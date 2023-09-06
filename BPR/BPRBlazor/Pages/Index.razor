@@ -1,9 +1,11 @@
 ﻿@page "/"
+@using BPRBlazor.Services
+@inject IHttpService HttpService
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<button @onclick="SendDataAsync">
+    Button Test
+</button>
