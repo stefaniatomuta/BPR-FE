@@ -8,13 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BlazorTemplater" Version="1.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.16"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.16"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.16"/>
     </ItemGroup>
-
-
-
 </Project>
