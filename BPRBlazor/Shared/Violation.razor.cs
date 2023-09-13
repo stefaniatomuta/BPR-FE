@@ -1,4 +1,4 @@
-﻿using BPRBE.Models.Results;
+﻿using BPRBE.Models.UI.Results;
 
 namespace BPRBlazor.Shared;
 

@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Models.Results.Enums;
+﻿namespace BPRBE.Models.UI.Results.Enums;
 
 public enum ViolationSeverity
 {
