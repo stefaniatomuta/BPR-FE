@@ -1,8 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPRBlazor", "BPRBlazor\BPRBlazor.csproj", "{237A2C01-9575-45F6-8D8A-4B2DF682519A}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPRBlazor", "BPRBlazor\BPRBlazor.csproj", "{237A2C01-9575-45F6-8D8A-4B2DF682519A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPRBE", "BPRBE\BPRBE.csproj", "{70C47CA4-EDA8-4F79-8151-EF39A9A67E6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPRBE", "BPRBE\BPRBE.csproj", "{70C47CA4-EDA8-4F79-8151-EF39A9A67E6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPRBE.Tests", "BPRBE.Test\BPRBE.Tests.csproj", "{B5B6F05F-0CB7-42D1-A3CC-1F8B62A9008D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +23,15 @@ Global
 		{70C47CA4-EDA8-4F79-8151-EF39A9A67E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70C47CA4-EDA8-4F79-8151-EF39A9A67E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70C47CA4-EDA8-4F79-8151-EF39A9A67E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5B6F05F-0CB7-42D1-A3CC-1F8B62A9008D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5B6F05F-0CB7-42D1-A3CC-1F8B62A9008D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5B6F05F-0CB7-42D1-A3CC-1F8B62A9008D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5B6F05F-0CB7-42D1-A3CC-1F8B62A9008D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6777DCEB-1AC6-415B-9374-797D6A5FBDFC}
 	EndGlobalSection
 EndGlobal
