@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using SevenZipExtractor;
-
-namespace BPRBlazor.Pages;
+﻿namespace BPRBlazor.Pages;
 
 public partial class Index : ComponentBase
 {
