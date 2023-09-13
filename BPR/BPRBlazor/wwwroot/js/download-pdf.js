@@ -1,3 +1,5 @@
-function exportHTMLtoPDF(html) {
-    html2pdf().from(html).save('Download.pdf');
+function exportHTMLtoPDF(html, fileName) {
+    html2pdf()
+        .from(html)
+        .save(`${fileName}.pdf`);
 }
