@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-BPRBlazor-B853B8C6-B81B-44B2-B827-69DF1142479F</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BlazorTemplater" Version="1.5.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BPRBE\BPRBE.csproj" />
+    </ItemGroup>
+</Project>

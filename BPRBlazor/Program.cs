@@ -8,7 +8,8 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IHttpService, HttpService>();
 
-builder.Services.AddSingleton(new JsonSerializerOptions {
+builder.Services.AddSingleton(new JsonSerializerOptions
+{
     PropertyNameCaseInsensitive = true,
     WriteIndented = true
 });

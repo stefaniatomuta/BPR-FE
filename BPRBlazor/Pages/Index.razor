@@ -1,0 +1,6 @@
+﻿@page "/"
+@using BPRBlazor.Services
+@inject IHttpService HttpService
+
+<button class="btn btn-primary" @onclick="SendDataAsync">Send Data</button>
+<DownloadButton />
