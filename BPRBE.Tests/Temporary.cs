@@ -28,10 +28,4 @@ internal class Temporary
     {
         Assert.Pass();
     }
-
-    [Test]
-    public void MethodName2_WhenSomething_ThenSomething()
-    {
-        Assert.Fail();
-    }
 }
