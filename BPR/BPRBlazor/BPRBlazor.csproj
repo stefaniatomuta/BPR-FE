@@ -14,5 +14,6 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.16"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.16"/>
+        <PackageReference Include="SevenZipExtractor" Version="1.0.17" />
     </ItemGroup>
 </Project>
