@@ -1,6 +1,4 @@
-﻿@using BPRBE.Models.UI.Results.Enums;
-
-<div class="violation">
+﻿<div class="violation">
     <p class="violation-name">
         #@Model.Id - @Model.Name 
         (<strong>@Model.Type.ToString()</strong>)
@@ -13,7 +11,3 @@
         <code>@Model.Code</code>
     </div>
 </div>
-
-@code {
-    public string SeverityCssClass => Model.Severity.ToString().ToLower();
-}
