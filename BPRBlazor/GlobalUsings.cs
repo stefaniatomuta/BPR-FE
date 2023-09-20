@@ -1,4 +1,3 @@
-global using BlazorTemplater;
 global using BPRBE.Models.UI.Results;
 global using BPRBE.Models.UI.Results.Enums;
 global using BPRBlazor.Services;

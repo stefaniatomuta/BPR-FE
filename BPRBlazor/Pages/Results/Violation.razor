@@ -8,6 +8,9 @@
         <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
     </p>
     <div class="violation-code-wrapper">
-        <code>@Model.Code</code>
+        @foreach (var line in Model.Code.Split("\n"))
+        {
+            <code>@line</code>
+        }
     </div>
 </div>

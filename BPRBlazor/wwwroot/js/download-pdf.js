@@ -1,15 +1,15 @@
-const styleSheet = "css/pdf.css";
+const fileName = "Download";
 
-function exportHTMLtoPDF(html, fileName) {
-    html = setStyleSheet(html)
-    
+function DownloadResultsToPDF() {
+    const element = document.getElementById('result-details');
+
+    const opt = {
+        margin: 10,
+        filename: fileName,
+    };
+
     html2pdf()
-        .from(html)
-        .save(`${fileName}.pdf`);
-}
-
-function setStyleSheet(html) {
-    const link = "<head><link rel=\"stylesheet\" href=\"" + styleSheet + "\"/></head>"
-    console.log(link + html)
-    return link + html
+        .set(opt)
+        .from(element)
+        .save();
 }

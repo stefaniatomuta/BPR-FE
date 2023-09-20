@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BlazorTemplater" Version="1.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
         <PackageReference Include="SevenZipExtractor" Version="1.0.17" />

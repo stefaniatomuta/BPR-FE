@@ -1,6 +1,6 @@
 ﻿namespace BPRBlazor.Pages.Results;
 
-public partial class ResultDetails : ComponentBase
+public partial class Results : ComponentBase
 {
     private ResultModel? _resultModel;
 

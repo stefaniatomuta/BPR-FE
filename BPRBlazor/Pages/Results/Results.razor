@@ -1,6 +1,21 @@
 ﻿@page "/results"
 
-<div class="mb-4">
-    <ResultDetails/>
+<div class="float-end">
     <DownloadButton/>
+</div>
+
+<div id="result-details">
+    <h1>Results</h1>
+
+    @if (_resultModel is null) {
+        <h2>No results to display...</h2>
+    }
+    else {
+        <h2>Score: @($"{_resultModel.Score:0.00}")%</h2>
+        <h3>Violations:</h3>
+        @foreach (var violation in _resultModel.Violations)
+        {
+            <Violation Model="violation" />
+        }
+    }
 </div>

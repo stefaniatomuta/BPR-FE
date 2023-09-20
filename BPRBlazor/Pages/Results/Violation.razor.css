@@ -1,5 +1,5 @@
 ﻿.violation {
-    margin: 2rem 0;
+    margin: 2rem 1rem;
     border: 1px solid #BBBBBB;
     border-radius: 10px;
     padding: 1rem;
@@ -33,6 +33,7 @@
     background-color: orangered;
 }
 
-.violation, .violation-code-wrapper, p { 
+.violation, .violation-code-wrapper, p, code { 
     page-break-inside: avoid !important;
+    display: block;
 }
