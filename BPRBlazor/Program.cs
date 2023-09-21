@@ -1,3 +1,7 @@
+using BPRBE.Config;
+using BPRBE.Models.Persistence;
+using BPRBE.Validators;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -5,9 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-
+// Services
 builder.Services.AddScoped<IHttpService, HttpService>();
-
+builder.Services.AddScoped<IMongoDependencyRepository, MongoDependencyRepository>();
+// Validators
+builder.Services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
+builder.Services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
+// Database config
+builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection(DatabaseConfig.Section));
 builder.Services.AddSingleton(new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,

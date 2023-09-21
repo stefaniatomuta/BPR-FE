@@ -1,5 +1,6 @@
 global using BlazorTemplater;
 global using BPRBlazor.Services;
+global using BPRBE.Persistence;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Forms;
 global using Microsoft.AspNetCore.Mvc;
