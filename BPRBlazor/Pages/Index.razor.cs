@@ -3,6 +3,8 @@
 public partial class Index : ComponentBase
 {
     private string _errorMessage = string.Empty;
+    private List<string> _folders = new ();
+
 
     private async Task SendDataAsync()
     {
@@ -25,10 +27,11 @@ public partial class Index : ComponentBase
             await eventArgs.File.OpenReadStream(Int32.MaxValue).CopyToAsync(memoryStream);
             memoryStream.Position = 0;
             using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
-            foreach (var entry in archiveFile.Entries)
-            {
-                Console.WriteLine(entry.FileName);
-            }
+            _folders = DependencyComponentService.LoadComponentsFromStream(archiveFile);
+            // foreach (var entry in archiveFile.Entries)
+            // {
+            //     // Console.WriteLine(entry.FileName);
+            // }
         }
         catch (Exception e)
         {
