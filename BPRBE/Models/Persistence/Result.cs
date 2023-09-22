@@ -3,7 +3,7 @@
 public class Result
 {
     public bool Success { get; set; }
-    public IList<string> Error { get; set; }
+    public IList<string>? Error { get; set; }
 
     public Result(bool success, IList<string> error)
     {
@@ -28,27 +28,27 @@ public class Result
         return new Result<T>(false, message);
     }
 
-    public static Result<T> Ok<T>(T value)
+    public static Result<T?> Ok<T>(T value)
     {
-        return new Result<T>(value, true, string.Empty);
+        return new Result<T?>(value, true, string.Empty);
     }
 }
 
 public class Result<T> : Result
 {
-    public T Val { get; set; }
+    public T? Val { get; set; }
 
     public Result(bool success, string error) : base(success, error)
     {
         
     }
 
-    public Result(T value, bool success, string error) : base(success, error)
+    public Result(T? value, bool success, string error) : base(success, error)
     {
         Val = value;
     }
 
-    public Result(T value, bool success) : base(success)
+    public Result(T? value, bool success) : base(success)
     {
         Val = value;
     }
