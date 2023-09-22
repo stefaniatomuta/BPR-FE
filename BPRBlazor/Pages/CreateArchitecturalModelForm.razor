@@ -1,0 +1,21 @@
+﻿@page "/new-model"
+
+<EditForm Model="model" OnValidSubmit="CreateArchitecturalModel">
+    <ObjectGraphDataAnnotationsValidator />
+    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="model.Name" />
+    <ValidationMessage For="(() => model.Name)" />
+    <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
+    @foreach (var component in model.Components)
+    {
+        <div class="mb-2">
+            <div class="d-flex gap-2">
+                <InputText class="form-control w-25" placeholder="Component name..." @bind-Value="component.Name" />
+                <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove component</button>
+            </div>
+            <ValidationMessage For="(() => component.Name)" />
+        </div>
+    }
+    <ValidationMessage For="(() => model.Components)" />
+    <button type="submit" class="btn btn-primary my-2">Submit</button>
+    <p class="@createModelResultCss">@resultMessage</p>
+</EditForm>
