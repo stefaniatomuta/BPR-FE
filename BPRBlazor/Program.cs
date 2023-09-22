@@ -15,6 +15,7 @@ builder.Services.AddScoped<IMongoDependencyRepository, MongoDependencyRepository
 // Validators
 builder.Services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
 builder.Services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
+builder.Services.AddScoped<IValidatorService, ValidatorService>();
 // Database config
 builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection(DatabaseConfig.Section));
 builder.Services.AddSingleton(new JsonSerializerOptions

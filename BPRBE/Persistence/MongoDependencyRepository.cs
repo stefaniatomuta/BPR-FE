@@ -1,6 +1,5 @@
 ﻿using BPRBE.Config;
 using BPRBE.Models.Persistence;
-using FluentValidation;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -9,11 +8,9 @@ namespace BPRBE.Persistence;
 public class MongoDependencyRepository : IMongoDependencyRepository
 {
     private readonly IMongoCollection<ArchitecturalModel> _dependenciesRuleCollection;
-    private readonly IValidator<ArchitecturalModel> _validator;
 
-    public MongoDependencyRepository(IOptions<DatabaseConfig> databaseSettings, IValidator<ArchitecturalModel> validator)
+    public MongoDependencyRepository(IOptions<DatabaseConfig> databaseSettings)
     {
-        _validator = validator;
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
 
@@ -25,9 +22,16 @@ public class MongoDependencyRepository : IMongoDependencyRepository
     {
         return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
     }
+    public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
+    {
+        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
+    }
     public async Task AddModelAsync(ArchitecturalModel model)
     {
-        await _validator.ValidateAndThrowAsync(model);
-        await _dependenciesRuleCollection.InsertOneAsync(model);
+        var result = await GetArchitecturalModelByName(model);
+        if (result == null)
+        {
+            await _dependenciesRuleCollection.InsertOneAsync(model);
+        }
     }
 }
