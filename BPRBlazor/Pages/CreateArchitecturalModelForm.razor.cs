@@ -4,20 +4,24 @@ namespace BPRBlazor.Pages;
 
 public partial class CreateArchitecturalModelForm : ComponentBase
 {
-    private ArchitecturalModel model = new();
-    private string resultMessage = "";
-    private string createModelResultCss = "";
+    private ArchitecturalModel _model = new();
+    private string _resultMessage = "";
+    private string _createModelResultCss = "";
 
     private void AddArchitecturalComponent()
     {
-        var component = new ArchitecturalComponent();
-        model.Components.Add(component);
+        var component = new ArchitecturalComponent()
+        {
+            Id = _model.Components.Any() ? _model.Components.Max(c => c.Id) + 1 : 0
+        };
+
+        _model.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(ArchitecturalComponent component)
+    private void RemoveArchitecturalComponent(int componentId)
     {
-        var componentToRemove = model.Components.First(c => c.Name == component.Name);
-        model.Components.Remove(componentToRemove);
+        var component = _model.Components.First(c => c.Id == componentId);
+        _model.Components.Remove(component);
     }
 
     private void CreateArchitecturalModel()
@@ -25,14 +29,14 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         try
         {
             // TODO - Actually add the model.
-            model = new();
-            resultMessage = "Model successfully added!";
-            createModelResultCss = "success";
+            _model = new();
+            _resultMessage = "Model successfully added!";
+            _createModelResultCss = "success";
         }
         catch (Exception ex)
         {
-            resultMessage = ex.Message;
-            createModelResultCss = "error";
+            _resultMessage = ex.Message;
+            _createModelResultCss = "error";
         }
     }
 }
