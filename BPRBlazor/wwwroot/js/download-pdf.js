@@ -1,5 +1,15 @@
-function exportHTMLtoPDF(html, fileName) {
+const fileName = "Download";
+
+function DownloadResultsToPDF() {
+    const element = document.getElementById('result-details');
+
+    const opt = {
+        margin: 10,
+        filename: fileName,
+    };
+
     html2pdf()
-        .from(html)
-        .save(`${fileName}.pdf`);
+        .set(opt)
+        .from(element)
+        .save();
 }
