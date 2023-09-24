@@ -1,7 +1,4 @@
-﻿using BPRBE.Enums;
-using BPRBE.Models;
-
-namespace BPRBlazor.Pages;
+﻿namespace BPRBlazor.Results.Pages;
 
 public partial class Results : ComponentBase
 {
