@@ -1,4 +1,4 @@
-﻿namespace BPRBlazor.Results.Pages;
+﻿namespace BPRBlazor.Pages.Results;
 
 public partial class Results : ComponentBase
 {
