@@ -1,5 +1,5 @@
-﻿using BPRBE.UserInterface.Enums;
+﻿using BPRBE.Enums;
 
-namespace BPRBE.UserInterface.Models;
+namespace BPRBE.Models;
 
 public record ViolationModel(int Id, string Name, ViolationType Type, string Description, ViolationSeverity Severity, string Code);

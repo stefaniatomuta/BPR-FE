@@ -1,5 +1,5 @@
-﻿using BPRBE.UserInterface.Enums;
-using BPRBE.UserInterface.Models;
+﻿using BPRBE.Enums;
+using BPRBE.Models;
 
 namespace BPRBlazor.Pages;
 

@@ -1,4 +1,7 @@
 global using BlazorTemplater;
+global using BPRBE.Enums;
+global using BPRBE.Models;
+global using BPRBlazor.Models;
 global using BPRBlazor.Services;
 global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Forms;

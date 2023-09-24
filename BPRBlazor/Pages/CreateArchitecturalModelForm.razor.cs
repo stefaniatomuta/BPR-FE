@@ -1,6 +1,4 @@
-﻿using BPRBlazor.Models;
-
-namespace BPRBlazor.Pages;
+﻿namespace BPRBlazor.Pages;
 
 public partial class CreateArchitecturalModelForm : ComponentBase
 {

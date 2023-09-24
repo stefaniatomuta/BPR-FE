@@ -1,4 +1,4 @@
-﻿using BPRBE.UserInterface.Models;
+﻿using BPRBE.Models;
 
 namespace BPRBlazor.Shared;
 
