@@ -27,10 +27,11 @@ public partial class Index : ComponentBase
             await eventArgs.File.OpenReadStream(Int32.MaxValue).CopyToAsync(memoryStream);
             memoryStream.Position = 0;
             using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
-            _folders = DependencyComponentService.LoadComponentsFromStream(archiveFile);
+            var folderPath = DependencyComponentService.LoadCodebaseInTemp(archiveFile);
+            _folders = DependencyComponentService.GetProjectNamesFromSolution(folderPath);
             // foreach (var entry in archiveFile.Entries)
             // {
-            //     // Console.WriteLine(entry.FileName);
+            //     // Consotle.WriteLine(enry.FileName);
             // }
         }
         catch (Exception e)
