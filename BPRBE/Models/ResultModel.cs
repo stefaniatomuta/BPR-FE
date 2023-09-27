@@ -1,3 +1,3 @@
-﻿namespace BPRBE.Models.UI.Results;
+﻿namespace BPRBE.Models;
 
 public record ResultModel(double Score, IEnumerable<ViolationModel> Violations);

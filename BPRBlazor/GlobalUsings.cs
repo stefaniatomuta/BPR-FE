@@ -1,4 +1,6 @@
-global using BlazorTemplater;
+global using BPRBE.Enums;
+global using BPRBE.Models;
+global using BPRBlazor.Models;
 global using BPRBlazor.Services;
 global using BPRBE.Persistence;
 global using Microsoft.AspNetCore.Components;
