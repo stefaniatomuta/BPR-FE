@@ -7,12 +7,12 @@ using MongoDB.Driver;
 
 namespace BPRBE.Persistence;
 
-public class MongoDependencyRepository : IMongoDependencyRepository
+public class DependencyRepository : IDependencyRepository
 {
     private readonly IMongoCollection<ArchitecturalModel> _dependenciesRuleCollection;
     private readonly IMongoCollection<BsonDocument> _sequenceCollection;
 
-    public MongoDependencyRepository(IOptions<DatabaseConfig> databaseSettings)
+    public DependencyRepository(IOptions<DatabaseConfig> databaseSettings)
     {
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
@@ -26,19 +26,28 @@ public class MongoDependencyRepository : IMongoDependencyRepository
     {
         return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
     }
+    
     public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
     {
         return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
     }
-    public async Task AddModelAsync(ArchitecturalModel model)
+    
+    public async Task<Result> AddModelAsync(ArchitecturalModel model)
     {
-        var result = await GetArchitecturalModelByName(model);
-        if (result == null)
+        try
         {
-            model.Id =  await GetNextSequenceValueAsync();
+            var result = await GetArchitecturalModelByName(model);
+            if (result != null) return Result.Fail<ArchitecturalModel>("Model with the same name already exists");
+            model.Id = await GetNextSequenceValueAsync();
             await _dependenciesRuleCollection.InsertOneAsync(model);
+            return Result.Ok(model);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<ArchitecturalModel>(e.Message);
         }
     }
+    
     private async Task<int> GetNextSequenceValueAsync()
     {
         var filter = Builders<BsonDocument>.Filter.Eq(Values.MongoDbId, Values.MongoDbId);
