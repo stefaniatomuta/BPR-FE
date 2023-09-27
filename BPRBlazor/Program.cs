@@ -6,12 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-
-builder.Services.AddScoped<IHttpService, HttpService>();
-builder.Services.AddScoped<IDependencyComponentService, DependencyComponentService>();
-builder.Services.AddScoped<ICodebaseService, CodebaseService>();
-builder.Services.AddScoped<IDependencyRepository, DependencyRepository>();
 builder.Services.AddValidators();
+builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
 // Database config
 builder.Services.AddSingleton(new JsonSerializerOptions
