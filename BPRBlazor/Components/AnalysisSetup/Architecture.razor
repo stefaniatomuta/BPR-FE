@@ -1,1 +1,11 @@
-<h3>ArchitectureSetup</h3>
+<div class="container-fluid">
+    <div class="row">
+
+        @foreach (var component in ArchitecturalModel.Components)
+        {
+            <div class="col-6 mt-3">
+                <ArchitectureComponent ArchitecturalComponent="component"/>
+            </div>
+        }
+    </div>
+</div>

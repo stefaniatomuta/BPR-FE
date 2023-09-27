@@ -1,0 +1,9 @@
+.namespace-container {
+    border: solid 1px black;
+    padding: 1rem;
+}
+
+h3 {
+    word-break: break-all;
+    display: flex;
+}

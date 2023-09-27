@@ -3,6 +3,7 @@ using BPRBlazor.Services;
 using BPRBE.Services;
 using BPRBE.Persistence;
 using BPRBE;
+using BPRBlazor;
 
 var builder = WebApplication.CreateBuilder(args);
 

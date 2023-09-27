@@ -59,7 +59,7 @@ public partial class Index : ComponentBase
     {
         _unmappedNamespaceComponents = new List<Namespace>();
         var folderNames = DependencyComponentService.GetFolderNamesForProjects(_folderPath);
-        for (var id = 0; id < folderNames.Count; id++)
+        for (var id = 0; id < folderNames.Count(); id++)
         {
             _unmappedNamespaceComponents.Add(new Namespace(id, folderNames[id]));
         }
@@ -127,7 +127,7 @@ public partial class Index : ComponentBase
                 new ArchitecturalComponent()
                 {
                     Id = 8,
-                    Name = "Component8",
+                    Name = "elauirghaelurghlaseuirngaeuilrhgeiolarhjgaelrhgleuirhglaeuirhglaieurhglaieurhgliaeurhvlaeuirhvlaeyuirhvaweilurncvaeklruyhfseikrvhskerv",
                     NamespaceComponents = new List<Namespace>()
                 },
             }

@@ -1,1 +1,7 @@
-<h3>ArchitectureSetup</h3>
+<h3>@ArchitecturalComponent.Name</h3>
+<div class="namespace-container">
+    @foreach (var component in ArchitecturalComponent.NamespaceComponents)
+    {
+        <NamespaceComponent Namespace="component"/>
+    }
+</div>

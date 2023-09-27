@@ -11,7 +11,7 @@
     @if (_model.Components.Any())
     {
         <div class="d-flex gap-2 mb-2">
-            <input type="text" class="form-control w-25" placeholder="Dependency id... ('parentId,childId')" @bind-value="_dependencyString" />
+            <InputText type="text" class="form-control w-25" placeholder="Dependency id... ('parentId,childId')" @bind-value="_dependencyString" />
             <button type="button" class="btn btn-success" @onclick="(() => AddDependency(int.Parse(_dependencyString.Split(',')[0]), int.Parse(_dependencyString.Split(',')[1])))">Add dependency</button>
         </div>
     }
