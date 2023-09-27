@@ -2,6 +2,8 @@
 using BPRBE.Models.Persistence;
 using BPRBE.Validators;
 using FluentValidation;
+using ArchitecturalComponent = BPRBE.Models.Persistence.ArchitecturalComponent;
+using ArchitecturalModel = BPRBE.Models.Persistence.ArchitecturalModel;
 
 namespace BPRBE;
 
