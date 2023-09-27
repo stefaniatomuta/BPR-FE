@@ -24,7 +24,8 @@ public class DependencyRepository : IDependencyRepository
 
     public async Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
     {
-        return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
+        var filter = BsonDocument.Parse("{'$and': [{'Name': {'$exists': true}}]}");
+        return await (await _dependenciesRuleCollection.FindAsync(filter)).ToListAsync();
     }
     
     public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
