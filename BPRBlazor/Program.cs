@@ -1,6 +1,8 @@
 using System.Text.Json;
-using BPRBE.Services;
 using BPRBlazor.Services;
+using BPRBE.Services;
+using BPRBE.Persistence;
+using BPRBE;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,10 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-
+// Services
 builder.Services.AddScoped<IHttpService, HttpService>();
+builder.Services.AddScoped<IDependencyRepository, DependencyRepository>();
 builder.Services.AddScoped<IDependencyComponentService, DependencyComponentService>();
 builder.Services.AddScoped<ICodebaseService, CodebaseService>();
+builder.Services.AddValidators();
+builder.Services.AddDbConfiguration(builder.Configuration);
+// Database config
+
 builder.Services.AddSingleton(new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,

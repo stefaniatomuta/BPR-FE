@@ -9,6 +9,8 @@ public partial class CreateArchitecturalModelForm : ComponentBase
     private string _resultMessage = "";
     private string _createModelResultCss = "";
 
+    private string _dependencyString = "";
+
     private void AddArchitecturalComponent()
     {
         var component = new ArchitecturalComponent()
@@ -30,6 +32,7 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         try
         {
             // TODO - Actually add the model.
+            Console.WriteLine(_model.ToString());
             _model = new();
             _resultMessage = "Model successfully added!";
             _createModelResultCss = "success";
@@ -38,6 +41,23 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         {
             _resultMessage = ex.Message;
             _createModelResultCss = "error";
+        }
+    }
+
+    private void AddDependency(int parentComponentId, int dependencyComponentId)
+    {
+        _dependencyString = "";
+
+        if (parentComponentId == dependencyComponentId)
+        {
+            return;
+        }
+
+        var parentComponent = _model.Components.First(c => c.Id == parentComponentId);
+
+        if (!parentComponent.Dependencies.Any(c => c.Id == dependencyComponentId))
+        {
+            parentComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponentId));
         }
     }
 }
