@@ -1,0 +1,11 @@
+﻿button {
+    display: block;
+}
+
+.success {
+    color: forestgreen;
+}
+
+.error {
+    color: orangered;
+}

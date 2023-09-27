@@ -1,5 +1,5 @@
 ﻿.violation {
-    margin-bottom: 4rem;
+    margin: 2rem 1rem;
     border: 1px solid #BBBBBB;
     border-radius: 10px;
     padding: 1rem;
@@ -13,9 +13,9 @@
     width: fit-content;
 }
 
-    .violation-code-wrapper > code {
-        white-space: pre-wrap
-    }
+.violation-code-wrapper > code {
+    white-space: pre-wrap
+}
 
 .violation-severity {
     width: fit-content;
@@ -31,4 +31,9 @@
 
 .violation-severity-critical {
     background-color: orangered;
+}
+
+.violation, .violation-code-wrapper, p, code { 
+    page-break-inside: avoid !important;
+    display: block;
 }
