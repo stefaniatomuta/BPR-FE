@@ -5,6 +5,8 @@
 @using BPRBE.Services
 @inject IHttpService HttpService
 @inject IDependencyComponentService DependencyComponentService
+@inject ICodebaseService CodebaseService
+@implements IDisposable
 
 
 <label for="inputFile" class="btn btn-primary me-1">

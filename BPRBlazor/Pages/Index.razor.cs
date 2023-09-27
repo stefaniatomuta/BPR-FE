@@ -42,6 +42,7 @@ public partial class Index : ComponentBase
             _unmappedNamespaceComponents = new();
             _folderPath = string.Empty;
             _errorMessage = e.Message + " " + e.StackTrace;
+            CodebaseService.Dispose();
         }
     }
 
@@ -51,7 +52,7 @@ public partial class Index : ComponentBase
         await file.OpenReadStream(Int32.MaxValue).CopyToAsync(memoryStream);
         memoryStream.Position = 0;
         using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
-        _folderPath = DependencyComponentService.LoadCodebaseInTemp(archiveFile);
+        _folderPath = CodebaseService.LoadCodebaseInTemp(archiveFile);
     }
 
     private void SetNamespaceComponents()
@@ -64,6 +65,10 @@ public partial class Index : ComponentBase
         }
     }
 
+    public void Dispose() {
+        CodebaseService.Dispose();
+    }
+    
     private void LoadDummyData()
     {
         _architecturalModel = new ArchitecturalModel()

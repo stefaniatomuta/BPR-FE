@@ -4,17 +4,11 @@ using SevenZipExtractor;
 namespace BPRBE.Services; 
 
 public class DependencyComponentService : IDependencyComponentService {
-    
-    
-    public string LoadCodebaseInTemp(ArchiveFile file) {
-        var tempDirectory = ExtractArchive(file);
-        try {
-            return tempDirectory;
-        }
-        catch (Exception e) {
-            Directory.Delete(tempDirectory,true);
-            throw new Exception(e.Message);
-        }
+
+    private ICodebaseService _codebaseService;
+
+    public DependencyComponentService(ICodebaseService codebaseService) {
+        _codebaseService = codebaseService;
     }
 
     public List<string> GetFolderNamesForProjects(string folderPath) {
@@ -39,13 +33,6 @@ public class DependencyComponentService : IDependencyComponentService {
         // var projNames = GetProjectNames(sln);
         // Directory.Delete(tempDirectory.Name,true);
         // return projNames.OrderBy(p => p).ToList();
-    }
-
-    private string ExtractArchive(ArchiveFile archiveFile) {
-        var directory =  Directory.CreateDirectory("temp");
-        var archiveName = archiveFile.Entries.FirstOrDefault()!.FileName;
-        archiveFile.Extract(directory.Name);
-        return $"{directory.FullName}/{archiveName}";
     }
 
     private List<string> GetProjectNames(string path) {
