@@ -27,7 +27,7 @@ public partial class Index : ComponentBase
             await eventArgs.File.OpenReadStream(Int32.MaxValue).CopyToAsync(memoryStream);
             memoryStream.Position = 0;
             using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
-            var folderPath = DependencyComponentService.LoadCodebaseInTemp(archiveFile);
+            var folderPath = CodebaseService.LoadCodebaseInTemp(archiveFile);
             // _folders = DependencyComponentService.GetProjectNamesFromSolution(folderPath);
             // foreach (var entry in archiveFile.Entries)
             _folders = DependencyComponentService.GetFolderNamesForProjects(folderPath);
@@ -38,6 +38,11 @@ public partial class Index : ComponentBase
         catch (Exception e)
         {
             _errorMessage = e.Message + " " + e.StackTrace;
+            CodebaseService.Dispose();
         }
+    }
+
+    public void Dispose() {
+        CodebaseService.Dispose();
     }
 }
