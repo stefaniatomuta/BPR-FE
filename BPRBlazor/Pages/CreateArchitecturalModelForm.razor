@@ -5,10 +5,20 @@
     <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_model.Name" />
     <ValidationMessage For="(() => _model.Name)" />
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
+
+    @if (_model.Components.Any())
+    {
+        <div class="d-flex gap-2 mb-2">
+            <input type="text" class="form-control w-25" placeholder="Dependency id... ('parentId,childId')" @bind-value="_dependencyString" />
+            <button type="button" class="btn btn-success" @onclick="(() => AddDependency(int.Parse(_dependencyString.Split(',')[0]), int.Parse(_dependencyString.Split(',')[1])))">Add dependency</button>
+        </div>
+    }
+
     @foreach (var component in _model.Components)
     {
         <div class="mb-2">
-            <div class="d-flex gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span>Id: @component.Id</span>
                 <InputText class="form-control w-25" placeholder="Component name..." @bind-Value="component.Name" />
                 <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component.Id))">Remove component</button>
             </div>
