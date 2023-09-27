@@ -1,4 +1,8 @@
-﻿namespace BPRBlazor.Pages.Results;
+﻿using BPRBE.Enums;
+using BPRBE.Models;
+using Microsoft.AspNetCore.Components;
+
+namespace BPRBlazor.Pages;
 
 public partial class Results : ComponentBase
 {

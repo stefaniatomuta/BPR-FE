@@ -1,4 +1,6 @@
-﻿namespace BPRBlazor.Services;
+﻿using System.Text.Json;
+
+namespace BPRBlazor.Services;
 
 public class HttpService : IHttpService
 {

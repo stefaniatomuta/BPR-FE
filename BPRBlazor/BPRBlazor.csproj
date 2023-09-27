@@ -15,4 +15,84 @@
     <ItemGroup>
       <ProjectReference Include="..\BPRBE\BPRBE.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Areas\Promo\Views\Home\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Areas\Promo\Views\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Account\AccessDenied.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Account\Login.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Account\Register.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\AddNewRole.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\AddUser.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\AddUserToRole.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\DeleteUserFromRole.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\EditRole.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\EditUser.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\ManageClaimsForUser.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\RoleManagement.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Admin\UserManagement.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Contact\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Home\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Order\Checkout.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Order\CheckoutComplete.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieGift\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieGift\PieGiftOrderComplete.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieManagement\AddPie.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieManagement\BulkEditPies.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieManagement\DeletePie.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieManagement\EditPie.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieManagement\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\PieManagement\QuickEdit.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Pie\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Pie\List.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Pie\PieNotFound.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\Carousel.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\Components\AdminMenu\Default.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\Components\CategoryMenu\Default.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\Components\ShoppingCartSummary\Default.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\Components\SystemStatusPage\Default.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\LanguageSelection.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\LoginPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\PieOfTheWeekSummary.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\PieOverviewSummary.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\Shared\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\ShoppingCart\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Views\_ViewStart.cshtml" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\web.config" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\BethanysPieShop.Tests\obj\BethanysPieShop.Tests.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\BethanysPieShop.Tests\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\BethanysPieShop.Tests\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\appsettings.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\Connected Services\Application Insights\ConnectedService.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\obj\BethanysPieShop.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\bootstrap\.bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\bootstrap\bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\bootstrap\grunt\configBridge.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\bootstrap\grunt\npm-shrinkwrap.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\bootstrap\less\.csscomb.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\bootstrap\package.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery-validation-unobtrusive\.bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery-validation-unobtrusive\bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery-validation\.bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery-validation\bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery-validation\package.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery-validation\validation.jquery.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery\.bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery\bower.json" />
+      <_ContentIncludedByDefault Remove="temp\BethanysPieShop\src\BethanysPieShop\wwwroot\lib\jquery\src\.eslintrc.json" />
+      <_ContentIncludedByDefault Remove="Pages\AnalysisSetup\ArchitectureSetup.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Components\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Results\DownloadButton.razor" />
+    </ItemGroup>
 </Project>

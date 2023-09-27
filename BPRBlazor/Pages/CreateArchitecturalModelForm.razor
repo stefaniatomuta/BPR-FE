@@ -1,4 +1,6 @@
-﻿@page "/new-model"
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+@page "/new-model"
 
 <EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
