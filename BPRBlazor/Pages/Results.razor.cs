@@ -2,7 +2,7 @@
 using BPRBE.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace BPRBlazor.Pages.Results;
+namespace BPRBlazor.Pages;
 
 public partial class Results : ComponentBase
 {

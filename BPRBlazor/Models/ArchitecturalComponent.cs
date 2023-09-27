@@ -8,4 +8,5 @@ public class ArchitecturalComponent
 
     [Required(ErrorMessage = "Please give the component a name")]
     public string Name { get; set; } = string.Empty;
+    public List<Namespace> NamespaceComponents { get; set; } = new();
 }

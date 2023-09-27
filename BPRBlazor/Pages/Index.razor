@@ -1,21 +1,30 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Forms
 @using BPRBlazor.Services
+@using BPRBlazor.Components.AnalysisSetup
 @using BPRBE.Services
 @inject IHttpService HttpService
 @inject IDependencyComponentService DependencyComponentService
 
-<button class="btn btn-primary" @onclick="SendDataAsync">Send Data</button>
-<InputFile OnChange="LoadCodeSource" accept=".7z"/>
-<p>@_errorMessage</p>
 
-<div>
-<tbody>
-    @foreach (var item in _folders)
-    {
-        <tr>
-            <td>@item</td>
-        </tr>
-    }
-</tbody>
+<label for="inputFile" class="btn btn-primary me-1">
+    <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=".7z" />
+    Upload src.7z file
+</label>
+<p>@_errorMessage</p>
+<div class="container-fluid p-5">
+    <div class="row">
+        <div class="col-3">
+            @foreach (var component in _unmappedNamespaceComponents)
+            {
+                <NamespaceComponent Namespace="component"/>
+            }
+        </div>
+        <div class="col-9">
+            @if (_architecturalModel != default!) 
+            {
+                <Architecture ArchitecturalModel="_architecturalModel"/>
+            }
+        </div>
+    </div>
 </div>
