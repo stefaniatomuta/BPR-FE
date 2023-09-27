@@ -1,15 +1,13 @@
+using BPRBE.Services;
 using BPRBE;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-// Services
-builder.Services.AddScoped<IHttpService, HttpService>();
-builder.Services.AddScoped<IDependencyRepository, DependencyRepository>();
 builder.Services.AddValidators();
+builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
 // Database config
 builder.Services.AddSingleton(new JsonSerializerOptions
