@@ -1,4 +1,8 @@
-﻿namespace BPRBlazor.Pages;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using SevenZipExtractor;
+
+namespace BPRBlazor.Pages;
 
 public partial class Index : ComponentBase
 {
@@ -29,10 +33,6 @@ public partial class Index : ComponentBase
             using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
             var folderPath = DependencyComponentService.LoadCodebaseInTemp(archiveFile);
             _folders = DependencyComponentService.GetProjectNamesFromSolution(folderPath);
-            // foreach (var entry in archiveFile.Entries)
-            // {
-            //     // Consotle.WriteLine(enry.FileName);
-            // }
         }
         catch (Exception e)
         {

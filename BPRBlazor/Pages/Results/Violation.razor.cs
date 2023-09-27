@@ -1,4 +1,7 @@
-﻿namespace BPRBlazor.Pages.Results;
+﻿using BPRBE.Models;
+using Microsoft.AspNetCore.Components;
+
+namespace BPRBlazor.Pages.Results;
 
 public partial class Violation : ComponentBase
 {

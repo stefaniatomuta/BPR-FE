@@ -1,4 +1,7 @@
-﻿namespace BPRBlazor.Pages;
+﻿using BPRBlazor.Models;
+using Microsoft.AspNetCore.Components;
+
+namespace BPRBlazor.Pages;
 
 public partial class CreateArchitecturalModelForm : ComponentBase
 {

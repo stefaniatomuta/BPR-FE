@@ -1,4 +1,7 @@
-﻿namespace BPRBlazor.Pages.Results;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+
+namespace BPRBlazor.Pages.Results;
 
 public partial class DownloadButton : ComponentBase
 {
