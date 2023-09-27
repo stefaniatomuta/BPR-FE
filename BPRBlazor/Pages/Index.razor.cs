@@ -32,7 +32,12 @@ public partial class Index : ComponentBase
             memoryStream.Position = 0;
             using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
             var folderPath = DependencyComponentService.LoadCodebaseInTemp(archiveFile);
-            _folders = DependencyComponentService.GetProjectNamesFromSolution(folderPath);
+            // _folders = DependencyComponentService.GetProjectNamesFromSolution(folderPath);
+            // foreach (var entry in archiveFile.Entries)
+            _folders = DependencyComponentService.GetFolderNamesForProjects(folderPath);
+            // {
+            //     // Consotle.WriteLine(enry.FileName);
+            // }
         }
         catch (Exception e)
         {

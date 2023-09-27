@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using SevenZipExtractor;
-using SearchOption = Microsoft.VisualBasic.FileIO.SearchOption;
 
 namespace BPRBE.Services; 
 
@@ -18,28 +17,35 @@ public class DependencyComponentService : IDependencyComponentService {
         }
     }
 
+    public List<string> GetFolderNamesForProjects(string folderPath) {
+        var projectNames = Directory.EnumerateDirectories(folderPath);
+        var folders = new List<string>();
+        foreach (var project in projectNames) {
+            var fd = Directory.EnumerateDirectories(project);
+            folders.AddRange(fd.Select(f => RemoveFolderPath(folderPath, f)).ToList());
+        }
+        return folders;
+    }
+
+    private string RemoveFolderPath(string folderPath, string pathToClean) {
+        return pathToClean.Replace($"{folderPath}\\", "");
+    }
+
     public List<string> GetProjectNamesFromSolution(string folderPath) {
-        var projectNames = Directory.GetDirectories(folderPath);
+        var projectNames = Directory.EnumerateDirectories(folderPath);
+        return projectNames.Select(m=> RemoveFolderPath(folderPath,m)).ToList(); 
+        
         // var sln = tempDirectory!.GetFiles("*.sln", SearchOption.AllDirectories).FirstOrDefault()!.FullName;
         // var projNames = GetProjectNames(sln);
         // Directory.Delete(tempDirectory.Name,true);
         // return projNames.OrderBy(p => p).ToList();
-        return projectNames.ToList();
     }
-
-    //step 1: get list of folders and projects
-    //how?: from sln read the projects?
-    //from each project the folder: project/foldername
-    // public List<string> LoadComponentsFromStream(ArchiveFile file) {
-    //     var entries = file.Entries;
-    //     List<string> folders = new List<string>();
-    //     
-    // }
 
     private string ExtractArchive(ArchiveFile archiveFile) {
         var directory =  Directory.CreateDirectory("temp");
+        var archiveName = archiveFile.Entries.FirstOrDefault()!.FileName;
         archiveFile.Extract(directory.Name);
-        return directory.FullName;
+        return $"{directory.FullName}/{archiveName}";
     }
 
     private List<string> GetProjectNames(string path) {
@@ -48,6 +54,5 @@ public class DependencyComponentService : IDependencyComponentService {
         string solutionFileContent = File.ReadAllText(path);
         MatchCollection matches = regex.Matches(solutionFileContent);
         return matches.Select(m => m.Groups[1].Value).ToList();
-
     }
 }

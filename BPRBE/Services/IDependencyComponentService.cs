@@ -4,7 +4,6 @@ namespace BPRBE.Services;
 
 public interface IDependencyComponentService {
 
-    // public List<string> LoadComponentsFromStream(ArchiveFile file);
     /// <summary>
     /// Loads the codebase in a temp folder
     /// </summary>
@@ -17,4 +16,6 @@ public interface IDependencyComponentService {
     /// <param name="folderPath">The path to the temp folder</param>
     /// <returns>A list with the names of the projects in the solution</returns>
     public List<string> GetProjectNamesFromSolution(string folderPath);
+
+    public List<string> GetFolderNamesForProjects(string folderPath);
 }
