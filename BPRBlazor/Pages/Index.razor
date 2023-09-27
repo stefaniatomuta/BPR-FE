@@ -1,6 +1,20 @@
 ﻿@page "/"
+@using BPRBlazor.Services
+@using BPRBE.Services
 @inject IHttpService HttpService
+@inject IDependencyComponentService DependencyComponentService
 
 <button class="btn btn-primary" @onclick="SendDataAsync">Send Data</button>
 <InputFile OnChange="LoadCodeSource" accept=".7z"/>
 <p>@_errorMessage</p>
+
+<div>
+<tbody>
+    @foreach (var item in _folders)
+    {
+        <tr>
+            <td>@item</td>
+        </tr>
+    }
+</tbody>
+</div>

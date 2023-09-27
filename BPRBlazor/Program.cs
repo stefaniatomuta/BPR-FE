@@ -1,3 +1,4 @@
+using BPRBE.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IHttpService, HttpService>();
+builder.Services.AddScoped<IDependencyComponentService, DependencyComponentService>();
 
 builder.Services.AddSingleton(new JsonSerializerOptions
 {
