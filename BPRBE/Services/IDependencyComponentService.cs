@@ -1,6 +1,4 @@
-﻿using SevenZipExtractor;
-
-namespace BPRBE.Services; 
+﻿namespace BPRBE.Services; 
 
 public interface IDependencyComponentService {
 
@@ -12,5 +10,10 @@ public interface IDependencyComponentService {
     /// <returns>A list with the names of the projects in the solution</returns>
     public List<string> GetProjectNamesFromSolution(string folderPath);
 
+    /// <summary>
+    /// Gets all the subfolders from the projects in the codebase
+    /// </summary>
+    /// <param name="folderPath"></param>
+    /// <returns></returns>
     public List<string> GetFolderNamesForProjects(string folderPath);
 }

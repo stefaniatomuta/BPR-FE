@@ -16,9 +16,9 @@ public class CodebaseService : ICodebaseService {
     }
     
     private string ExtractArchive(ArchiveFile archiveFile) {
-        var directory =  Directory.CreateDirectory("temp");
+        var directory =  Directory.CreateDirectory("../temp");
         var archiveName = archiveFile.Entries.FirstOrDefault()!.FileName;
-        archiveFile.Extract(directory.Name);
+        archiveFile.Extract(directory.FullName);
         folderPath = directory.FullName;
         return $"{directory.FullName}/{archiveName}";
     }
