@@ -2,3 +2,33 @@
     border: solid 1px black;
     padding: 1rem;
 }
+
+.namespace-container {
+    border: solid 1px black;
+    padding: 1rem;
+}
+
+h3 {
+    word-break: break-all;
+    display: flex;
+}
+
+.namespace-component {
+    background-color: #69a2ef;
+    margin: 1rem 0 0 1rem;
+    width: fit-content;
+    padding: 1rem;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    word-break: break-all;
+    border-radius: 1rem;
+}
+
+.namespace-component p {
+    margin: 0;
+}
+
+.namespace-component:hover {
+    background-color: #99bbf1;
+}

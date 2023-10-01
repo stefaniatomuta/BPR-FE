@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
 @using BPRBlazor.Services
-@using BPRBlazor.Components.AnalysisSetup
 @using BPRBE.Services
 @inject IHttpService HttpService
 @inject IDependencyComponentService DependencyComponentService
@@ -10,20 +10,26 @@
 @page "/"
 
 <label for="inputFile" class="btn btn-primary me-1">
-    <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=".7z" />
+    <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=".7z"/>
     Upload src.7z file
 </label>
-<p>@_errorMessage</p>
+
 <div class="container-fluid">
     <div class="row">
         @if (_unmappedNamespaceComponents.Any())
         {
             <div class="col-lg-3 mt-3">
-                <p >Unmapped namespaces:</p>
-                <div class="unmapped-namespaces">
-                    @foreach (var component in _unmappedNamespaceComponents)
+                <p>Unmapped namespaces:</p>
+                <div class="namespace-container" 
+                     ondragover="return false;" 
+                     @ondrop="() => HandleDrop()">
+                    @foreach (var namespaceComponent in _unmappedNamespaceComponents)
                     {
-                        <NamespaceComponent Namespace="component"/>
+                        <div class="namespace-component"
+                             draggable="true" 
+                             @ondragstart=@(() => HandleDragStart(namespaceComponent))>
+                            <p>@namespaceComponent.Name</p>
+                        </div>
                     }
                 </div>
             </div>
@@ -31,7 +37,29 @@
             <div class="col-lg-9">
                 @if (_architecturalModel != default!)
                 {
-                    <Architecture ArchitecturalModel="_architecturalModel"/>
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            @foreach (var component in _architecturalModel.Components)
+                            {
+                                <div class="col-6 mt-3">
+                                    <h3>@component.Name</h3>
+                                    <div class="namespace-container" 
+                                         ondragover="return false;" 
+                                         @ondrop="() => HandleDrop(component)">
+                                        @foreach (var namespaceComponent in component.NamespaceComponents)
+                                        {
+                                            <div class="namespace-component" 
+                                                 draggable="true" 
+                                                 @ondragstart=@(() => HandleDragStart(namespaceComponent))>
+                                                <p>@namespaceComponent.Name</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 }
             </div>
         }
@@ -40,9 +68,36 @@
             <div class="col-12">
                 @if (_architecturalModel != default!)
                 {
-                    <Architecture ArchitecturalModel="_architecturalModel"/>
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            @foreach (var component in _architecturalModel.Components)
+                            {
+                                <div class="col-6 mt-3">
+                                    <h3>@component.Name</h3>
+                                    <div class="namespace-container" 
+                                         ondragover="return false;" 
+                                         @ondrop="() => HandleDrop(component)">
+                                        @foreach (var namespaceComponent in component.NamespaceComponents)
+                                        {
+                                            <div class="namespace-component" 
+                                                 draggable="true"
+                                                 @ondragstart=@(() => HandleDragStart(namespaceComponent))>
+                                                <p>@namespaceComponent.Name</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 }
             </div>
         }
     </div>
 </div>
+
+<p class="error m-3">@_errorMessage</p>
+<button class="btn btn-primary m-5 float-end" @onclick="StartAnalysis">
+    Start Analysis
+</button>
