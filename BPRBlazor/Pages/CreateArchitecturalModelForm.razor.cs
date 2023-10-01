@@ -1,4 +1,4 @@
-﻿using BPRBlazor.Models;
+﻿using BPR.Models.Blazor;
 using Microsoft.AspNetCore.Components;
 
 namespace BPRBlazor.Pages;

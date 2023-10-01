@@ -1,4 +1,5 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPR.Models.Persistence;
+using BPRBE.Models.Persistence;
 
 namespace BPRBE.Validators;
 

@@ -1,5 +1,5 @@
 ﻿
-namespace BPRBE.Models.Persistence;
+namespace BPR.Models.Persistence;
 
 public class MongoArchitecturalComponent
 {

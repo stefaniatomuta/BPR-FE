@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BPRBlazor.Models;
+namespace BPR.Models.Blazor;
 
 public class ArchitecturalModel
 {

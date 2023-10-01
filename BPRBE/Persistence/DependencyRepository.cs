@@ -1,4 +1,5 @@
-﻿using BPRBE.Config;
+﻿using BPR.Models.Persistence;
+using BPRBE.Config;
 using BPRBE.Constants;
 using BPRBE.Models.Persistence;
 using Microsoft.Extensions.Options;

@@ -1,4 +1,5 @@
-﻿using BPRBE.Config;
+﻿using BPR.Models.Persistence;
+using BPRBE.Config;
 using BPRBE.Models.Persistence;
 using BPRBE.Persistence;
 using BPRBE.Services;
@@ -22,6 +23,8 @@ public static class ServicesExtensions
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
         services.AddScoped<IDependencyRepository, DependencyRepository>();
+        services.AddScoped<ICodeExtractionService, CodeExtractionService>();
+        services.AddScoped<IAnalysisService, AnalysisService>();
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)

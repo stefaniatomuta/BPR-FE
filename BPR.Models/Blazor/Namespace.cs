@@ -1,4 +1,4 @@
-namespace BPRBlazor.Models;
+namespace BPR.Models.Blazor;
 
 public class Namespace
 {

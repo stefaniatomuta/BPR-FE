@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using BPR.Models.Persistence;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace BPRBE.Models.Persistence;
 

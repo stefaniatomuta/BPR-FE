@@ -1,4 +1,5 @@
-﻿using BPRBE.Models;
+﻿using BPR.Models.Analysis;
+using BPRBE.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace BPRBlazor.Components.Results;
