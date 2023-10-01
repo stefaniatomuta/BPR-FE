@@ -1,5 +1,5 @@
-using BPRBE.Services;
-using BPRBE;
+using System.Text.Json;
+using BPRBlazor;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +9,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddValidators();
 builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
+
 // Database config
 builder.Services.AddSingleton(new JsonSerializerOptions
 {

@@ -1,12 +1,13 @@
 ﻿using BPRBE.Config;
-using BPRBE.Models.Persistence;
+using BPRBE.Persistence;
 using BPRBE.Services;
 using BPRBE.Validators;
+using BPRBlazor.Services;
 using FluentValidation;
 using ArchitecturalComponent = BPRBE.Models.Persistence.ArchitecturalComponent;
 using ArchitecturalModel = BPRBE.Models.Persistence.ArchitecturalModel;
 
-namespace BPRBE;
+namespace BPRBlazor;
 
 public static class ServicesExtensions
 {

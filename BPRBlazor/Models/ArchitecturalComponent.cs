@@ -11,6 +11,8 @@ public class ArchitecturalComponent
 
     public List<ArchitecturalComponent> Dependencies { get; set; } = new();
 
+    public List<Namespace> NamespaceComponents { get; set; } = new();
+    
     public override string ToString()
     {
         return $"\tName: {Name}, Dependencies: \n\t\t'{string.Join(", ", Dependencies.Select(x => x.Name))}'";
