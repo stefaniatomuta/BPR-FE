@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using BPRBlazor.Components.AnalysisSetup
 @using Microsoft.AspNetCore.Components.Web
 @using BPRBlazor.Services
 @using BPRBE.Services
@@ -9,7 +10,9 @@
 
 @page "/"
 
-<SelectArchitectureComponent/>
+<div>
+    <SelectArchitectureComponent/>
+</div>
 <label for="inputFile" class="btn btn-primary me-1">
     <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=".7z"/>
     Upload src.7z file

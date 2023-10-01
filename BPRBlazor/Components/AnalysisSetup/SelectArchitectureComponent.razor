@@ -1,4 +1,5 @@
 ﻿@using BPRBE.Persistence
+@using Microsoft.AspNetCore.Components.Web
 @inject IDependencyRepository DependencyRepository
 @if (architecturalOption == null)
 {
@@ -8,12 +9,11 @@ else if(!architecturalOption.Any()){
     <div>Oops...something went wrong</div>
 }
 else {
-    <div>@architecturalOption.Count</div>
     <select class="mb-5" @onchange="OnSelectedValueChangedAsync">
         <option>Select an architectural model</option>
         @foreach (var op in architecturalOption)
         {
-            <option value="@op.Id">@op.Name</option>
+            <option value="@op.Name">@op.Name</option>
         }
     </select>
 }

@@ -23,11 +23,11 @@ public partial class SelectArchitectureComponent : ComponentBase
     {
         foreach (var ar in architecturalOption)
         {
-            if (ar.Name.Equals(e.Value.ToString()))
+            if (ar.Name.Equals(e.Value))
             {
                 SelectedArchitecturalModel = ar.Name;
             }
         }
-        //StateHasChanged();
+        StateHasChanged();
     }
 }
