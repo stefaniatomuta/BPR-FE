@@ -5,8 +5,7 @@ namespace BPRBlazor.Components.AnalysisSetup;
 
 public partial class SelectArchitectureComponent : ComponentBase
 {
-    [Parameter]
-    public string SelectedArchitecturalModel { get; set; } = default!;
+    public string SelectedArchitecturalModel;
 
     public IList<ArchitecturalModel> architecturalOption = new List<ArchitecturalModel>();
 
@@ -22,8 +21,13 @@ public partial class SelectArchitectureComponent : ComponentBase
     }
     public async Task OnSelectedValueChangedAsync(ChangeEventArgs e)
     {
-        SelectedArchitecturalModel = e.Value.ToString();
-        Console.WriteLine("It is definitely: " + SelectedArchitecturalModel);
-        StateHasChanged();
+        foreach (var ar in architecturalOption)
+        {
+            if (ar.Name.Equals(e.Value.ToString()))
+            {
+                SelectedArchitecturalModel = ar.Name;
+            }
+        }
+        //StateHasChanged();
     }
 }

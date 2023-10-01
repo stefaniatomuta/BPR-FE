@@ -1,5 +1,4 @@
 ﻿@using BPRBE.Persistence
-@using MongoDB.Libmongocrypt
 @inject IDependencyRepository DependencyRepository
 @if (architecturalOption == null)
 {
@@ -10,16 +9,13 @@ else if(!architecturalOption.Any()){
 }
 else {
     <div>@architecturalOption.Count</div>
-    @if (architecturalOption.Count > 0)
-    {
-        <select class="mb-5" @onchange="OnSelectedValueChangedAsync">
-            <option>Select an architectural model</option>
-            @foreach (var op in architecturalOption)
-            {
-                <option value="@op.Id">@op.Name</option>
-            }
-        </select>
-    }
+    <select class="mb-5" @onchange="OnSelectedValueChangedAsync">
+        <option>Select an architectural model</option>
+        @foreach (var op in architecturalOption)
+        {
+            <option value="@op.Id">@op.Name</option>
+        }
+    </select>
 }
 
 
