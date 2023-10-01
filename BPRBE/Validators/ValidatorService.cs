@@ -5,14 +5,14 @@ namespace BPRBE.Validators;
 
 public class ValidatorService : IValidatorService
 {
-    private readonly IValidator<ArchitecturalModel> _validator;
+    private readonly IValidator<MongoArchitecturalModel> _validator;
     
-    public ValidatorService(IValidator<ArchitecturalModel> validator)
+    public ValidatorService(IValidator<MongoArchitecturalModel> validator)
     {
         _validator = validator;
     }
 
-    public async Task<Result> ValidateArchitecturalModelAsync(ArchitecturalModel model)
+    public async Task<Result> ValidateArchitecturalModelAsync(MongoArchitecturalModel model)
     {
         var result = await _validator.ValidateAsync(model);
         if (result.IsValid) return new Result(true);

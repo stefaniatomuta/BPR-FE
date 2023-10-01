@@ -1,11 +1,10 @@
 ﻿using BPRBE.Config;
+using BPRBE.Models.Persistence;
 using BPRBE.Persistence;
 using BPRBE.Services;
 using BPRBE.Validators;
 using BPRBlazor.Services;
 using FluentValidation;
-using ArchitecturalComponent = BPRBE.Models.Persistence.ArchitecturalComponent;
-using ArchitecturalModel = BPRBE.Models.Persistence.ArchitecturalModel;
 
 namespace BPRBlazor;
 
@@ -13,8 +12,8 @@ public static class ServicesExtensions
 {
     public static void AddValidators(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
-        services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
+        services.AddScoped<IValidator<MongoArchitecturalModel>, ArchitecturalModelValidator>();
+        services.AddScoped<IValidator<MongoArchitecturalComponent>, ArchitecturalComponentValidator>();
         services.AddScoped<IValidatorService, ValidatorService>();
     }
 

@@ -12,4 +12,8 @@
         <PackageReference Include="SevenZipExtractor" Version="1.0.17" />
         <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BPR.Models\BPR.Models.csproj" />
+    </ItemGroup>
 </Project>

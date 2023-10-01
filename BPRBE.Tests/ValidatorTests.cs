@@ -9,7 +9,7 @@ namespace BPRBE.Tests;
 [TestFixture]
 public class ValidatorTests
 {
-    private IValidator<ArchitecturalModel> _validator;
+    private IValidator<MongoArchitecturalModel> _validator;
 
     [SetUp]
     public void Setup()
@@ -21,7 +21,7 @@ public class ValidatorTests
     public void Should_Have_Error_When_Name_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel { Name = "", Components = new List<ArchitecturalComponent>() };
+        var model = new MongoArchitecturalModel { Name = "", Components = new List<MongoArchitecturalComponent>() };
 
         // Act
         var result = _validator.TestValidate(model);
@@ -35,7 +35,7 @@ public class ValidatorTests
     public void Should_Have_Error_When_Components_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel { Name = "ModelName", Components = new List<ArchitecturalComponent>() };
+        var model = new MongoArchitecturalModel { Name = "ModelName", Components = new List<MongoArchitecturalComponent>() };
 
         // Act
         var result = _validator.TestValidate(model);
@@ -49,10 +49,10 @@ public class ValidatorTests
     public void Should_Have_Error_When_Duplicate_Component_Names()
     {
         // Arrange
-        var model = new ArchitecturalModel
+        var model = new MongoArchitecturalModel
         {
             Name = "ModelName",
-            Components = new List<ArchitecturalComponent>
+            Components = new List<MongoArchitecturalComponent>
             {
                 new() { Name = "Component1" },
                 new() { Name = "Component2" },
@@ -72,10 +72,10 @@ public class ValidatorTests
     public void Should_Not_Have_Error_When_Valid_Model()
     {
         // Arrange
-        var model = new ArchitecturalModel
+        var model = new MongoArchitecturalModel
         {
             Name = "ModelName",
-            Components = new List<ArchitecturalComponent>
+            Components = new List<MongoArchitecturalComponent>
             {
                 new() { Name = "Component1" },
                 new() { Name = "Component2" }

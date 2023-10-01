@@ -9,7 +9,7 @@ namespace BPRBE.Persistence;
 
 public class DependencyRepository : IDependencyRepository
 {
-    private readonly IMongoCollection<ArchitecturalModel> _dependenciesRuleCollection;
+    private readonly IMongoCollection<MongoArchitecturalModel> _dependenciesRuleCollection;
     private readonly IMongoCollection<BsonDocument> _sequenceCollection;
 
     public DependencyRepository(IOptions<DatabaseConfig> databaseSettings)
@@ -18,33 +18,33 @@ public class DependencyRepository : IDependencyRepository
         var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
 
         _dependenciesRuleCollection =
-            mongoDatabase.GetCollection<ArchitecturalModel>(databaseSettings.Value.DependenciesRuleCollectionName);
+            mongoDatabase.GetCollection<MongoArchitecturalModel>(databaseSettings.Value.DependenciesRuleCollectionName);
         _sequenceCollection = mongoDatabase.GetCollection<BsonDocument>(databaseSettings.Value.DependenciesRuleCollectionName);
     }
 
-    public async Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
+    public async Task<IList<MongoArchitecturalModel>> GetArchitecturalModelsAsync()
     {
         return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
     }
     
-    public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
+    public async Task<MongoArchitecturalModel?> GetArchitecturalModelByName(MongoArchitecturalModel model)
     {
         return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
     }
     
-    public async Task<Result> AddModelAsync(ArchitecturalModel model)
+    public async Task<Result> AddModelAsync(MongoArchitecturalModel model)
     {
         try
         {
             var result = await GetArchitecturalModelByName(model);
-            if (result != null) return Result.Fail<ArchitecturalModel>("Model with the same name already exists");
+            if (result != null) return Result.Fail<MongoArchitecturalModel>("Model with the same name already exists");
             model.Id = await GetNextSequenceValueAsync();
             await _dependenciesRuleCollection.InsertOneAsync(model);
             return Result.Ok(model);
         }
         catch (Exception e)
         {
-            return Result.Fail<ArchitecturalModel>(e.Message);
+            return Result.Fail<MongoArchitecturalModel>(e.Message);
         }
     }
     
