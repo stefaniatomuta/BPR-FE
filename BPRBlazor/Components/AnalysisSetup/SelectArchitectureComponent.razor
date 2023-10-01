@@ -9,7 +9,7 @@ else if(!architecturalOption.Any()){
     <div>Oops...something went wrong</div>
 }
 else {
-    <select class="mb-5" @onchange="OnSelectedValueChangedAsync">
+    <select class="mb-5" @onchange="OnSelectedValueChanged">
         <option>Select an architectural model</option>
         @foreach (var op in architecturalOption)
         {

@@ -5,7 +5,7 @@ namespace BPRBlazor.Components.AnalysisSetup;
 
 public partial class SelectArchitectureComponent : ComponentBase
 {
-    public string SelectedArchitecturalModel;
+    public string? SelectedArchitecturalModel = default!;
 
     public IList<ArchitecturalModel> architecturalOption = new List<ArchitecturalModel>();
 
@@ -19,7 +19,7 @@ public partial class SelectArchitectureComponent : ComponentBase
     {
         return await DependencyRepository.GetArchitecturalModelsAsync();
     }
-    public async Task OnSelectedValueChangedAsync(ChangeEventArgs e)
+    public void OnSelectedValueChanged(ChangeEventArgs e)
     {
         foreach (var ar in architecturalOption)
         {
