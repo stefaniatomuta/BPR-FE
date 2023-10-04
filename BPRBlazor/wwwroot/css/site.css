@@ -22,6 +22,14 @@ a, .btn-link {
     padding-top: 1.1rem;
 }
 
+button {
+    display: block;
+}
+
+.success {
+    color: forestgreen;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
@@ -32,6 +40,11 @@ a, .btn-link {
 
 .validation-message {
     color: red;
+}
+
+.error
+{
+    color: orangered;
 }
 
 #blazor-error-ui {

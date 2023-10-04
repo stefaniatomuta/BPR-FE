@@ -1,5 +1,6 @@
-﻿using BPRBE.UserInterface.Enums;
-using BPRBE.UserInterface.Models;
+﻿using BPRBE.Enums;
+using BPRBE.Models;
+using Microsoft.AspNetCore.Components;
 
 namespace BPRBlazor.Pages;
 

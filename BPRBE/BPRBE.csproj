@@ -6,4 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.7.1" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+        <PackageReference Include="SevenZipExtractor" Version="1.0.17" />
+        <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
+    </ItemGroup>
 </Project>

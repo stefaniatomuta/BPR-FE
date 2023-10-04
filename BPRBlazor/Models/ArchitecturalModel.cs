@@ -11,4 +11,9 @@ public class ArchitecturalModel
     [MinLength(1, ErrorMessage = "The model must consist of at least {1} component")]
     [ValidateComplexType]
     public List<ArchitecturalComponent> Components { get; set; } = new();
+
+    public override string ToString()
+    {
+        return $"Name: {Name}, Components: \n{string.Join('\n', Components.Select(x => x.ToString()))}";
+    }
 }

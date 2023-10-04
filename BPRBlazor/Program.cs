@@ -1,13 +1,16 @@
-
+using System.Text.Json;
+using BPRBlazor;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
+builder.Services.AddValidators();
+builder.Services.AddServices();
+builder.Services.AddDbConfiguration(builder.Configuration);
 
-builder.Services.AddScoped<IHttpService, HttpService>();
-
+// Database config
 builder.Services.AddSingleton(new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,

@@ -4,7 +4,7 @@
 <EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
     <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_model.Name" />
-    <ValidationMessage For="(() => _model.Name)" />
+    <ValidationMessage class="error" For="(() => _model.Name)" />
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
 
     @if (_model.Components.Any())
@@ -24,13 +24,13 @@
                 <span>@component.Id</span>
                 <div class="d-flex flex-column p-2 gap-1">
                     <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
-                    <ValidationMessage For="(() => component.Name)" />
+                    <ValidationMessage class="error" For="(() => component.Name)" />
                 </div>
             </div>
         }
     </div>
 
-    <ValidationMessage For="(() => _model.Components)" />
+    <ValidationMessage class="error" For="(() => _model.Components)" />
     <button type="submit" class="btn btn-primary my-2">Submit Model</button>
     <p class="@_createModelResultCss">@_resultMessage</p>
 </EditForm>
