@@ -12,9 +12,9 @@ public class CodeExtractionService : ICodeExtractionService {
         var files  = Directory.GetFiles(filepath).ToList();
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
-                var content = File.ReadAllText(file,Encoding.UTF8);
-                var result = Regex.Matches(content, usingRegex,RegexOptions.Multiline);
-                matches.AddRange(result.Select(r =>r.Value));
+                var content = File.ReadLines(file,Encoding.UTF8);
+                var result = content.Where(s => Regex.Match(s, usingRegex).Success).ToList();
+                matches.AddRange(result);
             }
         }
         return matches;
