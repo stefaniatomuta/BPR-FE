@@ -42,12 +42,4 @@ public class AnalysisService : IAnalysisService {
         return notMatched;
     }
 
-    private List<string> GetUsingsForComponentNamespace(string folderPath, string componentNamespace) {
-        
-        return null;
-    }
-
-    private string GetFullPath(string folderPath, string componentNamespace) {
-        return $"{folderPath}/{componentNamespace}";
-    }
 }
