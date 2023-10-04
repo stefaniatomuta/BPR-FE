@@ -12,8 +12,8 @@ public class DependencyService : IDependencyService
         _dependencyRepository = dependencyRepository;
     }
 
-    public Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
+    public async Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
     {
-        return _dependencyRepository.GetArchitecturalModelsAsync();
+        return await _dependencyRepository.GetArchitecturalModelsAsync();
     }
 }
