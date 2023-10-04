@@ -1,4 +1,5 @@
 ﻿@page "/new-model"
+@inject IJSRuntime JS
 
 <EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
@@ -13,19 +14,23 @@
             <button type="button" class="btn btn-success" @onclick="(() => AddDependency(int.Parse(_dependencyString.Split(',')[0]), int.Parse(_dependencyString.Split(',')[1])))">Add dependency</button>
         </div>
     }
-
-    @foreach (var component in _model.Components)
-    {
-        <div class="mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <span>Id: @component.Id</span>
-                <InputText class="form-control w-25" placeholder="Component name..." @bind-Value="component.Name" />
-                <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component.Id))">Remove component</button>
+    <div class="draggable-boundary" ondragover="return false;" @ondrop="OnDropComponent">
+        @foreach (var component in _model.Components)
+        {
+            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="@component.Style" @ondragstart="((e) => OnDragComponentStart(e, component))">
+                <div class="component-header mb-2">
+                    <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name" />
+                </div>
+                <span>@component.Id</span>
+                <div class="d-flex flex-column p-2 gap-1">
+                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
+                    <ValidationMessage For="(() => component.Name)" />
+                </div>
             </div>
-            <ValidationMessage For="(() => component.Name)" />
-        </div>
-    }
+        }
+    </div>
+
     <ValidationMessage For="(() => _model.Components)" />
-    <button type="submit" class="btn btn-primary my-2">Submit</button>
+    <button type="submit" class="btn btn-primary my-2">Submit Model</button>
     <p class="@_createModelResultCss">@_resultMessage</p>
 </EditForm>

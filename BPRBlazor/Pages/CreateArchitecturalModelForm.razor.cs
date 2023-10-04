@@ -1,5 +1,7 @@
 ﻿using BPRBlazor.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace BPRBlazor.Pages;
 
@@ -11,6 +13,9 @@ public partial class CreateArchitecturalModelForm : ComponentBase
 
     private string _dependencyString = "";
 
+    private (double ClientX, double ClientY) _dragStartCoordinates;
+    private ArchitecturalComponent? _draggingComponent;
+
     private void AddArchitecturalComponent()
     {
         var component = new ArchitecturalComponent()
@@ -21,9 +26,8 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         _model.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(int componentId)
+    private void RemoveArchitecturalComponent(ArchitecturalComponent component)
     {
-        var component = _model.Components.First(c => c.Id == componentId);
         _model.Components.Remove(component);
     }
 
@@ -59,5 +63,29 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         {
             parentComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponentId));
         }
+    }
+
+    private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponent component)
+    {
+        _dragStartCoordinates = (args.ClientX, args.ClientY);
+        _draggingComponent = component;
+    }
+
+    private async Task OnDropComponent(DragEventArgs args)
+    {
+        if (_draggingComponent == null)
+        {
+            return;
+        }
+
+        var difference = (args.ClientX - _dragStartCoordinates.ClientX, args.ClientY - _dragStartCoordinates.ClientY);
+        var offset = await JS.InvokeAsync<HTMLElementOffset>("getElementOffset", _draggingComponent.Id);
+        _draggingComponent.Style = $"left: {offset.Left + difference.Item1}px; top: {offset.Top + difference.Item2}px";
+    }
+
+    private class HTMLElementOffset
+    {
+        public double Left { get; set; }
+        public double Top { get; set; }
     }
 }

@@ -9,3 +9,24 @@
 .error {
     color: orangered;
 }
+
+.draggable-boundary {
+    width: 100%;
+    height: 70vh;
+    border: 1px dashed #b3b3b3;
+    position: relative;
+}
+
+.component {
+    position: absolute;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    width: 10rem;
+    cursor: move;
+}
+
+.component-header {
+    padding: 10px;
+    background-color: #2196F3;
+}
