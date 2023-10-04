@@ -17,8 +17,12 @@ public class RuleService : IRuleService
 
     public async Task<Result> AddRuleAsync(Rule rule)
     {
-        var result = _validatorService.ValidateRuleAsync(rule);
-        return await _ruleRepository.AddRuleAsync(rule);
+        var result = await _validatorService.ValidateRuleAsync(rule);
+        if (result.Success)
+        {
+            return await _ruleRepository.AddRuleAsync(rule);
+        }
+        return result;
     }
 
     public async Task<IList<Rule>> GetRulesAsync()

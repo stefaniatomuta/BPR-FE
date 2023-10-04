@@ -22,12 +22,17 @@ public class RuleRepository : IRuleRepository
     {
         return await (await _rulesCollection.FindAsync(_ => true)).ToListAsync();
     }
+
+    private async Task<Rule?> GetRuleByNameAsync(string name)
+    {
+        return await (await _rulesCollection.FindAsync(x => x.Name.Equals(name))).FirstOrDefaultAsync();
+    }
     
     public async Task<Result> AddRuleAsync(Rule rule)
     {
         try
         {
-            var result = await GetRulesAsync();
+            var result = await GetRuleByNameAsync(rule.Name);
             if (result != null) return Result.Fail<Rule>("Rule with the same name already exists");
             
             await _rulesCollection.InsertOneAsync(rule);

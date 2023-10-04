@@ -7,7 +7,7 @@ namespace BPRBlazor.Pages;
 
 public partial class CreateArchitecturalModelForm : ComponentBase
 {
-    private ArchitecturalModelViewModel _model = new();
+    private ArchitecturalModelViewModel _modelViewModel = new();
     private List<(string Message, string Class)> _resultMessages = new();
 
     private string _dependencyString = "";
@@ -19,15 +19,15 @@ public partial class CreateArchitecturalModelForm : ComponentBase
     {
         var component = new ArchitecturalComponentViewModel()
         {
-            Id = _model.Components.Any() ? _model.Components.Max(c => c.Id) + 1 : 0
+            Id = _modelViewModel.Components.Any() ? _modelViewModel.Components.Max(c => c.Id) + 1 : 0
         };
 
-        _model.Components.Add(component);
+        _modelViewModel.Components.Add(component);
     }
 
     private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
     {
-        _model.Components.Remove(component);
+        _modelViewModel.Components.Remove(component);
     }
 
     private async Task CreateArchitecturalModel()
@@ -35,10 +35,10 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         try
         {
             _resultMessages = new();
-            var result = await repository.AddModelAsync(_model.ToBackendModel());
+            var result = await service.AddModelAsync(_modelViewModel.ToBackendModel());
             if (result.Success)
             {
-                _model = new();
+                _modelViewModel = new();
                 _resultMessages.Add(("Model successfully added!", "success"));
             }
             else
@@ -64,11 +64,11 @@ public partial class CreateArchitecturalModelForm : ComponentBase
             return;
         }
 
-        var parentComponent = _model.Components.First(c => c.Id == parentComponentId);
+        var parentComponent = _modelViewModel.Components.First(c => c.Id == parentComponentId);
 
         if (!parentComponent.Dependencies.Any(c => c.Id == dependencyComponentId))
         {
-            parentComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponentId));
+            parentComponent.Dependencies.Add(_modelViewModel.Components.First(c => c.Id == dependencyComponentId));
         }
     }
 

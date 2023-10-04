@@ -1,7 +1,7 @@
 ﻿@page "/new-model"
 @inject IJSRuntime JS
-@inject IDependencyRepository repository
-@using BPRBE.Persistence;
+@inject IDependencyService service
+@using BPRBE.Services
 
 <EditForm Model="_modelViewModel" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
@@ -16,23 +16,8 @@
             <button type="button" class="btn btn-success" @onclick="(() => AddDependency(int.Parse(_dependencyString.Split(',')[0]), int.Parse(_dependencyString.Split(',')[1])))">Add dependency</button>
         </div>
     }
-
-    @foreach (var component in _modelViewModel.Components)
-    {
-        <div class="mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <span>Id: @component.Id</span>
-                <InputText class="form-control w-25" placeholder="Component name..." @bind-Value="component.Name" />
-                <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component.Id))">Remove component</button>
-            </div>
-            <ValidationMessage For="(() => component.Name)" />
-        </div>
-    }
-    <ValidationMessage For="(() => _modelViewModel.Components)" />
-    <button type="submit" class="btn btn-primary my-2">Submit</button>
-    <p class="@_createModelResultCss">@_resultMessage</p>
     <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
-        @foreach (var component in _model.Components)
+        @foreach (var component in _modelViewModel.Components)
         {
             <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="@component.Style" @ondragstart="((e) => OnDragComponentStart(e, component))">
                 <div class="component-header mb-2">
@@ -46,7 +31,7 @@
             </div>
         }
     </div>
-    <ValidationMessage For="(() => _model.Components)" />
+    <ValidationMessage For="(() => _modelViewModel.Components)" />
     @foreach (var message in _resultMessages)
     {
         <span class="@message.Class d-block">@message.Message</span>

@@ -1,0 +1,13 @@
+﻿@using BPRBE.Services
+@inject IRuleService Service
+
+@foreach (var item in Rules)
+{
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="@item.Id" />
+        <label class="form-check-label" for="@item.Id">
+            @item.Name
+            @item.Description
+        </label>
+    </div>
+}
