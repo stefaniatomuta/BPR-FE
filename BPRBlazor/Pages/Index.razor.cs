@@ -25,7 +25,7 @@ public partial class Index : ComponentBase
         _architecturalModel = default!;
         LoadDummyData();
     }
-    private void HandleChildParameterChange(string newValue)
+    private void HandleArchitecturalModelOnChange(string newValue)
     {
         _selectedArchitectureModel = newValue;
     }

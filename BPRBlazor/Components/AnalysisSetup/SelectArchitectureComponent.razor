@@ -1,17 +1,17 @@
 ﻿@using BPRBE.Services
 @using Microsoft.AspNetCore.Components.Web
 @inject IDependencyService DependencyService
-@if (architecturalOption == null)
+@if (ArchitecturalOptions == null)
 {
     <div>Loading...</div>
 }
-else if(!architecturalOption.Any()){
+else if(!ArchitecturalOptions.Any()){
     <div>Oops...something went wrong</div>
 }
 else {
     <select class="mb-5" @onchange="OnSelectedValueChanged">
         <option hidden>Select an architectural model</option>
-        @foreach (var op in architecturalOption)
+        @foreach (var op in ArchitecturalOptions)
         {
             <option value="@op.Name">@op.Name</option>
         }
