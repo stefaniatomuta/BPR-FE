@@ -23,6 +23,7 @@ public static class ServicesExtensions
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
         services.AddScoped<IDependencyRepository, DependencyRepository>();
+        services.AddScoped<IDependencyService, DependencyService>();
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)
