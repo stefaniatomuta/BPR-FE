@@ -4,13 +4,13 @@
 <EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
     <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_model.Name" />
-    <ValidationMessage class="error" For="(() => _model.Name)" />
+    <ValidationMessage For="(() => _model.Name)" />
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
 
     @if (_model.Components.Any())
     {
         <div class="d-flex gap-2 mb-2">
-            <input type="text" class="form-control w-25" placeholder="Dependency id... ('parentId,childId')" @bind-value="_dependencyString" />
+            <InputText type="text" class="form-control w-25" placeholder="Dependency id... ('parentId,childId')" @bind-value="_dependencyString" />
             <button type="button" class="btn btn-success" @onclick="(() => AddDependency(int.Parse(_dependencyString.Split(',')[0]), int.Parse(_dependencyString.Split(',')[1])))">Add dependency</button>
         </div>
     }
@@ -24,13 +24,13 @@
                 <span>@component.Id</span>
                 <div class="d-flex flex-column p-2 gap-1">
                     <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
-                    <ValidationMessage class="error" For="(() => component.Name)" />
+                    <ValidationMessage For="(() => component.Name)" />
                 </div>
             </div>
         }
     </div>
 
-    <ValidationMessage class="error" For="(() => _model.Components)" />
+    <ValidationMessage For="(() => _model.Components)" />
     <button type="submit" class="btn btn-primary my-2">Submit Model</button>
     <p class="@_createModelResultCss">@_resultMessage</p>
 </EditForm>
