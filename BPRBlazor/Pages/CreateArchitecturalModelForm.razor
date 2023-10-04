@@ -1,7 +1,6 @@
 ﻿@page "/new-model"
 @inject IJSRuntime JS
 @inject IDependencyRepository repository
-@using BPRBE.Persistence;
 
 <EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
