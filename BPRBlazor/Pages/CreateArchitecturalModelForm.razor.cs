@@ -8,8 +8,7 @@ namespace BPRBlazor.Pages;
 public partial class CreateArchitecturalModelForm : ComponentBase
 {
     private ArchitecturalModel _model = new();
-    private string _resultMessage = "";
-    private string _createModelResultCss = "";
+    private List<(string Message, string Class)> _resultMessages = new();
 
     private string _dependencyString = "";
 
@@ -35,22 +34,24 @@ public partial class CreateArchitecturalModelForm : ComponentBase
     {
         try
         {
+            _resultMessages = new();
             var result = await repository.AddModelAsync(_model.ToBackendModel());
             if (result.Success)
             {
                 _model = new();
-                _resultMessage = "Model successfully added!";
-                _createModelResultCss = "success";
+                _resultMessages.Add(("Model successfully added!", "success"));
             }
             else
             {
-                _resultMessage = string.Join("\n", result.Errors.Select(e => e));
+                foreach (var error in result.Errors)
+                {
+                    _resultMessages.Add((error, "error"));
+                }
             }
         }
         catch (Exception ex)
         {
-            _resultMessage = ex.Message;
-            _createModelResultCss = "error";
+            _resultMessages.Add((ex.Message, "error"));
         }
     }
 

@@ -16,7 +16,7 @@
             <button type="button" class="btn btn-success" @onclick="(() => AddDependency(int.Parse(_dependencyString.Split(',')[0]), int.Parse(_dependencyString.Split(',')[1])))">Add dependency</button>
         </div>
     }
-    <div class="draggable-boundary" ondragover="return false;" @ondrop="OnDropComponent">
+    <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
         @foreach (var component in _model.Components)
         {
             <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="@component.Style" @ondragstart="((e) => OnDragComponentStart(e, component))">
@@ -31,8 +31,10 @@
             </div>
         }
     </div>
-
     <ValidationMessage For="(() => _model.Components)" />
+    @foreach (var message in _resultMessages)
+    {
+        <span class="@message.Class d-block">@message.Message</span>
+    }
     <button type="submit" class="btn btn-primary my-2">Submit Model</button>
-    <p class="@_createModelResultCss">@_resultMessage</p>
 </EditForm>
