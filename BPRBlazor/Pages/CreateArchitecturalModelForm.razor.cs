@@ -31,15 +31,21 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         _model.Components.Remove(component);
     }
 
-    private void CreateArchitecturalModel()
+    private async Task CreateArchitecturalModel()
     {
         try
         {
-            // TODO - Actually add the model.
-            Console.WriteLine(_model.ToString());
-            _model = new();
-            _resultMessage = "Model successfully added!";
-            _createModelResultCss = "success";
+            var result = await repository.AddModelAsync(_model.ToBackendModel());
+            if (result.Success)
+            {
+                _model = new();
+                _resultMessage = "Model successfully added!";
+                _createModelResultCss = "success";
+            }
+            else
+            {
+                _resultMessage = string.Join("\n", result.Errors.Select(e => e));
+            }
         }
         catch (Exception ex)
         {
