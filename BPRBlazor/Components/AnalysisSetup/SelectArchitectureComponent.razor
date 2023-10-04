@@ -1,13 +1,16 @@
 ﻿@using BPRBE.Services
 @inject IDependencyService DependencyService
+
 @if (ArchitecturalOptions == null)
 {
     <div>Loading...</div>
 }
-else if(!ArchitecturalOptions.Any()){
+else if (!ArchitecturalOptions.Any())
+{
     <div>Oops...something went wrong</div>
 }
-else {
+else
+{
     <select class="mb-5" @onchange="OnSelectedValueChanged">
         <option hidden>Select an architectural model</option>
         @foreach (var op in ArchitecturalOptions)
@@ -16,5 +19,3 @@ else {
         }
     </select>
 }
-
-
