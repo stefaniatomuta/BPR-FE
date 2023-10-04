@@ -9,15 +9,15 @@ public partial class SelectArchitectureComponent : ComponentBase
     [Parameter]
     public EventCallback<string> ArchitecturalModelChanged { get; set; }
 
-    public IList<ArchitecturalModel> ArchitecturalOptions = new List<ArchitecturalModel>();
+    public IList<MongoArchitecturalModel> ArchitecturalOptions = new List<MongoArchitecturalModel>();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        ArchitecturalOptions = await GetArchitecturalModels();
+        // ArchitecturalOptions = await GetArchitecturalModels();
     }
 
-    private async Task<IList<ArchitecturalModel>> GetArchitecturalModels()
+    private async Task<IList<MongoArchitecturalModel>> GetArchitecturalModels()
     {
         return await DependencyService.GetArchitecturalModelsAsync();
     }

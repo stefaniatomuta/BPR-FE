@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BPRBE.Services; 
 
@@ -8,11 +9,11 @@ public class CodeExtractionService : ICodeExtractionService {
     
     public List<string> GetUsingDirectives(string filepath) {
         List<string> matches = new ();
-        var files  = Directory.EnumerateFiles(filepath,SearchOption.AllDirectories.ToString());
+        var files  = Directory.GetFiles(filepath).ToList();
         foreach (var file in files) {
-            if (file.EndsWith(".cs")) {
-                var content = File.ReadAllText(file);
-                var result = Regex.Matches(content, usingRegex);
+            if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
+                var content = File.ReadAllText(file,Encoding.UTF8);
+                var result = Regex.Matches(content, usingRegex,RegexOptions.Multiline);
                 matches.AddRange(result.Select(r =>r.Value));
             }
         }

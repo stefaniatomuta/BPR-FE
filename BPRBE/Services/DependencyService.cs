@@ -12,7 +12,7 @@ public class DependencyService : IDependencyService
         _dependencyRepository = dependencyRepository;
     }
 
-    public Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
+    public Task<IList<MongoArchitecturalModel>> GetArchitecturalModelsAsync()
     {
         return _dependencyRepository.GetArchitecturalModelsAsync();
     }

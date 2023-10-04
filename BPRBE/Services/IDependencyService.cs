@@ -8,5 +8,5 @@ public interface IDependencyService
      * Mediator between the persistence and the UI
      * Used in retrieval of architectural models
      */
-    public Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
+    public Task<IList<MongoArchitecturalModel>> GetArchitecturalModelsAsync();
 }

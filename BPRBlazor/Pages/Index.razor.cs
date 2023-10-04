@@ -37,6 +37,8 @@ public partial class Index : ComponentBase
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
             return;
         }
+
+        AnalysisService.GetDependencyAnalysis(_folderPath,_architecturalModel);
     }
 
     private void HandleDrop(ArchitecturalComponent component = default!)

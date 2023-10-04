@@ -16,19 +16,23 @@ public class AnalysisService : IAnalysisService {
     public List<ViolationModel> GetDependencyAnalysis(string folderPath, ArchitecturalModel model) {
         List<ViolationModel> violations = new();
         foreach (var component in model.Components) {
-            violations.AddRange(GetViolationsForComponentDependency(component.Name, component.NamespaceComponents));
+            violations.AddRange(GetViolationsForComponentDependency(component.Name,folderPath, component.NamespaceComponents));
         }
         return violations;
     }
 
-    private List<ViolationModel> GetViolationsForComponentDependency(string componentPath, List<Namespace> namespaces) {
+    private List<ViolationModel> GetViolationsForComponentDependency(string componentName, string folderPath, List<Namespace> namespaces) {
         List<ViolationModel> notMatched = new ();
-        var usings = _codeExtractionService.GetUsingDirectives(componentPath);
+        List<string> usings = new();
+
+        foreach (var n in namespaces) {
+            usings.AddRange(_codeExtractionService.GetUsingDirectives($"{folderPath}/{n.Name}"));
+        }
         foreach (var directive in usings) {
             if (!namespaces.Select(n => n.Name).Any(n => n.Contains(directive))) {
                 var violation = new ViolationModel{
                     Type = ViolationType.ForbiddenDependencyDirection,
-                    Name = componentPath,
+                    Name = componentName,
                     Severity = ViolationSeverity.Major,
                     Code = directive
                 };
@@ -36,5 +40,14 @@ public class AnalysisService : IAnalysisService {
             }
         }
         return notMatched;
+    }
+
+    private List<string> GetUsingsForComponentNamespace(string folderPath, string componentNamespace) {
+        
+        return null;
+    }
+
+    private string GetFullPath(string folderPath, string componentNamespace) {
+        return $"{folderPath}/{componentNamespace}";
     }
 }
