@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BPRBlazor.Models;
+namespace BPRBlazor.ViewModels;
 
-public class ArchitecturalComponent
+public class ArchitecturalComponentViewModel
 {
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Please give the component a name")]
     public string Name { get; set; } = string.Empty;
 
-    public List<ArchitecturalComponent> Dependencies { get; set; } = new();
+    public List<ArchitecturalComponentViewModel> Dependencies { get; set; } = new();
 
-    public List<Namespace> NamespaceComponents { get; set; } = new();
+    public List<NamespaceViewModel> NamespaceComponents { get; set; } = new();
     
     public override string ToString()
     {

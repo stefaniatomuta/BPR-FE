@@ -38,12 +38,12 @@
             </div>
 
             <div class="col-lg-9">
-                @if (_architecturalModel != default!)
+                @if (_architecturalModelViewModel != default!)
                 {
                     <div class="container-fluid">
                         <div class="row">
 
-                            @foreach (var component in _architecturalModel.Components)
+                            @foreach (var component in _architecturalModelViewModel.Components)
                             {
                                 <div class="col-6 mt-3">
                                     <h3>@component.Name</h3>
@@ -69,12 +69,12 @@
         else
         {
             <div class="col-12">
-                @if (_architecturalModel != default!)
+                @if (_architecturalModelViewModel != default!)
                 {
                     <div class="container-fluid">
                         <div class="row">
 
-                            @foreach (var component in _architecturalModel.Components)
+                            @foreach (var component in _architecturalModelViewModel.Components)
                             {
                                 <div class="col-6 mt-3">
                                     <h3>@component.Name</h3>

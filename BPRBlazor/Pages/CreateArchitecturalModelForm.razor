@@ -1,12 +1,12 @@
 ﻿@page "/new-model"
 
-<EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
+<EditForm Model="_modelViewModel" OnValidSubmit="CreateArchitecturalModel">
     <ObjectGraphDataAnnotationsValidator />
-    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_model.Name" />
-    <ValidationMessage For="(() => _model.Name)" />
+    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_modelViewModel.Name" />
+    <ValidationMessage For="(() => _modelViewModel.Name)" />
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
 
-    @if (_model.Components.Any())
+    @if (_modelViewModel.Components.Any())
     {
         <div class="d-flex gap-2 mb-2">
             <InputText type="text" class="form-control w-25" placeholder="Dependency id... ('parentId,childId')" @bind-value="_dependencyString" />
@@ -14,7 +14,7 @@
         </div>
     }
 
-    @foreach (var component in _model.Components)
+    @foreach (var component in _modelViewModel.Components)
     {
         <div class="mb-2">
             <div class="d-flex align-items-center gap-2">
@@ -25,7 +25,7 @@
             <ValidationMessage For="(() => component.Name)" />
         </div>
     }
-    <ValidationMessage For="(() => _model.Components)" />
+    <ValidationMessage For="(() => _modelViewModel.Components)" />
     <button type="submit" class="btn btn-primary my-2">Submit</button>
     <p class="@_createModelResultCss">@_resultMessage</p>
 </EditForm>
