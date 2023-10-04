@@ -5,7 +5,10 @@ namespace BPRBlazor.Components.AnalysisSetup;
 
 public partial class SelectArchitectureComponent : ComponentBase
 {
-    public string? SelectedArchitecturalModel = default!;
+    [Parameter] 
+    public string? SelectedArchitecturalModel { get; set; }
+    [Parameter]
+    public EventCallback<string> ChildParameterChanged { get; set; }
 
     public IList<ArchitecturalModel> architecturalOption = new List<ArchitecturalModel>();
 
@@ -17,17 +20,17 @@ public partial class SelectArchitectureComponent : ComponentBase
 
     private async Task<IList<ArchitecturalModel>> GetArchitecturalModels()
     {
-        return await DependencyRepository.GetArchitecturalModelsAsync();
+        return await DependencyService.GetArchitecturalModelsAsync();
     }
-    public void OnSelectedValueChanged(ChangeEventArgs e)
+    public async Task OnSelectedValueChanged(ChangeEventArgs e)
     {
         foreach (var ar in architecturalOption)
         {
             if (ar.Name.Equals(e.Value))
             {
                 SelectedArchitecturalModel = ar.Name;
+                await ChildParameterChanged.InvokeAsync(SelectedArchitecturalModel);
             }
         }
-        StateHasChanged();
     }
 }

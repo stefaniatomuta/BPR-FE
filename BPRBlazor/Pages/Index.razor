@@ -11,7 +11,7 @@
 @page "/"
 
 <div>
-    <SelectArchitectureComponent/>
+    <SelectArchitectureComponent SelectedArchitecturalModel="@_selectedArchitectureModel" ChildParameterChanged="HandleChildParameterChange"/>
 </div>
 <label for="inputFile" class="btn btn-primary me-1">
     <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=".7z"/>

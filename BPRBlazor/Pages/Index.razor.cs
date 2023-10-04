@@ -12,8 +12,8 @@ public partial class Index : ComponentBase
     private ArchitecturalModel _architecturalModel = default!;
     private List<Namespace> _unmappedNamespaceComponents = new();
     private Namespace _selectedNamespaceComponent = default!;
-
-
+    private string _selectedArchitectureModel = default!;
+    
     private async Task SendDataAsync()
     {
         await HttpService.PostAsync("http://127.0.0.1:8000/post?item=HelloWorld", string.Empty);
@@ -24,6 +24,10 @@ public partial class Index : ComponentBase
         _errorMessage = default!;
         _architecturalModel = default!;
         LoadDummyData();
+    }
+    private void HandleChildParameterChange(string newValue)
+    {
+        _selectedArchitectureModel = newValue;
     }
 
     private void StartAnalysis()
