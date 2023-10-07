@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
+using BE = BPRBE.Models.Persistence;
 
 namespace BPRBlazor.Pages;
 
@@ -12,8 +13,8 @@ public partial class Index : ComponentBase
     private ArchitecturalModel _architecturalModel = default!;
     private List<Namespace> _unmappedNamespaceComponents = new();
     private Namespace _selectedNamespaceComponent = default!;
-    private string _selectedArchitectureModel = default!;
-    
+    private BE.ArchitecturalModel? _selectedArchitectureModel;
+
     private async Task SendDataAsync()
     {
         await HttpService.PostAsync("http://127.0.0.1:8000/post?item=HelloWorld", string.Empty);
@@ -25,9 +26,11 @@ public partial class Index : ComponentBase
         _architecturalModel = default!;
         LoadDummyData();
     }
-    private void HandleArchitecturalModelOnChange(string newValue)
+
+    private void HandleArchitectureModelOnChange(BE.ArchitecturalModel newValue)
     {
         _selectedArchitectureModel = newValue;
+        // TODO - Actually do something with the selected model when analysis is started.
     }
 
     private void StartAnalysis()
@@ -47,7 +50,7 @@ public partial class Index : ComponentBase
         {
             oldComponent.NamespaceComponents.Remove(_selectedNamespaceComponent);
         }
-        
+
         if (component != default!)
         {
             component.NamespaceComponents.Add(_selectedNamespaceComponent);

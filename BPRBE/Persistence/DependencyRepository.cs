@@ -27,12 +27,12 @@ public class DependencyRepository : IDependencyRepository
         var filter = BsonDocument.Parse("{'$and': [{'Name': {'$exists': true}}]}");
         return await (await _dependenciesRuleCollection.FindAsync(filter)).ToListAsync();
     }
-    
+
     public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
     {
         return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
     }
-    
+
     public async Task<Result> AddModelAsync(ArchitecturalModel model)
     {
         try
@@ -48,7 +48,7 @@ public class DependencyRepository : IDependencyRepository
             return Result.Fail<ArchitecturalModel>(e.Message);
         }
     }
-    
+
     private async Task<int> GetNextSequenceValueAsync()
     {
         var filter = Builders<BsonDocument>.Filter.Eq(Values.MongoDbId, Values.MongoDbId);
@@ -57,5 +57,11 @@ public class DependencyRepository : IDependencyRepository
         var result = await _sequenceCollection.FindOneAndUpdateAsync(filter, update, options);
 
         return result[Values.MongoDbValue].AsInt32;
+    }
+
+    public async Task<ArchitecturalModel?> DeleteModelAsync(int modelId)
+    {
+        var filter = Builders<ArchitecturalModel>.Filter.Eq(model => model.Id, modelId);
+        return await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
     }
 }

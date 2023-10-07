@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
-namespace BPRBlazor.Pages;
+namespace BPRBlazor.Components.ModelManagement;
 
-public partial class CreateArchitecturalModelForm : ComponentBase
+public partial class CreateArchitectureComponent : ComponentBase
 {
     private ArchitecturalModel _model = new();
     private List<(string Message, string Class)> _resultMessages = new();
@@ -15,7 +15,7 @@ public partial class CreateArchitecturalModelForm : ComponentBase
     private (double ClientX, double ClientY) _dragStartCoordinates;
     private ArchitecturalComponent? _draggingComponent;
 
-    private void AddArchitecturalComponent()
+    private void AddArchitectureComponent()
     {
         var component = new ArchitecturalComponent()
         {
@@ -25,16 +25,17 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         _model.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(ArchitecturalComponent component)
+    private void RemoveArchitectureComponent(ArchitecturalComponent component)
     {
         _model.Components.Remove(component);
     }
 
-    private async Task CreateArchitecturalModel()
+    private async Task CreateArchitectureModel()
     {
         try
         {
             _resultMessages = new();
+            // TODO - Fix to not access repository directly
             var result = await repository.AddModelAsync(_model.ToBackendModel());
             if (result.Success)
             {
