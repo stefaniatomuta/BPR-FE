@@ -1,6 +1,7 @@
 ﻿@using BPRBE.Services
 @using BPRBlazor.Components.Common
 @inject IDependencyService service
+@inject IJSRuntime JS
 
 <h3>Delete architecture models</h3>
 <SelectArchitectureComponent ArchitectureModelChanged="HandleModelChange" @ref="selectArchitectureComponent" />

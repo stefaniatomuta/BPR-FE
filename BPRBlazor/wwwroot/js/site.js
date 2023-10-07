@@ -13,3 +13,7 @@ function removeSelectedElement(elementId) {
     var element = document.getElementById(elementId);
     element.selectedIndex = 0;
 }
+
+function handleConfirmation(message) {
+    return confirm(message)
+}

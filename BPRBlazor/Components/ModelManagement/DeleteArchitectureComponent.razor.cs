@@ -1,6 +1,7 @@
 ﻿using BPRBE.Models.Persistence;
 using BPRBlazor.Components.Common;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace BPRBlazor.Components.ModelManagement;
 
@@ -19,9 +20,15 @@ public partial class DeleteArchitectureComponent : ComponentBase
 
     private async Task DeleteSelectedModel()
     {
+        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", $"Are you sure you want to delete the '{_selectedModel!.Name}' model?");
+        if (!confirmed)
+        {
+            return;
+        }
+
         try
         {
-            var result = await service.DeleteArchitectureModelAsync(_selectedModel!.Id);
+            var result = await service.DeleteArchitectureModelAsync(_selectedModel.Id);
 
             if (result.Success)
             {
