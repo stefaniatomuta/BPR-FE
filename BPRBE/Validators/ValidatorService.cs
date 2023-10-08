@@ -29,8 +29,12 @@ public class ValidatorService : IValidatorService
 
     private Result HandleValidatorResults(ValidationResult? result)
     {
-        if (result.IsValid) return new Result(true);
-        var errorMessages = result.Errors.Select(x=> x.ErrorMessage).ToList();
-        return new Result(false, errorMessages);
+        if (result != null)
+        {
+            if (result.IsValid) return new Result(true);
+            var errorMessages = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            return new Result(false, errorMessages);
+        }
+        return new Result(false, "Something went wrong");
     }
 }

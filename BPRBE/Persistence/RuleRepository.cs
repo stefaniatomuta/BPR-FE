@@ -33,7 +33,10 @@ public class RuleRepository : IRuleRepository
         try
         {
             var result = await GetRuleByNameAsync(rule.Name);
-            if (result != null) return Result.Fail<Rule>("Rule with the same name already exists");
+            if (result != null)
+            {
+                return Result.Fail<Rule>("Rule with the same name already exists");
+            }
             
             await _rulesCollection.InsertOneAsync(rule);
             return Result.Ok(rule);

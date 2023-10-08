@@ -14,6 +14,7 @@ public partial class Index : ComponentBase
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
     private ArchitecturalModel _selectedArchitectureModel = default!;
+    public List<RuleViewModel> _rulesViewModel = new();
     
     private async Task SendDataAsync()
     {
@@ -31,7 +32,20 @@ public partial class Index : ComponentBase
         _selectedArchitectureModel = architecturalModel;
     }
 
-    private void StartAnalysis()
+    private void HandleRule(RuleViewModel value)
+    {
+        var index  = _rulesViewModel.FindIndex(x => x.Name.Equals(value.Name));
+        if (index != -1)
+        {
+            _rulesViewModel[index] = value;
+        }
+        else
+        {
+            _rulesViewModel.Add(value);
+        }
+    }
+
+    private async Task StartAnalysis()
     {
         if (_selectedArchitectureModel == null)
         {

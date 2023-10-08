@@ -1,12 +1,13 @@
-﻿using BPRBlazor.ViewModels;
+﻿
+using BPRBE.Models.Persistence;
 
 namespace BPRBlazor.ViewModels
 {
     public static class Extensions
     {
-        public static BPRBE.Models.Persistence.ArchitecturalModel ToBackendModel(this ArchitecturalModelViewModel model)
+        public static ArchitecturalModel ToBackendModel(this ArchitecturalModelViewModel model)
         {
-            return new BPRBE.Models.Persistence.ArchitecturalModel
+            return new ArchitecturalModel
             {
                 Name = model.Name,
                 Components = model.Components
@@ -15,9 +16,9 @@ namespace BPRBlazor.ViewModels
             };
         }
 
-        public static BPRBE.Models.Persistence.ArchitecturalComponent ToBackendModel(this ArchitecturalComponentViewModel component)
+        public static ArchitecturalComponent ToBackendModel(this ArchitecturalComponentViewModel component)
         {
-            return new BPRBE.Models.Persistence.ArchitecturalComponent
+            return new ArchitecturalComponent
             {
                 Name = component.Name,
                 Dependencies = component.Dependencies
