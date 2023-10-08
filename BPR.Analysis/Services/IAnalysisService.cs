@@ -11,4 +11,6 @@ public interface IAnalysisService {
     /// <param name="model">Architectural model </param>
     /// <returns>A list of all violations and their severity</returns>
     List<Violation> GetDependencyAnalysis(string folderPath, AnalysisArchitecturalModel model);
+
+    List<Violation> GetNamespaceAnalysis(string folderPath);
 }

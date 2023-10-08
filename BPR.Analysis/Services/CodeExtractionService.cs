@@ -8,9 +8,9 @@ public class CodeExtractionService : ICodeExtractionService {
     private string usingRegex = @"^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$";
     private string namespaceRegex = @"^\s*namespace\s+[A-Za-z_][A-Za-z0-9_.]*\s*";
     
-    public List<UsingDirective> GetUsingDirectives(string filepath) {
+    public List<UsingDirective> GetUsingDirectives(string folderPath) {
         List<UsingDirective> matches = new ();
-        var files  = Directory.GetFiles(filepath).ToList();
+        var files  = Directory.GetFiles(folderPath).ToList();
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
                 var content = File.ReadLines(file,Encoding.UTF8);
@@ -38,5 +38,25 @@ public class CodeExtractionService : ICodeExtractionService {
             projectNames.Add(Path.GetFileName(file).Split(".csproj")[0]);
         }
         return projectNames;
+    }
+
+    public List<NamespaceDirective> GetNamespaceDirectives(string folderPath) {
+        List<NamespaceDirective> matches = new ();
+        var files  = Directory.GetFiles(folderPath,"*",SearchOption.AllDirectories).ToList();
+        foreach (var file in files) {
+            if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
+                var content = File.ReadLines(file,Encoding.UTF8);
+                var result = content.Where(s => Regex.Match(s, namespaceRegex).Success).ToList();
+                foreach (var match in result) {
+                    matches.Add(new NamespaceDirective() {
+                        Namespace = match,
+                        File = Path.GetFileName(file),
+                        FilePath = file
+                    });
+                }
+            }
+        }
+
+        return matches;
     }
 }

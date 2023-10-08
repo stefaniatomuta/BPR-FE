@@ -41,7 +41,7 @@ public partial class Index : ComponentBase
         }
 
         var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
-
+        AnalysisService.GetNamespaceAnalysis(_folderPath);
         AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
     }
 
