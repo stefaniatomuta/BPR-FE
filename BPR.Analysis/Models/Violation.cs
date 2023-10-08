@@ -1,6 +1,6 @@
-﻿using BPR.Models.Enums;
+﻿using BPR.Analysis.Enums;
 
-namespace BPR.Models.Analysis; 
+namespace BPR.Analysis.Models; 
 
 public class Violation {
     public string Name { get; set; } = null!;
@@ -9,4 +9,5 @@ public class Violation {
     public string Description { get; set; } = null!;
     public ViolationSeverity Severity { get; set; }
     public string Code { get; set; } = null!;
+    public string File { get; set; } = null!;
 }

@@ -5,7 +5,7 @@ namespace BPRBE.Persistence;
 
 public interface IDependencyRepository
 {
-    public Task<IList<MongoArchitecturalModel>> GetArchitecturalModelsAsync();
-    public Task<Result> AddModelAsync(MongoArchitecturalModel model);
-    public Task<MongoArchitecturalModel?> GetArchitecturalModelByName(MongoArchitecturalModel model);
+    public Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
+    public Task<Result> AddModelAsync(ArchitecturalModel model);
+    public Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model);
 }

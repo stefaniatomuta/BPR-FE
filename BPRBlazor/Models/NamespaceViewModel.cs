@@ -1,11 +1,11 @@
-namespace BPR.Models.Blazor;
+namespace BPRBlazor.Models;
 
-public class Namespace
+public class NamespaceViewModel
 {
     public int Id { get; set; }
     public string Name { get; set; }
 
-    public Namespace(int id, string name)
+    public NamespaceViewModel(int id, string name)
     {
         Id = id;
         Name = name;

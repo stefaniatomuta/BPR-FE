@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace BPRBE.Services; 
+namespace BPR.Analysis.Services; 
 
 public class CodeExtractionService : ICodeExtractionService {
     private string usingRegex = @"^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$";

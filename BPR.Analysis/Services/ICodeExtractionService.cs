@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Services; 
+﻿namespace BPR.Analysis.Services; 
 
 public interface ICodeExtractionService {
     /// <summary>

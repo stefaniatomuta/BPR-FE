@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BPRBlazor.Models;
 
 namespace BPR.Models.Blazor;
 
-public class ArchitecturalComponent
+public class ArchitecturalComponentViewModel
 {
     public int Id { get; set; }
 
@@ -11,7 +12,7 @@ public class ArchitecturalComponent
     [Required(ErrorMessage = "Please give the component a name")]
     public string Name { get; set; } = string.Empty;
 
-    public List<ArchitecturalComponent> Dependencies { get; set; } = new();
+    public List<ArchitecturalComponentViewModel> Dependencies { get; set; } = new();
 
-    public List<Namespace> NamespaceComponents { get; set; } = new();
+    public List<NamespaceViewModel> NamespaceComponents { get; set; } = new();
 }

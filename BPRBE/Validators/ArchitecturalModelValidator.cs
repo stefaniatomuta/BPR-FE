@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace BPRBE.Validators;
 
-public class ArchitecturalModelValidator : AbstractValidator<MongoArchitecturalModel>
+public class ArchitecturalModelValidator : AbstractValidator<ArchitecturalModel>
 {
     public ArchitecturalModelValidator()
     {
@@ -16,7 +16,7 @@ public class ArchitecturalModelValidator : AbstractValidator<MongoArchitecturalM
             .WithMessage("Duplicate names of components are not allowed");
     }
 
-    private bool ContainDifferentComponentNames(IList<MongoArchitecturalComponent> components)
+    private bool ContainDifferentComponentNames(IList<ArchitecturalComponent> components)
     {
         return !components.GroupBy(x => x.Name).Any(n => n.Count() > 1);
     }

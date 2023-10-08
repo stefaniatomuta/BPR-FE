@@ -1,4 +1,5 @@
-﻿using BPR.Models.Persistence;
+﻿using BPR.Analysis.Services;
+using BPR.Models.Persistence;
 using BPRBE.Config;
 using BPRBE.Models.Persistence;
 using BPRBE.Persistence;
@@ -13,8 +14,8 @@ public static class ServicesExtensions
 {
     public static void AddValidators(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<MongoArchitecturalModel>, ArchitecturalModelValidator>();
-        services.AddScoped<IValidator<MongoArchitecturalComponent>, ArchitecturalComponentValidator>();
+        services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
+        services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
         services.AddScoped<IValidatorService, ValidatorService>();
     }
 

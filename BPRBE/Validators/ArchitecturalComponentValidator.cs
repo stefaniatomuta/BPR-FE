@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace BPRBE.Validators;
 
-public class ArchitecturalComponentValidator : AbstractValidator<MongoArchitecturalComponent>
+public class ArchitecturalComponentValidator : AbstractValidator<ArchitecturalComponent>
 {
     public ArchitecturalComponentValidator()
     {
