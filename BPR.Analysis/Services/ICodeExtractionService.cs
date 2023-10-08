@@ -1,4 +1,6 @@
-﻿namespace BPR.Analysis.Services; 
+﻿using BPR.Analysis.Models;
+
+namespace BPR.Analysis.Services; 
 
 public interface ICodeExtractionService {
     /// <summary>
@@ -6,7 +8,7 @@ public interface ICodeExtractionService {
     /// </summary>
     /// <param name="filepath">path to the parent folder  </param>
     /// <returns>list of using directives</returns>
-    List<string> GetUsingDirectives(string filepath);
+    List<UsingDirective> GetUsingDirectives(string filepath);
 
     /// <summary>
     /// Extracts the projects names within the codebase based on the csproj files

@@ -11,23 +11,24 @@ public class AnalysisService : IAnalysisService {
         _codeExtractionService = codeExtractionService;
     }
 
-//TODO: refactor to add filename for violation
+//TODO: refactor to add filename for violation - as description?
     public List<Violation> GetDependencyAnalysis(string folderPath, AnalysisArchitecturalModel model) {
         List<Violation> violations = new();
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
 
         foreach (var component in model.Components) {
             var usings = GetUsingsPerComponent(folderPath, component.NamespaceComponents);
-            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj =>u.Contains(proj))).ToList();
+            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj =>u.Using.Contains(proj))).ToList();
             foreach (var directive in usingsWithProjectNames) {
-                var processedDirective = directive.Replace(".", "/");
+                var processedDirective = directive.Using.Replace(".", "/");
                 if (!component.NamespaceComponents.Any(comp => processedDirective.Contains(comp.Name)) ||
                     !component.Dependencies.Any(dep => processedDirective.Contains(dep.Name))) {
                     violations.Add(new Violation() {
                         Type = ViolationType.ForbiddenDependency,
                         Description = component.Name,
                         Severity = ViolationSeverity.Major,
-                        Code = directive,
+                        Code = directive.Using,
+                        File = directive.File
                     });
                 }
             }
@@ -35,8 +36,8 @@ public class AnalysisService : IAnalysisService {
         return violations;
     }
 
-    private List<string> GetUsingsPerComponent(string folderPath, List<AnalysisNamespace> namespaces) {
-        List<string> usings = new();
+    private List<UsingDirective> GetUsingsPerComponent(string folderPath, List<AnalysisNamespace> namespaces) {
+        List<UsingDirective> usings = new();
 
         foreach (var n in namespaces) {
             usings.AddRange(_codeExtractionService.GetUsingDirectives($"{folderPath}/{n.Name}"));
