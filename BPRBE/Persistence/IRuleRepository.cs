@@ -4,6 +4,6 @@ namespace BPRBE.Persistence;
 
 public interface IRuleRepository
 {
-    public Task<Result> AddRuleAsync(Rule rule);
-    public Task<IList<Rule>> GetRulesAsync();
+    Task<Result> AddRuleAsync(Rule rule);
+    Task<IList<Rule>> GetRulesAsync();
 }
