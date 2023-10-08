@@ -1,4 +1,5 @@
-﻿using BPR.Models.Blazor;
+﻿using BPR.Analysis.Models;
+using BPR.Models.Blazor;
 using BPRBlazor.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -39,7 +40,9 @@ public partial class Index : ComponentBase
             return;
         }
 
-        AnalysisService.GetDependencyAnalysis(_folderPath,_architecturalModelViewModel);
+        var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
+
+        AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
     }
 
     private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
