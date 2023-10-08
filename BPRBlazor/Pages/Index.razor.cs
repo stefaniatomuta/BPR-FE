@@ -14,7 +14,7 @@ public partial class Index : ComponentBase
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
     private ArchitecturalModel _selectedArchitectureModel = default!;
-    public List<RuleViewModel> _rulesViewModel = new();
+    public List<RuleViewModel> _rulesViewModels = new();
     
     private async Task SendDataAsync()
     {
@@ -34,14 +34,14 @@ public partial class Index : ComponentBase
 
     private void HandleRule(RuleViewModel value)
     {
-        var index  = _rulesViewModel.FindIndex(x => x.Name.Equals(value.Name));
+        var index  = _rulesViewModels.FindIndex(x => x.Name.Equals(value.Name));
         if (index != -1)
         {
-            _rulesViewModel[index] = value;
+            _rulesViewModels[index] = value;
         }
         else
         {
-            _rulesViewModel.Add(value);
+            _rulesViewModels.Add(value);
         }
     }
 
@@ -54,6 +54,11 @@ public partial class Index : ComponentBase
         if (_unmappedNamespaceComponents.Any())
         {
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
+            return;
+        }
+        if (_rulesViewModels.All(r => !r.IsChecked))
+        {
+            _errorMessage = "Analysis can not start without any rule selected";
             return;
         }
     }
