@@ -19,4 +19,17 @@ public class CodeExtractionService : ICodeExtractionService {
         }
         return matches;
     }
+
+    public List<string> GetProjectNames(string folderPath) {
+        List<string> projectNames = new();
+        var projDirectories = Directory.GetDirectories(folderPath).ToList();
+        var files = new List<string>();
+        foreach (var dir in projDirectories) {
+            files.AddRange(Directory.GetFiles(dir).ToList().Where(file => file.EndsWith("csproj")).ToList());
+        }
+        foreach (var file in files) {
+            projectNames.Add(Path.GetFileName(file).Split(".csproj")[0]);
+        }
+        return projectNames;
+    }
 }
