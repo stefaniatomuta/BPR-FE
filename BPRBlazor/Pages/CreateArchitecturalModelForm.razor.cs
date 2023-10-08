@@ -1,15 +1,19 @@
 ﻿using BPR.Models.Blazor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace BPRBlazor.Pages;
 
 public partial class CreateArchitecturalModelForm : ComponentBase
 {
     private ArchitecturalModel _model = new();
-    private string _resultMessage = "";
-    private string _createModelResultCss = "";
+    private List<(string Message, string Class)> _resultMessages = new();
 
     private string _dependencyString = "";
+
+    private (double ClientX, double ClientY) _dragStartCoordinates;
+    private ArchitecturalComponent? _draggingComponent;
 
     private void AddArchitecturalComponent()
     {
@@ -21,26 +25,33 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         _model.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(int componentId)
+    private void RemoveArchitecturalComponent(ArchitecturalComponent component)
     {
-        var component = _model.Components.First(c => c.Id == componentId);
         _model.Components.Remove(component);
     }
 
-    private void CreateArchitecturalModel()
+    private async Task CreateArchitecturalModel()
     {
         try
         {
-            // TODO - Actually add the model.
-            Console.WriteLine(_model.ToString());
-            _model = new();
-            _resultMessage = "Model successfully added!";
-            _createModelResultCss = "success";
+            _resultMessages = new();
+            var result = await repository.AddModelAsync(_model.ToBackendModel());
+            if (result.Success)
+            {
+                _model = new();
+                _resultMessages.Add(("Model successfully added!", "success"));
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _resultMessages.Add((error, "error"));
+                }
+            }
         }
         catch (Exception ex)
         {
-            _resultMessage = ex.Message;
-            _createModelResultCss = "error";
+            _resultMessages.Add((ex.Message, "error"));
         }
     }
 
@@ -59,5 +70,29 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         {
             parentComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponentId));
         }
+    }
+
+    private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponent component)
+    {
+        _dragStartCoordinates = (args.ClientX, args.ClientY);
+        _draggingComponent = component;
+    }
+
+    private async Task OnDropComponent(DragEventArgs args)
+    {
+        if (_draggingComponent == null)
+        {
+            return;
+        }
+
+        var difference = (args.ClientX - _dragStartCoordinates.ClientX, args.ClientY - _dragStartCoordinates.ClientY);
+        var offset = await JS.InvokeAsync<HTMLElementOffset>("getElementOffset", _draggingComponent.Id);
+        _draggingComponent.Style = $"left: {offset.Left + difference.Item1}px; top: {offset.Top + difference.Item2}px";
+    }
+
+    private class HTMLElementOffset
+    {
+        public double Left { get; set; }
+        public double Top { get; set; }
     }
 }

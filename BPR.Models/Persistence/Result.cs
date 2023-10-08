@@ -3,24 +3,24 @@
 public class Result
 {
     public bool Success { get; set; }
-    public IList<string>? Error { get; set; }
+    public IList<string> Errors { get; set; }
 
     public Result(bool success, IList<string> error)
     {
         Success = success;
-        Error = error;
+        Errors = error;
     }
 
     public Result(bool success, string error)
     {
         Success = success;
-        Error = new List<string>();
-        Error.Add(error);
+        Errors = new List<string>() { error };
     }
 
     public Result(bool success)
     {
         Success = success;
+        Errors = new List<string>();
     }
 
     public static Result<T> Fail<T>(string message)
@@ -30,7 +30,7 @@ public class Result
 
     public static Result<T?> Ok<T>(T value)
     {
-        return new Result<T?>(value, true, string.Empty);
+        return new Result<T?>(value, true);
     }
 }
 
@@ -40,7 +40,7 @@ public class Result<T> : Result
 
     public Result(bool success, string error) : base(success, error)
     {
-        
+
     }
 
     public Result(T? value, bool success, string error) : base(success, error)
