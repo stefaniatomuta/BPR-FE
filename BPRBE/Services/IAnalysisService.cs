@@ -1,6 +1,5 @@
 ﻿using BPR.Models.Analysis;
 using BPR.Models.Blazor;
-using BPRBE.Models;
 
 namespace BPRBE.Services; 
 
@@ -12,5 +11,5 @@ public interface IAnalysisService {
     /// <param name="folderPath">The path to the root temp directory</param>
     /// <param name="model">Architectural model </param>
     /// <returns>A list of all violations and their severity</returns>
-    List<ViolationModel> GetDependencyAnalysis(string folderPath, ArchitecturalModel model);
+    List<Violation> GetDependencyAnalysis(string folderPath, ArchitecturalModel model);
 }
