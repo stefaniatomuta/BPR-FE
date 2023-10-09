@@ -19,6 +19,7 @@ public static class Extensions
     {
         return new ArchitecturalComponent
         {
+            Id = component.Id,
             Name = component.Name,
             Dependencies = component.Dependencies
                 .Select(c => c.Id)
