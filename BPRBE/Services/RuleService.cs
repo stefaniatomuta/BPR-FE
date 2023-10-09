@@ -15,6 +15,7 @@ public class RuleService : IRuleService
         _validatorService = validatorService;
     }
 
+    // TODO - Is this method necessary? We have no user stories related to being able to add new rules.
     public async Task<Result> AddRuleAsync(Rule rule)
     {
         var result = await _validatorService.ValidateRuleAsync(rule);

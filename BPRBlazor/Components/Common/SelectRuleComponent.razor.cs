@@ -8,11 +8,10 @@ public partial class SelectRuleComponent : ComponentBase
     [Parameter]
     public EventCallback<RuleViewModel> Value { get; set; }
 
-    private List<RuleViewModel> _rules = new();
+    private List<RuleViewModel>? _rules;
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         _rules = await GetRulesAsync();
         foreach (var rule in _rules)
         {
@@ -26,12 +25,12 @@ public partial class SelectRuleComponent : ComponentBase
         return rules.Select(rule => new RuleViewModel()
         {
             Name = rule.Name,
-            Description = rule.Description!,
+            Description = rule.Description,
             IsChecked = (rule.Name == "Dependency")
         }).ToList();
     }
 
-    public async Task CheckboxChanged(ChangeEventArgs e, RuleViewModel item)
+    private async Task CheckboxChanged(ChangeEventArgs e, RuleViewModel item)
     {
         item.IsChecked = (bool)(e.Value ?? false);
         await Value.InvokeAsync(item);

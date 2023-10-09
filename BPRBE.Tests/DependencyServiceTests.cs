@@ -23,6 +23,33 @@ internal class DependencyServiceTests
     }
 
     [Test]
+    public async Task AddModelAsync_WhenModelIsSuccessfullyAdded_ReturnsOkResult()
+    {
+        // Arrange
+        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
+
+        // Act
+        var result = await uut.AddModelAsync(new ArchitecturalModel());
+
+        // Assert
+        Assert.That(result.Success, Is.True);
+    }
+
+    [Test]
+    public async Task AddModelAsync_WhenValidationFails_ReturnsFailResult()
+    {
+        // Arrange
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Fail());
+
+        // Act
+        var result = await uut.AddModelAsync(new ArchitecturalModel());
+
+        // Assert
+        Assert.That(result.Success, Is.False);
+    }
+
+    [Test]
     public async Task DeleteArchitectureModelAsync_WhenModelExists_ReturnsOkResult()
     {
         // Arrange

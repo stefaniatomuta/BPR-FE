@@ -24,11 +24,6 @@ public class DependencyRepository : IDependencyRepository
         return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
     }
 
-    public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
-    {
-        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
-    }
-
     public async Task<Result> AddModelAsync(ArchitecturalModel model)
     {
         try
@@ -46,8 +41,12 @@ public class DependencyRepository : IDependencyRepository
 
     public async Task<ArchitecturalModel?> DeleteModelAsync(ObjectId id)
     {
-        //var objectId = ObjectId.Parse(id.ToString());
         var filter = Builders<ArchitecturalModel>.Filter.Eq(model => model.Id, id);
         return await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
+    }
+
+    private async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
+    {
+        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
     }
 }

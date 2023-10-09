@@ -2,7 +2,7 @@
 
 public class RuleViewModel
 {
-    public string Name { get; set; } = default!;
-    public string Description { get; set; } = default!;
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
     public bool IsChecked { get; set; }
 }
