@@ -1,4 +1,4 @@
-﻿using BPRBlazor.Models;
+﻿using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -7,27 +7,27 @@ namespace BPRBlazor.Pages;
 
 public partial class CreateArchitecturalModelForm : ComponentBase
 {
-    private ArchitecturalModel _model = new();
+    private ArchitecturalModelViewModel _modelViewModel = new();
     private List<(string Message, string Class)> _resultMessages = new();
 
     private string _dependencyString = "";
 
     private (double ClientX, double ClientY) _dragStartCoordinates;
-    private ArchitecturalComponent? _draggingComponent;
+    private ArchitecturalComponentViewModel? _draggingComponent;
 
     private void AddArchitecturalComponent()
     {
-        var component = new ArchitecturalComponent()
+        var component = new ArchitecturalComponentViewModel()
         {
-            Id = _model.Components.Any() ? _model.Components.Max(c => c.Id) + 1 : 0
+            Id = _modelViewModel.Components.Any() ? _modelViewModel.Components.Max(c => c.Id) + 1 : 0
         };
 
-        _model.Components.Add(component);
+        _modelViewModel.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(ArchitecturalComponent component)
+    private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
     {
-        _model.Components.Remove(component);
+        _modelViewModel.Components.Remove(component);
     }
 
     private async Task CreateArchitecturalModel()
@@ -35,10 +35,10 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         try
         {
             _resultMessages = new();
-            var result = await repository.AddModelAsync(_model.ToBackendModel());
+            var result = await service.AddModelAsync(_modelViewModel.ToBackendModel());
             if (result.Success)
             {
-                _model = new();
+                _modelViewModel = new();
                 _resultMessages.Add(("Model successfully added!", "success"));
             }
             else
@@ -64,15 +64,15 @@ public partial class CreateArchitecturalModelForm : ComponentBase
             return;
         }
 
-        var parentComponent = _model.Components.First(c => c.Id == parentComponentId);
+        var parentComponent = _modelViewModel.Components.First(c => c.Id == parentComponentId);
 
         if (!parentComponent.Dependencies.Any(c => c.Id == dependencyComponentId))
         {
-            parentComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponentId));
+            parentComponent.Dependencies.Add(_modelViewModel.Components.First(c => c.Id == dependencyComponentId));
         }
     }
 
-    private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponent component)
+    private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
         _dragStartCoordinates = (args.ClientX, args.ClientY);
         _draggingComponent = component;

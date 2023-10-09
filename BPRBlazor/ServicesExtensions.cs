@@ -1,11 +1,10 @@
 ﻿using BPRBE.Config;
+using BPRBE.Models.Persistence;
 using BPRBE.Persistence;
 using BPRBE.Services;
 using BPRBE.Validators;
 using BPRBlazor.Services;
 using FluentValidation;
-using ArchitecturalComponent = BPRBE.Models.Persistence.ArchitecturalComponent;
-using ArchitecturalModel = BPRBE.Models.Persistence.ArchitecturalModel;
 
 namespace BPRBlazor;
 
@@ -15,6 +14,7 @@ public static class ServicesExtensions
     {
         services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
         services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
+        services.AddScoped<IValidator<Rule>, RuleValidator>();
         services.AddScoped<IValidatorService, ValidatorService>();
     }
 
@@ -24,6 +24,8 @@ public static class ServicesExtensions
         services.AddScoped<ICodebaseService, CodebaseService>();
         services.AddScoped<IDependencyRepository, DependencyRepository>();
         services.AddScoped<IDependencyService, DependencyService>();
+        services.AddScoped<IRuleRepository, RuleRepository>();
+        services.AddScoped<IRuleService, RuleService>();
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)
