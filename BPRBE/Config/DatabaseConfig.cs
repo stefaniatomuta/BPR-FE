@@ -6,4 +6,5 @@ public class DatabaseConfig
     public string ConnectionString { get; set; } = default!;
     public string DatabaseName { get; set; } = default!;
     public string DependenciesRuleCollectionName { get; set; } = default!;
+    public string RulesCollectionName { get; set; } = default!;
 }

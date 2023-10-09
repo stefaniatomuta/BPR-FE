@@ -1,6 +1,7 @@
 ﻿using BPRBE.Models.Persistence;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MongoDB.Bson;
 
 namespace BPRBlazor.Components.Common;
 
@@ -23,12 +24,12 @@ public partial class SelectArchitectureComponent : ComponentBase
 
     private async Task OnSelectedValueChanged(ChangeEventArgs e)
     {
-        var selectedModelId = int.Parse(e.Value?.ToString()!);
+        var selectedModelId = ObjectId.Parse(e.Value?.ToString()!);
         var selectedModel = _architectureOptions.First(option => option.Id == selectedModelId);
         await ArchitectureModelChanged.InvokeAsync(selectedModel);
     }
 
-    public async Task RemoveOptionById(int modelId)
+    public async Task RemoveOptionById(ObjectId modelId)
     {
         var model = _architectureOptions.First(option => option.Id == modelId);
         _architectureOptions.Remove(model);

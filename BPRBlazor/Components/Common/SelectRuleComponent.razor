@@ -1,0 +1,18 @@
+﻿@using BPRBE.Services
+@inject IRuleService Service
+
+<div class="container pt-3">
+    <div class="p-1">Please select the rules that you want the tool to analyse against</div>
+    @foreach (var item in _rules)
+    {
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
+            <label class="form-check-label" for="@item.Name">
+                @item.Name
+            </label>
+            <div>
+                @item.Description
+            </div>
+        </div>
+    }
+</div>
