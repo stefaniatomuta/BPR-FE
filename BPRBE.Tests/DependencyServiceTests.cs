@@ -2,6 +2,7 @@
 using BPRBE.Persistence;
 using BPRBE.Services;
 using BPRBE.Validators;
+using MongoDB.Bson;
 using NSubstitute.ReturnsExtensions;
 
 namespace BPRBE.Tests;
@@ -25,8 +26,8 @@ internal class DependencyServiceTests
     public async Task DeleteArchitectureModelAsync_WhenModelExists_ReturnsOkResult()
     {
         // Arrange
-        repositoryStub.DeleteModelAsync(Arg.Any<Guid>()).Returns(new ArchitecturalModel());
-        var modelId = Guid.NewGuid();
+        repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).Returns(new ArchitecturalModel());
+        var modelId = ObjectId.GenerateNewId();
 
         // Act
         var result = await uut.DeleteArchitectureModelAsync(modelId);
@@ -39,14 +40,17 @@ internal class DependencyServiceTests
     public async Task DeleteArchitectureModelAsync_WhenModelDoesNotExist_ReturnsFailResult()
     {
         // Arrange
-        repositoryStub.DeleteModelAsync(Arg.Any<Guid>()).ReturnsNull();
-        var modelId = Guid.NewGuid();
+        repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).ReturnsNull();
+        var modelId = ObjectId.GenerateNewId();
 
         // Act
         var result = await uut.DeleteArchitectureModelAsync(modelId);
 
         // Assert
-        Assert.That(result.Success, Is.False);
-        Assert.That(result.Errors, Is.Not.Empty);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Success, Is.False);
+            Assert.That(result.Errors, Is.Not.Empty);
+        });
     }
 }
