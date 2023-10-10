@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BPR.Analysis.Models;
+using BPRBE.Models;
 using BPRBlazor.ViewModels;
 
 
@@ -10,5 +11,6 @@ public class MapperProfile : Profile {
         CreateMap<AnalysisArchitecturalComponent, ArchitecturalComponentViewModel>().ReverseMap();
         CreateMap<AnalysisArchitecturalModel, ArchitecturalModelViewModel>().ReverseMap();
         CreateMap<AnalysisNamespace, NamespaceViewModel>().ReverseMap();
+        CreateMap<Violation, ViolationModel>().ReverseMap();
     }
 }

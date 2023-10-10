@@ -19,26 +19,20 @@ public class AnalysisService : IAnalysisService {
 
         foreach (var component in model.Components) {
             var usings = GetUsingsPerComponent(folderPath, component.NamespaceComponents);
-            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj =>u.Using.Contains(proj))).ToList();
+            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj => u.Using.Contains(proj))).ToList();
+            
             foreach (var directive in usingsWithProjectNames) {
                 var processedDirective = directive.Using.Replace(".", "/");
-                if (!component.NamespaceComponents.Any(comp => processedDirective.Contains(comp.Name))) {
+                
+                if (!component.NamespaceComponents.Any(comp => processedDirective.Contains(comp.Name))
+                    || !component.Dependencies.Any(dep => processedDirective.Contains(dep.Name))) {
+                    
                     violations.Add(new Violation() {
                         Type = ViolationType.ForbiddenDependency,
-                        Description = component.Name,
+                        Description = $"Dependency: {directive.Using} cannot be in {directive.File}. Component {component.Name} does not have this dependency",
                         Severity = ViolationSeverity.Major,
                         Code = directive.Using,
-                        File = directive.File
-                    });
-                }
-
-                if (!component.Dependencies.Any(dep => processedDirective.Contains(dep.Name))) {
-                    violations.Add(new Violation() {
-                        Type = ViolationType.ForbiddenDependency,
-                        Description = component.Name,
-                        Severity = ViolationSeverity.Major,
-                        Code = directive.Using,
-                        File = directive.File
+                        File = directive.File,
                     });
                 }
             }
@@ -55,20 +49,22 @@ public class AnalysisService : IAnalysisService {
         return usings.Distinct().ToList();
     }
 
-    //TODO: refactor condition to ignore special chars like brackets
     public List<Violation> GetNamespaceAnalysis(string folderPath) {
         List<Violation> violations = new();
         var namespaces = _codeExtractionService.GetNamespaceDirectives(folderPath);
+        
         foreach (var directive in namespaces) {
             var supposedNamespace = directive.FilePath.Split(folderPath)[1].Split(directive.File)[0].Replace("\\", ".");
             var currentNamespace = directive.Namespace.Split("namespace")[1].Trim();
-            var comparison = string.Compare(currentNamespace,0, supposedNamespace,0,supposedNamespace.Length,CultureInfo.InvariantCulture, CompareOptions.IgnoreSymbols);
+            var comparison = string.Compare(currentNamespace,0, supposedNamespace,0,
+                supposedNamespace.Length,CultureInfo.InvariantCulture, CompareOptions.IgnoreSymbols);
+            
             if (comparison != 0) {
                 violations.Add(new Violation() {
                         File = directive.File,
                         Severity = ViolationSeverity.Minor,
                         Code = directive.Namespace,
-                        Description = supposedNamespace,
+                        Description = $"Namespace \"{directive}\" in {directive.File} does not match.",
                         Type = ViolationType.MismatchedNamespace
                     });
             }

@@ -16,6 +16,9 @@ public partial class Index : ComponentBase
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
     private ArchitecturalModel _selectedArchitectureModel = default!;
     public List<RuleViewModel> _rulesViewModels = new();
+
+    private List<Violation> _namespaceViolations = new();
+    private List<Violation> _dependencyViolations = new();
     
     private async Task SendDataAsync()
     {
@@ -57,15 +60,15 @@ public partial class Index : ComponentBase
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
             return;
         }
-        if (_rulesViewModels.All(r => !r.IsChecked))
-        {
-            _errorMessage = "Analysis can not start without any rule selected";
-            return;
-        }
+        // if (_rulesViewModels.All(r => !r.IsChecked))
+        // {
+        //     _errorMessage = "Analysis can not start without any rule selected";
+        //     return;
+        // }
 
         var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
-        var namespaceAnalysis = AnalysisService.GetNamespaceAnalysis(_folderPath);
-        var dependencyAnalysis = AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
+        _namespaceViolations= AnalysisService.GetNamespaceAnalysis(_folderPath);
+        _dependencyViolations = AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
     }
 
     private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
