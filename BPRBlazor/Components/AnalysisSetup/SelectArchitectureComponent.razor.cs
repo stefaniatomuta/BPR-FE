@@ -5,9 +5,8 @@ namespace BPRBlazor.Components.AnalysisSetup;
 
 public partial class SelectArchitectureComponent : ComponentBase
 {
-    private string? SelectedArchitecturalModel { get; set; }
     [Parameter]
-    public EventCallback<string> ArchitecturalModelChanged { get; set; }
+    public EventCallback<ArchitecturalModel> ArchitecturalModelChanged { get; set; }
 
     public IList<ArchitecturalModel> ArchitecturalOptions = new List<ArchitecturalModel>();
 
@@ -27,8 +26,7 @@ public partial class SelectArchitectureComponent : ComponentBase
         {
             if (ar.Name.Equals(e.Value))
             {
-                SelectedArchitecturalModel = ar.Name;
-                await ArchitecturalModelChanged.InvokeAsync(SelectedArchitecturalModel);
+                await ArchitecturalModelChanged.InvokeAsync(ar);
             }
         }
     }

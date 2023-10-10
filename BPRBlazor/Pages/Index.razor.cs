@@ -1,6 +1,5 @@
-﻿using BPR.Analysis.Models;
-using BPR.Models.Blazor;
-using BPRBlazor.Models;
+using BPRBE.Models.Persistence;
+using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
@@ -14,7 +13,8 @@ public partial class Index : ComponentBase
     private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
-    private string _selectedArchitectureModel = default!;
+    private ArchitecturalModel _selectedArchitectureModel = default!;
+    public List<RuleViewModel> _rulesViewModels = new();
     
     private async Task SendDataAsync()
     {
@@ -27,16 +27,38 @@ public partial class Index : ComponentBase
         _architecturalModelViewModel = default!;
         LoadDummyData();
     }
-    private void HandleArchitecturalModelOnChange(string newValue)
+    private void HandleArchitecturalModelOnChange(ArchitecturalModel architecturalModel)
     {
-        _selectedArchitectureModel = newValue;
+        _selectedArchitectureModel = architecturalModel;
     }
 
-    private void StartAnalysis()
+    private void HandleRule(RuleViewModel value)
     {
+        var index  = _rulesViewModels.FindIndex(x => x.Name.Equals(value.Name));
+        if (index != -1)
+        {
+            _rulesViewModels[index] = value;
+        }
+        else
+        {
+            _rulesViewModels.Add(value);
+        }
+    }
+
+    private async Task StartAnalysis()
+    {
+        if (_selectedArchitectureModel == null)
+        {
+            _errorMessage = "Analysis cannot start without a selected architectural model";
+        }
         if (_unmappedNamespaceComponents.Any())
         {
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
+            return;
+        }
+        if (_rulesViewModels.All(r => !r.IsChecked))
+        {
+            _errorMessage = "Analysis can not start without any rule selected";
             return;
         }
 
