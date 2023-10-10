@@ -1,4 +1,4 @@
-﻿namespace BPR.Models.Enums;
+﻿namespace BPRBE.Enums;
 
 public enum ViolationType
 {

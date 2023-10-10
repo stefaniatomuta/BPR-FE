@@ -1,5 +1,4 @@
-﻿using BPR.Models.Persistence;
-using BPRBE.Models.Persistence;
+﻿using BPRBE.Models.Persistence;
 
 namespace BPRBE.Persistence;
 

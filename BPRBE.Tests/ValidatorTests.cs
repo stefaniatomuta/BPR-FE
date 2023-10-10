@@ -1,9 +1,7 @@
-﻿using BPR.Models.Persistence;
-using BPRBE.Models.Persistence;
+﻿using BPRBE.Models.Persistence;
 using BPRBE.Validators;
 using FluentValidation;
 using FluentValidation.TestHelper;
-using MongoDB.Bson;
 using NUnit.Framework;
 
 namespace BPRBE.Tests;
@@ -11,24 +9,22 @@ namespace BPRBE.Tests;
 [TestFixture]
 public class ValidatorTests
 {
-    private IValidator<ArchitecturalModel> _architecturalModelValidator;
-    private IValidator<Rule> _ruleValidator;
+    private IValidator<ArchitecturalModel> _validator;
 
     [SetUp]
     public void Setup()
     {
-        _architecturalModelValidator = new ArchitecturalModelValidator();
-        _ruleValidator = new RuleValidator();
+        _validator = new ArchitecturalModelValidator();
     }
 
     [Test]
-    public void Architectural_Model_Should_Have_Error_When_Name_Is_Empty()
+    public void Should_Have_Error_When_Name_Is_Empty()
     {
         // Arrange
         var model = new ArchitecturalModel { Name = "", Components = new List<ArchitecturalComponent>() };
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Name)
@@ -36,13 +32,13 @@ public class ValidatorTests
     }
 
     [Test]
-    public void Architectural_Model_Should_Have_Error_When_Components_Is_Empty()
+    public void Should_Have_Error_When_Components_Is_Empty()
     {
         // Arrange
         var model = new ArchitecturalModel { Name = "ModelName", Components = new List<ArchitecturalComponent>() };
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Components)
@@ -50,7 +46,7 @@ public class ValidatorTests
     }
     
     [Test]
-    public void Architectural_Model_Should_Have_Error_When_Duplicate_Component_Names()
+    public void Should_Have_Error_When_Duplicate_Component_Names()
     {
         // Arrange
         var model = new ArchitecturalModel
@@ -65,7 +61,7 @@ public class ValidatorTests
         };
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Components)
@@ -73,7 +69,7 @@ public class ValidatorTests
     }
 
     [Test]
-    public void Architectural_Model_Should_Not_Have_Error_When_Valid_Model()
+    public void Should_Not_Have_Error_When_Valid_Model()
     {
         // Arrange
         var model = new ArchitecturalModel
@@ -87,25 +83,9 @@ public class ValidatorTests
         };
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _validator.TestValidate(model);
 
         // Assert
         result.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Test]
-    public void Rule_Does_Not_Have_Name()
-    {
-        // Arrange
-        var newRule = new Rule()
-        {
-            Id = new ObjectId(),
-            Description = "Test"
-        };
-        // Act
-        var result = _ruleValidator.TestValidate(newRule);
-        // Assert
-        result.ShouldHaveValidationErrorFor(x => x.Name)
-            .WithErrorMessage("Rule must contain a name");
     }
 }

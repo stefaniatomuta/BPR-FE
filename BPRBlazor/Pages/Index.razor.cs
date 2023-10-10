@@ -1,3 +1,4 @@
+using BPR.Analysis.Models;
 using BPRBE.Models.Persistence;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;

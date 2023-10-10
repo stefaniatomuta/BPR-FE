@@ -1,5 +1,6 @@
 using BPR.Analysis.Services;
 using BPRBE.Config;
+using BPRBE.Models.Persistence;
 using BPRBE.Persistence;
 using BPRBE.Services;
 using BPRBE.Validators;

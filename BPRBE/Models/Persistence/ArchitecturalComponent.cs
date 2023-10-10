@@ -1,6 +1,6 @@
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BPR.Models.Persistence;
+namespace BPRBE.Models.Persistence;
 
 public class ArchitecturalComponent
 {
