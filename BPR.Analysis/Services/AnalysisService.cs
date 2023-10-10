@@ -1,4 +1,5 @@
-﻿using BPR.Analysis.Enums;
+﻿using System.Globalization;
+using BPR.Analysis.Enums;
 using BPR.Analysis.Models;
 
 namespace BPR.Analysis.Services;
@@ -60,14 +61,16 @@ public class AnalysisService : IAnalysisService {
         var namespaces = _codeExtractionService.GetNamespaceDirectives(folderPath);
         foreach (var directive in namespaces) {
             var supposedNamespace = directive.FilePath.Split(folderPath)[1].Split(directive.File)[0].Replace("\\", ".");
-            if (!supposedNamespace.Contains(directive.Namespace.Split("namespace")[1].Trim())) {
+            var currentNamespace = directive.Namespace.Split("namespace")[1].Trim();
+            var comparison = string.Compare(currentNamespace,0, supposedNamespace,0,supposedNamespace.Length,CultureInfo.InvariantCulture, CompareOptions.IgnoreSymbols);
+            if (comparison != 0) {
                 violations.Add(new Violation() {
-                    File = directive.File,
-                    Severity = ViolationSeverity.Minor,
-                    Code = directive.Namespace,
-                    Description = supposedNamespace,
-                    Type = ViolationType.MismatchedNamespace
-                });
+                        File = directive.File,
+                        Severity = ViolationSeverity.Minor,
+                        Code = directive.Namespace,
+                        Description = supposedNamespace,
+                        Type = ViolationType.MismatchedNamespace
+                    });
             }
         }
         return violations;
