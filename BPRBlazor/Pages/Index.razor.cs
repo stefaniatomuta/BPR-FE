@@ -64,8 +64,8 @@ public partial class Index : ComponentBase
         }
 
         var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
-        AnalysisService.GetNamespaceAnalysis(_folderPath);
-        AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
+        var namespaceAnalysis = AnalysisService.GetNamespaceAnalysis(_folderPath);
+        var dependencyAnalysis = AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
     }
 
     private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
