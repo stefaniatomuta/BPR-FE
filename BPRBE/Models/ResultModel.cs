@@ -1,3 +1,7 @@
 ﻿namespace BPRBE.Models;
 
-public record ResultModel(double Score, IEnumerable<ViolationModel> Violations);
+public class ResultModel {
+   public double Score { get; set; }
+   public List<ViolationModel> Violations { get; set; } = new();
+
+}

@@ -1,4 +1,5 @@
 using BPR.Analysis.Models;
+using BPRBE.Models;
 using BPRBE.Models.Persistence;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -11,14 +12,14 @@ public partial class Index : ComponentBase
 {
     private string _errorMessage = string.Empty;
     private string _folderPath = string.Empty;
+    private string _analysisMessage = string.Empty;
     private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
     private ArchitecturalModel _selectedArchitectureModel = default!;
     public List<RuleViewModel> _rulesViewModels = new();
 
-    private List<Violation> _namespaceViolations = new();
-    private List<Violation> _dependencyViolations = new();
+    private List<Violation> violations = new();
     
     private async Task SendDataAsync()
     {
@@ -29,6 +30,7 @@ public partial class Index : ComponentBase
     {
         _errorMessage = default!;
         _architecturalModelViewModel = default!;
+        StateContainer.OnChange += StateHasChanged;
         LoadDummyData();
     }
     private void HandleArchitecturalModelOnChange(ArchitecturalModel architecturalModel)
@@ -60,15 +62,25 @@ public partial class Index : ComponentBase
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
             return;
         }
-        // if (_rulesViewModels.All(r => !r.IsChecked))
-        // {
-        //     _errorMessage = "Analysis can not start without any rule selected";
-        //     return;
-        // }
+        if (_rulesViewModels.All(r => !r.IsChecked))
+        {
+            _errorMessage = "Analysis can not start without any rule selected";
+            return;
+        }
 
-        var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
-        _namespaceViolations= AnalysisService.GetNamespaceAnalysis(_folderPath);
-        _dependencyViolations = AnalysisService.GetDependencyAnalysis(_folderPath,architecturalModel);
+        try {
+            var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
+            violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
+            violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
+            StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
+            _analysisMessage = "The analysis is ready. Check out the results page";
+
+        }
+        catch (Exception e) {
+            _errorMessage = "Oops.. An error occured";
+        }
+
+        
     }
 
     private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
@@ -141,6 +153,7 @@ public partial class Index : ComponentBase
     public void Dispose()
     {
         CodebaseService.Dispose();
+        StateContainer.OnChange -= StateHasChanged;
     }
 
     private void LoadDummyData()

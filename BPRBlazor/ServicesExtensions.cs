@@ -6,6 +6,7 @@ using BPRBE.Services;
 using BPRBE.Validators;
 using BPRBlazor.Mappers;
 using BPRBlazor.Services;
+using BPRBlazor.State;
 using FluentValidation;
 
 namespace BPRBlazor;
@@ -36,5 +37,9 @@ public static class ServicesExtensions
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<DatabaseConfig>(configuration.GetSection(DatabaseConfig.Section));
+    }
+
+    public static void AddStateMachine(this IServiceCollection services) {
+        services.AddScoped<StateContainer>();
     }
 }
