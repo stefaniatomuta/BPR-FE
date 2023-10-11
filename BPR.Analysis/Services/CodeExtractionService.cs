@@ -5,8 +5,6 @@ using BPR.Analysis.Models;
 namespace BPR.Analysis.Services; 
 
 public class CodeExtractionService : ICodeExtractionService {
-
-    private readonly AnalysisRegex _regex;
     
     public List<UsingDirective> GetUsingDirectives(string folderPath) {
         List<UsingDirective> matches = new ();
@@ -14,7 +12,7 @@ public class CodeExtractionService : ICodeExtractionService {
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
                 var content = File.ReadLines(file,Encoding.UTF8);
-                var result = content.Where(s => Regex.Match(s, _regex.usingRegex).Success).ToList();
+                var result = content.Where(s => Regex.Match(s, AnalysisRegex.usingRegex).Success).ToList();
                 foreach (var match in result) {
                     matches.Add(new UsingDirective() {
                         Using = match,
@@ -46,7 +44,7 @@ public class CodeExtractionService : ICodeExtractionService {
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
                 var content = File.ReadLines(file,Encoding.UTF8);
-                var result = content.Where(s => Regex.Match(s, _regex.namespaceRegex).Success).ToList();
+                var result = content.Where(s => Regex.Match(s, AnalysisRegex.namespaceRegex).Success).ToList();
                 foreach (var match in result) {
                     matches.Add(new NamespaceDirective() {
                         Namespace = match,

@@ -21,7 +21,8 @@ public class CodebaseService : ICodebaseService {
         var archiveName = archiveFile.Entries.FirstOrDefault()!.FileName;
         archiveFile.Extract(directory.FullName);
         folderPath = directory.FullName;
-        return $"{directory.FullName}/{archiveName}";
+        var fullpath = $"{directory.FullName}/{archiveName}";
+        return fullpath;
     }
 
     public void Dispose() {
