@@ -38,6 +38,30 @@ public class DependencyRepository : IDependencyRepository
             return Result.Fail<ArchitecturalModel>(e.Message);
         }
     }
+    
+    public async Task<Result> EditModelAsync(ArchitecturalModel model)
+    {
+        try
+        {
+            var result = await GetArchitecturalModelByName(model);
+            if (result != null && result.Id != model.Id)
+            {
+                return Result.Fail<ArchitecturalModel>("Model with the same name already exists");
+            }
+            
+            var filter = Builders<ArchitecturalModel>.Filter.Eq(old => old.Id, model.Id);
+            var update = Builders<ArchitecturalModel>.Update
+                    .Set(old => old.Name, model.Name)
+                    .Set(old => old.Components, model.Components);
+            
+            await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
+            return Result.Ok(model);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<ArchitecturalModel>(e.Message);
+        }
+    }
 
     public async Task<ArchitecturalModel?> DeleteModelAsync(ObjectId id)
     {

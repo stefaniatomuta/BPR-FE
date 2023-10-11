@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace BPRBlazor.Components.ModelManagement;
 
-public partial class CreateArchitectureComponent : ComponentBase
+public partial class CreateEditArchitectureComponent : ComponentBase
 {
-    private ArchitecturalModelViewModel _modelViewModel = new();
+    [Parameter] 
+    public ArchitecturalModelViewModel ModelViewModel { get; set; } = new();
     private List<(string Message, string Class)> _resultMessages = new();
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private Position _dragStartCoordinates = new();
@@ -17,36 +18,36 @@ public partial class CreateArchitectureComponent : ComponentBase
     private void AddArchitecturalComponent()
     {
         _dependencyComponent = null;
+        _resultMessages = new List<(string Message, string Class)>();
 
         var component = new ArchitecturalComponentViewModel()
         {
-            Id = _modelViewModel.Components.Any() ? _modelViewModel.Components.Max(c => c.Id) + 1 : 0
+            Id = ModelViewModel.Components.Any() ? ModelViewModel.Components.Max(c => c.Id) + 1 : 0
         };
 
-        _modelViewModel.Components.Add(component);
+        ModelViewModel.Components.Add(component);
     }
 
     private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
     {
         _dependencyComponent = null;
-        _modelViewModel.Components.Remove(component);
+        ModelViewModel.Components.Remove(component);
 
-        foreach (var dependentComponent in _modelViewModel.GetDependentComponents(component))
+        foreach (var dependentComponent in ModelViewModel.GetDependentComponents(component))
         {
             RemoveDependency(dependentComponent, component);
         }
     }
 
-    private async Task CreateArchitectureModel()
+    private async Task CreateOrEditArchitectureModel()
     {
         try
         {
             _resultMessages = new();
-            var result = await service.AddModelAsync(_modelViewModel.ToBackendModel());
+            var result = await DependencyService.AddOrEditModelAsync(ModelViewModel.ToBackendModel());
             if (result.Success)
             {
-                _modelViewModel = new();
-                _resultMessages.Add(("Model successfully added!", "success"));
+               NavigationManager.NavigateTo(NavigationManager.Uri, true);
             }
             else
             {
@@ -71,10 +72,7 @@ public partial class CreateArchitectureComponent : ComponentBase
                 _dependencyComponent = null;
                 return;
             }
-            if (!_dependencyComponent.HasDependency(dependencyComponent) && !dependencyComponent.HasDependency(_dependencyComponent))
-            {
-                _dependencyComponent.Dependencies.Add(dependencyComponent);
-            }
+            _dependencyComponent.Dependencies.Add(dependencyComponent);
             _dependencyComponent = null;
         }
         else
@@ -119,5 +117,34 @@ public partial class CreateArchitectureComponent : ComponentBase
             Height = offset.Height,
             Width = offset.Width
         };
+    }
+    
+    private async Task DeleteSelectedModel()
+    {
+        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the '{ModelViewModel!.Name}' model?"});
+        _resultMessages = new List<(string Message, string Class)>();
+        
+        if (!confirmed)
+        {
+            return;
+        }
+
+        try
+        {
+            var result = await DependencyService.DeleteArchitectureModelAsync(ModelViewModel.Id);
+
+            if (result.Success)
+            {
+                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+            }
+            else
+            {
+                _resultMessages.Add((result.Errors.First(), "error"));
+            }
+        }
+        catch (Exception ex)
+        {
+            _resultMessages.Add((ex.Message, "error"));
+        }
     }
 }

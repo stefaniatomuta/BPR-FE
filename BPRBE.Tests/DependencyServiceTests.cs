@@ -30,7 +30,7 @@ internal class DependencyServiceTests
         validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
 
         // Act
-        var result = await uut.AddModelAsync(new ArchitecturalModel());
+        var result = await uut.AddOrEditModelAsync(new ArchitecturalModel());
 
         // Assert
         Assert.That(result.Success, Is.True);
@@ -43,7 +43,7 @@ internal class DependencyServiceTests
         validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Fail());
 
         // Act
-        var result = await uut.AddModelAsync(new ArchitecturalModel());
+        var result = await uut.AddOrEditModelAsync(new ArchitecturalModel());
 
         // Assert
         Assert.That(result.Success, Is.False);

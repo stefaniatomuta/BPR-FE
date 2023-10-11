@@ -15,9 +15,4 @@ public class ArchitecturalComponentViewModel
     public List<ArchitecturalComponentViewModel> Dependencies { get; set; } = new();
 
     public List<NamespaceViewModel> NamespaceComponents { get; set; } = new();
-    
-    public bool HasDependency(ArchitecturalComponentViewModel dependency)
-    {
-        return Dependencies.Any(component => component == dependency);
-    }
 }

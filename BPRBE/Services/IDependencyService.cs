@@ -10,6 +10,6 @@ public interface IDependencyService
      * Used in retrieval of architectural models
      */
     Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
-    Task<Result> AddModelAsync(ArchitecturalModel model);
+    Task<Result> AddOrEditModelAsync(ArchitecturalModel model);
     Task<Result> DeleteArchitectureModelAsync(ObjectId id);
 }
