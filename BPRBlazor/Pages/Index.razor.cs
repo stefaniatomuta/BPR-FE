@@ -1,7 +1,8 @@
-﻿using BPRBlazor.Models;
+﻿using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
+using BE = BPRBE.Models.Persistence;
 
 namespace BPRBlazor.Pages;
 
@@ -9,11 +10,12 @@ public partial class Index : ComponentBase
 {
     private string _errorMessage = string.Empty;
     private string _folderPath = string.Empty;
-    private ArchitecturalModel _architecturalModel = default!;
-    private List<Namespace> _unmappedNamespaceComponents = new();
-    private Namespace _selectedNamespaceComponent = default!;
-    private string _selectedArchitectureModel = default!;
-    
+    private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
+    private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
+    private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
+    private BE.ArchitecturalModel _selectedArchitectureModel = default!;
+    public List<RuleViewModel> _rulesViewModels = new();
+
     private async Task SendDataAsync()
     {
         await HttpService.PostAsync("http://127.0.0.1:8000/post?item=HelloWorld", string.Empty);
@@ -22,46 +24,70 @@ public partial class Index : ComponentBase
     protected override void OnInitialized()
     {
         _errorMessage = default!;
-        _architecturalModel = default!;
+        _architecturalModelViewModel = default!;
         LoadDummyData();
     }
-    private void HandleArchitecturalModelOnChange(string newValue)
+
+    private void HandleArchitectureModelOnChange(BE.ArchitecturalModel newValue)
     {
         _selectedArchitectureModel = newValue;
+        // TODO - Actually do something with the selected model when analysis is started.
     }
 
-    private void StartAnalysis()
+    private void HandleRule(RuleViewModel value)
     {
+        var index = _rulesViewModels.FindIndex(x => x.Name.Equals(value.Name));
+        if (index != -1)
+        {
+            _rulesViewModels[index] = value;
+        }
+        else
+        {
+            _rulesViewModels.Add(value);
+        }
+    }
+
+    private async Task StartAnalysis()
+    {
+        if (_selectedArchitectureModel == null)
+        {
+            _errorMessage = "Analysis cannot start without a selected architectural model";
+        }
         if (_unmappedNamespaceComponents.Any())
         {
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
             return;
         }
+        if (_rulesViewModels.All(r => !r.IsChecked))
+        {
+            _errorMessage = "Analysis can not start without any rule selected";
+            return;
+        }
     }
 
-    private void HandleDrop(ArchitecturalComponent component = default!)
+    private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
     {
-        var oldComponent = _architecturalModel.Components.FirstOrDefault(architecturalComponent =>
-            architecturalComponent.NamespaceComponents.Contains(_selectedNamespaceComponent)) ?? default!;
+        var oldComponent = _architecturalModelViewModel.Components.FirstOrDefault(architecturalComponent =>
+            architecturalComponent.NamespaceComponents.Contains(_selectedNamespaceViewModelComponent)) ?? default!;
         if (oldComponent != default!)
         {
-            oldComponent.NamespaceComponents.Remove(_selectedNamespaceComponent);
+            oldComponent.NamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
         }
-        
-        if (component != default!)
+
+        if (componentViewModel != default!)
         {
-            component.NamespaceComponents.Add(_selectedNamespaceComponent);
-            _unmappedNamespaceComponents.Remove(_selectedNamespaceComponent);
+            componentViewModel.NamespaceComponents.Add(_selectedNamespaceViewModelComponent);
+            _unmappedNamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
         }
         else
         {
-            _unmappedNamespaceComponents.Add(_selectedNamespaceComponent);
+            _unmappedNamespaceComponents.Add(_selectedNamespaceViewModelComponent);
         }
     }
 
-    private void HandleDragStart(Namespace namespaceComponent)
+    private void HandleDragStart(NamespaceViewModel namespaceViewModelComponent)
     {
-        _selectedNamespaceComponent = namespaceComponent;
+        _selectedNamespaceViewModelComponent = namespaceViewModelComponent;
     }
 
     private async Task LoadCodeSource(InputFileChangeEventArgs eventArgs)
@@ -98,11 +124,11 @@ public partial class Index : ComponentBase
 
     private void SetNamespaceComponents()
     {
-        _unmappedNamespaceComponents = new List<Namespace>();
+        _unmappedNamespaceComponents = new List<NamespaceViewModel>();
         var folderNames = DependencyComponentService.GetFolderNamesForProjects(_folderPath);
         for (var id = 0; id < folderNames.Count(); id++)
         {
-            _unmappedNamespaceComponents.Add(new Namespace(id, folderNames[id]));
+            _unmappedNamespaceComponents.Add(new NamespaceViewModel(id, folderNames[id]));
         }
     }
 
@@ -113,34 +139,34 @@ public partial class Index : ComponentBase
 
     private void LoadDummyData()
     {
-        _architecturalModel = new ArchitecturalModel()
+        _architecturalModelViewModel = new ArchitecturalModelViewModel()
         {
             Name = "Architecture",
-            Components = new List<ArchitecturalComponent>()
+            Components = new List<ArchitecturalComponentViewModel>()
             {
-                new ArchitecturalComponent()
+                new ArchitecturalComponentViewModel()
                 {
                     Id = 0,
                     Name = "Component0",
-                    NamespaceComponents = new List<Namespace>()
+                    NamespaceComponents = new List<NamespaceViewModel>()
                 },
-                new ArchitecturalComponent()
+                new ArchitecturalComponentViewModel()
                 {
                     Id = 1,
                     Name = "Component1",
-                    NamespaceComponents = new List<Namespace>()
+                    NamespaceComponents = new List<NamespaceViewModel>()
                 },
-                new ArchitecturalComponent()
+                new ArchitecturalComponentViewModel()
                 {
                     Id = 2,
                     Name = "Component2",
-                    NamespaceComponents = new List<Namespace>()
+                    NamespaceComponents = new List<NamespaceViewModel>()
                 },
-                new ArchitecturalComponent()
+                new ArchitecturalComponentViewModel()
                 {
                     Id = 3,
                     Name = "Component3",
-                    NamespaceComponents = new List<Namespace>()
+                    NamespaceComponents = new List<NamespaceViewModel>()
                 },
             }
         };

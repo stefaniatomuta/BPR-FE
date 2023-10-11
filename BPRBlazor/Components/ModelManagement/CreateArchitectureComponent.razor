@@ -1,16 +1,16 @@
-﻿@page "/new-model"
-@inject IJSRuntime JS
-@inject IDependencyRepository repository
-@using BPRBE.Persistence;
+﻿@inject IJSRuntime JS
+@inject IDependencyService service
+@using BPRBE.Services
 
-<EditForm Model="_model" OnValidSubmit="CreateArchitecturalModel">
+<h3>Create architecture models</h3>
+<EditForm Model="_modelViewModel" OnValidSubmit="CreateArchitectureModel">
     <ObjectGraphDataAnnotationsValidator />
-    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_model.Name" />
-    <ValidationMessage For="(() => _model.Name)" />
+    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_modelViewModel.Name" />
+    <ValidationMessage For="(() => _modelViewModel.Name)" />
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
     
     <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
-            @foreach (var component in _model.Components)
+            @foreach (var component in _modelViewModel.Components)
             {
                 <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
                     <div class="component-header mb-2">
@@ -48,7 +48,7 @@
                 </svg>
             }
     </div>
-    <ValidationMessage For="(() => _model.Components)" />
+    <ValidationMessage For="(() => _modelViewModel.Components)" />
     @foreach (var message in _resultMessages)
     {
         <span class="@message.Class d-block">@message.Message</span>

@@ -23,14 +23,29 @@ public class Result
         Errors = new List<string>();
     }
 
+    public static Result Ok()
+    {
+        return new Result(true);
+    }
+
+    public static Result Fail()
+    {
+        return new Result(false);
+    }
+
+    public static Result Fail(string message)
+    {
+        return new Result(false, message);
+    }
+
     public static Result<T> Fail<T>(string message)
     {
         return new Result<T>(false, message);
     }
 
-    public static Result<T?> Ok<T>(T value)
+    public static Result<T> Ok<T>(T value)
     {
-        return new Result<T?>(value, true);
+        return new Result<T>(value, true);
     }
 }
 
