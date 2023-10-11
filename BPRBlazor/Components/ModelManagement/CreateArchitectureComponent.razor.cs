@@ -1,3 +1,5 @@
+using BPRBE.Models.Persistence;
+using BPRBlazor.Models;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -8,14 +10,14 @@ public partial class CreateArchitectureComponent : ComponentBase
 {
     private ArchitecturalModelViewModel _modelViewModel = new();
     private List<(string Message, string Class)> _resultMessages = new();
-
-    private string _dependencyString = "";
-
-    private (double ClientX, double ClientY) _dragStartCoordinates;
+    private ArchitecturalComponentViewModel? _dependencyComponent;
+    private Position _dragStartCoordinates = new();
     private ArchitecturalComponentViewModel? _draggingComponent;
 
-    private void AddArchitectureComponent()
+    private void AddArchitecturalComponent()
     {
+        _dependencyComponent = null;
+
         var component = new ArchitecturalComponentViewModel()
         {
             Id = _modelViewModel.Components.Any() ? _modelViewModel.Components.Max(c => c.Id) + 1 : 0
@@ -24,9 +26,15 @@ public partial class CreateArchitectureComponent : ComponentBase
         _modelViewModel.Components.Add(component);
     }
 
-    private void RemoveArchitectureComponent(ArchitecturalComponentViewModel component)
+    private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
     {
+        _dependencyComponent = null;
         _modelViewModel.Components.Remove(component);
+
+        foreach (var dependentComponent in _modelViewModel.GetDependentComponents(component))
+        {
+            RemoveDependency(dependentComponent, component);
+        }
     }
 
     private async Task CreateArchitectureModel()
@@ -54,26 +62,39 @@ public partial class CreateArchitectureComponent : ComponentBase
         }
     }
 
-    private void AddDependency(int parentComponentId, int dependencyComponentId)
+    private void AddDependency(ArchitecturalComponentViewModel dependencyComponent)
     {
-        _dependencyString = "";
-
-        if (parentComponentId == dependencyComponentId)
+        if (_dependencyComponent != null)
         {
-            return;
+            if (_dependencyComponent == dependencyComponent)
+            {
+                _dependencyComponent = null;
+                return;
+            }
+            if (!_dependencyComponent.HasDependency(dependencyComponent) && !dependencyComponent.HasDependency(_dependencyComponent))
+            {
+                _dependencyComponent.Dependencies.Add(dependencyComponent);
+            }
+            _dependencyComponent = null;
         }
-
-        var parentComponent = _modelViewModel.Components.First(c => c.Id == parentComponentId);
-
-        if (!parentComponent.Dependencies.Any(c => c.Id == dependencyComponentId))
+        else
         {
-            parentComponent.Dependencies.Add(_modelViewModel.Components.First(c => c.Id == dependencyComponentId));
+            _dependencyComponent = dependencyComponent;
         }
+    }
+    
+    private static void RemoveDependency(ArchitecturalComponentViewModel component, ArchitecturalComponentViewModel dependency)
+    {
+        component.Dependencies.Remove(dependency);
     }
 
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
-        _dragStartCoordinates = (args.ClientX, args.ClientY);
+        _dragStartCoordinates = new Position()
+        {
+            X = args.ClientX,
+            Y = args.ClientY
+        };
         _draggingComponent = component;
     }
 
@@ -84,14 +105,19 @@ public partial class CreateArchitectureComponent : ComponentBase
             return;
         }
 
-        var difference = (args.ClientX - _dragStartCoordinates.ClientX, args.ClientY - _dragStartCoordinates.ClientY);
-        var offset = await JS.InvokeAsync<HTMLElementOffset>("getElementOffset", new object[] { _draggingComponent.Id });
-        _draggingComponent.Style = $"left: {offset.Left + difference.Item1}px; top: {offset.Top + difference.Item2}px";
-    }
-
-    private class HTMLElementOffset
-    {
-        public double Left { get; set; }
-        public double Top { get; set; }
+        var difference = new Position
+        {
+            X = args.ClientX - _dragStartCoordinates.X,
+            Y = args.ClientY - _dragStartCoordinates.Y
+        };
+        
+        var offset = await JS.InvokeAsync<Position>("getElementOffset", new object[]{_draggingComponent.Id});
+        _draggingComponent.Position = new Position()
+        {
+            X = offset.X + difference.X,
+            Y = offset.Y + difference.Y,
+            Height = offset.Height,
+            Width = offset.Width
+        };
     }
 }

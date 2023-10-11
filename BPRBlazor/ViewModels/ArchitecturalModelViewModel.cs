@@ -16,4 +16,10 @@ public class ArchitecturalModelViewModel
     {
         return $"Name: {Name}, Components: \n{string.Join('\n', Components.Select(x => x.ToString()))}";
     }
+
+    public List<ArchitecturalComponentViewModel> GetDependentComponents(ArchitecturalComponentViewModel component)
+    {
+        return Components.Where(dependentComponent => dependentComponent.Dependencies.
+                Any(dependency => component == dependency)).ToList();
+    }
 }
