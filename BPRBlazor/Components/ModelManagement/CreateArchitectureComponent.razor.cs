@@ -1,4 +1,6 @@
-﻿using BPRBlazor.ViewModels;
+﻿using BPRBE.Models.Persistence;
+using BPRBlazor.Models;
+using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -8,8 +10,7 @@ public partial class CreateArchitectureComponent : ComponentBase
 {
     private ArchitecturalModelViewModel _modelViewModel = new();
     private List<(string Message, string Class)> _resultMessages = new();
-
-    private ArchitecturalComponent? _dependencyComponent;
+    private ArchitecturalComponentViewModel? _dependencyComponent;
     private Position _dragStartCoordinates = new();
     private ArchitecturalComponentViewModel? _draggingComponent;
 
@@ -25,19 +26,23 @@ public partial class CreateArchitectureComponent : ComponentBase
         _modelViewModel.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(ArchitecturalModelViewModel component)
+    private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
     {
         _dependencyComponent = null;
-        _modelViewModel.Components.Remove(component); 
-        
-        var dependentComponents = _modelViewModel.Components.
-            Where(dependentComponent => dependentComponent.Dependencies.
-                Any(dependency => component == dependency));
-        
+        _modelViewModel.Components.Remove(component);
+
+        var dependentComponents = GetDependentComponents(component);
         foreach (var dependentComponent in dependentComponents)
         {
-            dependentComponent.Dependencies.Remove(component);
+            RemoveDependency(dependentComponent, component);
         }
+    }
+
+    private List<ArchitecturalComponentViewModel> GetDependentComponents(ArchitecturalComponentViewModel component)
+    {
+        return _modelViewModel.Components.
+            Where(dependentComponent => dependentComponent.Dependencies.
+                Any(dependency => component == dependency)).ToList();
     }
 
     private async Task CreateArchitectureModel()
@@ -85,6 +90,11 @@ public partial class CreateArchitectureComponent : ComponentBase
             _dependencyComponent = dependencyComponent;
         }
     }
+    
+    private static void RemoveDependency(ArchitecturalComponentViewModel component, ArchitecturalComponentViewModel dependency)
+    {
+        component.Dependencies.Remove(dependency);
+    }
 
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
@@ -109,7 +119,7 @@ public partial class CreateArchitectureComponent : ComponentBase
             Y = args.ClientY - _dragStartCoordinates.Y
         };
         
-        var offset = await JS.InvokeAsync<Position>("getElementOffset", _draggingComponent.Id);
+        var offset = await JS.InvokeAsync<Position>("getElementOffset", new object[]{_draggingComponent.Id});
         _draggingComponent.Position = new Position()
         {
             X = offset.X + difference.X,

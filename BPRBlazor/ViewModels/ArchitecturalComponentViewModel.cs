@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BPRBlazor.Models;
 
 namespace BPRBlazor.ViewModels;
 

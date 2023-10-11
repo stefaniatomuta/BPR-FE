@@ -10,43 +10,46 @@
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
     
     <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
-            @foreach (var component in _modelViewModel.Components)
-            {
-                <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
-                    <div class="component-header mb-2">
-                        <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
-                    </div>
-                    <span>@component.Id</span>
-                    <div class="d-flex flex-column p-2 gap-1">
-                        <button type="button" class="btn btn-primary" @onclick="(() => AddDependency(component))">
-                            Dependency
-                        </button>
-                    </div>
-                    <div class="d-flex flex-column p-2 gap-1">
-                        <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
-                        <ValidationMessage For="(() => component.Name)"/>
-                    </div>
+        @foreach (var component in _modelViewModel.Components)
+        {
+            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
+                <div class="component-header mb-2">
+                    <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
                 </div>
+                <span>@component.Id</span>
+                <div class="d-flex flex-column p-2 gap-1">
+                    <button type="button" class="btn btn-primary" @onclick="(() => AddDependency(component))">
+                        Dependency
+                    </button>
+                </div>
+                <div class="d-flex flex-column p-2 gap-1">
+                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
+                    <ValidationMessage For="(() => component.Name)"/>
+                </div>
+            </div>
+            @foreach (var dependency in component.Dependencies)
+            {
+                var startX = component.Position.X + component.Position.Width / 2;
+                var startY = component.Position.Y + component.Position.Height / 2;
+                var endX = dependency.Position.X + dependency.Position.Width / 2;
+                var endY = dependency.Position.Y + dependency.Position.Height / 2;
                 <svg>
-                @foreach (var dependency in component.Dependencies)
-                {
-                    var startX = component.Position.X + component.Position.Width / 2;
-                    var startY = component.Position.Y + component.Position.Height / 2;
-                    var endX = dependency.Position.X + dependency.Position.Width / 2;
-                    var endY = dependency.Position.Y + dependency.Position.Height / 2;
-
-                    <polyline 
-                        points="
-                            @(startX),@(startY)
-                            @((startX + endX) / 2),@((startY + endY) / 2)
-                            @(endX),@(endY)" 
-                        stroke="#000000" 
-                        stroke-width="3" 
-                        fill="none" 
-                        marker-mid="url(#arrowhead)" />
-                }
+                    <polyline
+                        points="@(startX),@(startY) @((startX + endX) / 2),@((startY + endY) / 2) @(endX),@(endY)"
+                        stroke="#000000"
+                        stroke-width="3"
+                        fill="none"
+                        marker-mid="url(#arrowhead)">
+                    </polyline>
                 </svg>
+                <div 
+                    class="delete-dependency"
+                    style="left: @((startX + endX) / 2 - 25)px; top: @((startY + endY) / 2 - 25)px">
+                    <a class="btn btn-danger oi oi-trash" @onclick="(() => RemoveDependency(component, dependency))">
+                    </a>
+                </div>
             }
+        }
     </div>
     <ValidationMessage For="(() => _modelViewModel.Components)" />
     @foreach (var message in _resultMessages)

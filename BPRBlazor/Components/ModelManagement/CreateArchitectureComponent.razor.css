@@ -25,3 +25,19 @@ svg {
     padding: 10px;
     background-color: #2196F3;
 }
+
+.delete-dependency {
+    min-height: 5rem;
+    min-width: 5rem;
+    position: absolute;
+}
+
+.delete-dependency:hover a {
+    opacity: 1;
+}
+
+.delete-dependency a {
+    margin-top: 3rem;
+    transition: visibility 0s, opacity 0.2s ease-in;
+    opacity: 0;
+}
