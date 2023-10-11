@@ -17,7 +17,7 @@ public partial class Index : ComponentBase
     private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
-    private ArchitecturalModelCollection _selectedArchitectureModelCollection = default!;
+    private ArchitecturalModel _selectedArchitectureModelCollection = default!;
     public List<RuleViewModel> _rulesViewModels = new();
 
     private List<Violation> violations = new();
@@ -33,10 +33,9 @@ public partial class Index : ComponentBase
         _errorMessage = default!;
         _architecturalModelViewModel = default!;
         StateContainer.OnChange += StateHasChanged;
-        LoadDummyData();
     }
 
-    private void HandleArchitectureModelOnChange(ArchitecturalModelCollection newValue)
+    private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
         _selectedArchitectureModelCollection = newValue;
         // TODO - Actually do something with the selected modelCollection when analysis is started.
@@ -159,39 +158,5 @@ public partial class Index : ComponentBase
         CodebaseService.Dispose();
         StateContainer.OnChange -= StateHasChanged;
     }
-
-    private void LoadDummyData()
-    {
-        _architecturalModelViewModel = new ArchitecturalModelViewModel()
-        {
-            Name = "Architecture",
-            Components = new List<ArchitecturalComponentViewModel>()
-            {
-                new ArchitecturalComponentViewModel()
-                {
-                    Id = 0,
-                    Name = "Component0",
-                    NamespaceComponents = new List<NamespaceViewModel>()
-                },
-                new ArchitecturalComponentViewModel()
-                {
-                    Id = 1,
-                    Name = "Component1",
-                    NamespaceComponents = new List<NamespaceViewModel>()
-                },
-                new ArchitecturalComponentViewModel()
-                {
-                    Id = 2,
-                    Name = "Component2",
-                    NamespaceComponents = new List<NamespaceViewModel>()
-                },
-                new ArchitecturalComponentViewModel()
-                {
-                    Id = 3,
-                    Name = "Component3",
-                    NamespaceComponents = new List<NamespaceViewModel>()
-                },
-            }
-        };
-    }
+    
 }

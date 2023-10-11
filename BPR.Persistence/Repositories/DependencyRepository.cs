@@ -32,7 +32,7 @@ public class DependencyRepository : IDependencyRepository
     {
         try
         {
-            var result = await GetArchitecturalModelByName(modelCollection);
+            var result = await GetArchitecturalModelCollectionByName(modelCollection);
             if (result != null) return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists");
             await _dependenciesRuleCollection.InsertOneAsync(modelCollection);
             _logger.LogInformation("Architectural modelCollection added" + modelCollection);
@@ -45,6 +45,30 @@ public class DependencyRepository : IDependencyRepository
             return Result.Fail<ArchitecturalModelCollection>(message);
         }
     }
+    
+    public async Task<Result> EditModelAsync(ArchitecturalModelCollection model)
+    {
+        try
+        {
+            var result = await GetArchitecturalModelCollectionByName(model);
+            if (result != null && result.Id != model.Id)
+            {
+                return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists");
+            }
+            
+            var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(old => old.Id, model.Id);
+            var update = Builders<ArchitecturalModelCollection>.Update
+                .Set(old => old.Name, model.Name)
+                .Set(old => old.Components, model.Components);
+            
+            await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
+            return Result.Ok(model);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail<ArchitecturalModelCollection>(e.Message);
+        }
+    }
 
     public async Task<ArchitecturalModelCollection?> DeleteModelAsync(ObjectId id)
     {
@@ -52,8 +76,8 @@ public class DependencyRepository : IDependencyRepository
         return await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
     }
 
-    private async Task<ArchitecturalModelCollection?> GetArchitecturalModelByName(ArchitecturalModelCollection modelCollection)
+    private async Task<ArchitecturalModelCollection?> GetArchitecturalModelCollectionByName(ArchitecturalModelCollection model)
     {
-        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(modelCollection.Name))).FirstOrDefaultAsync();
+        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
     }
 }

@@ -2,7 +2,6 @@ using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
 using BPRBE.Models;
 using BPR.Analysis.Services;
-using BPRBE.Config;
 using BPRBE.Services;
 using BPRBE.Validators;
 using BPRBlazor.Mappers;

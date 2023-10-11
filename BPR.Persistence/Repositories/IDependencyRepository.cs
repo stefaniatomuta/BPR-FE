@@ -9,4 +9,5 @@ public interface IDependencyRepository
     Task<IList<ArchitecturalModelCollection>> GetArchitecturalModelsAsync();
     Task<Result> AddModelAsync(ArchitecturalModelCollection modelCollection);
     Task<ArchitecturalModelCollection?> DeleteModelAsync(ObjectId id);
+    Task<Result> EditModelAsync(ArchitecturalModelCollection model);
 }

@@ -12,5 +12,5 @@ public interface IDependencyService
      */
     Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
     Task<Result> AddOrEditModelAsync(ArchitecturalModel model);
-    Task<Result> DeleteArchitectureModelAsync(ObjectId id);
+    Task<Result> DeleteArchitectureModelAsync(Guid id);
 }

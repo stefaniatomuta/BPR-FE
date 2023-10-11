@@ -1,3 +1,4 @@
+﻿using BPRBE.Models.Persistence;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace BPR.Persistence.Models;

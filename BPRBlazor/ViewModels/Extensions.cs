@@ -1,12 +1,15 @@
 using BPR.Persistence.Models;
+using BPRBE.Models;
+using BPRBE.Models.Persistence;
+using MongoDB.Bson;
 
 namespace BPRBlazor.ViewModels;
 
 public static class Extensions
 {
-    public static ArchitecturalModelCollection ToBackendModel(this ArchitecturalModelViewModel model)
+    public static ArchitecturalModel ToBackendModel(this ArchitecturalModelViewModel model)
     {
-        return new ArchitecturalModelCollection
+        return new ArchitecturalModel
         {
             Id = model.Id,
             Name = model.Name,
@@ -16,15 +19,13 @@ public static class Extensions
         };
     }
 
-    private static ArchitecturalComponentCollection ToBackendModel(this ArchitecturalComponentViewModel component)
+    private static ArchitecturalComponent ToBackendModel(this ArchitecturalComponentViewModel component)
     {
-        return new ArchitecturalComponentCollection
+        return new ArchitecturalComponent
         {
             Id = component.Id,
             Name = component.Name,
-            Dependencies = component.Dependencies
-                .Select(c => c.Id)
-                .ToList(),
+            Dependencies = component.Dependencies.Select(x =>x.ToBackendModel()).ToList(),
             Position = new Position
             {
                 X = component.PositionViewModel.X,
@@ -39,11 +40,6 @@ public static class Extensions
     {
         var components = model.Components
             .Select(c => c.ToViewModel()).ToList();
-        foreach (var component in components)
-        {
-            component.Dependencies.AddRange(components
-                .Where(dependency => model.Components.First(modelComponent => modelComponent.Id == component.Id).Dependencies.Contains(dependency.Id)));
-        }
 
         return new ArchitecturalModelViewModel
         {

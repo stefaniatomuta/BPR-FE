@@ -1,6 +1,7 @@
 ﻿using BPR.Persistence.Models;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
+using BPRBE.Models;
 using BPRBE.Services;
 using BPRBE.Validators;
 using MongoDB.Bson;
@@ -28,10 +29,10 @@ internal class DependencyServiceTests
     {
         // Arrange
         repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Ok());
-        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Ok());
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
 
         // Act
-        var result = await uut.AddOrEditModelAsync(new ArchitecturalModelCollection());
+        var result = await uut.AddOrEditModelAsync(new ArchitecturalModel());
 
         // Assert
         Assert.That(result.Success, Is.True);
@@ -41,10 +42,10 @@ internal class DependencyServiceTests
     public async Task AddModelAsync_WhenValidationFails_ReturnsFailResult()
     {
         // Arrange
-        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Fail());
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Fail());
 
         // Act
-        var result = await uut.AddOrEditModelAsync(new ArchitecturalModelCollection());
+        var result = await uut.AddOrEditModelAsync(new ArchitecturalModel());
 
         // Assert
         Assert.That(result.Success, Is.False);
@@ -55,7 +56,7 @@ internal class DependencyServiceTests
     {
         // Arrange
         repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).Returns(new ArchitecturalModelCollection());
-        var modelId = ObjectId.GenerateNewId();
+        var modelId = new Guid();
 
         // Act
         var result = await uut.DeleteArchitectureModelAsync(modelId);
@@ -69,7 +70,7 @@ internal class DependencyServiceTests
     {
         // Arrange
         repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).ReturnsNull();
-        var modelId = ObjectId.GenerateNewId();
+        var modelId = new Guid();
 
         // Act
         var result = await uut.DeleteArchitectureModelAsync(modelId);

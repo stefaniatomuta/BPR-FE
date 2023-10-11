@@ -62,29 +62,23 @@ public class DependencyService : IDependencyService
         // Instead, maybe it would make more sense if the repository would return 'true'/'false' or an 'int' depending on affected documents, and then base the result off that.
         if (result.Success)
         {
-            if (model.Id == default)
-            {
-                return await _dependencyRepository.AddModelAsync(model);
-            }
-            return await _dependencyRepository.EditModelAsync(model);
             var document = new ArchitecturalModelCollection();
             document.Id = ObjectId.Parse(model.Id.ToString());
             document.Name = model.Name;
-            //var components = model.Components.Select(x => x).ToList();
-            //document.Components = components;
-            return await _dependencyRepository.AddModelAsync(document);
+            if (model.Id == default)
+            {
+                return await _dependencyRepository.AddModelAsync(document);
+            }
+            return await _dependencyRepository.EditModelAsync(document);
         }
 
         return result;
     }
 
-    public async Task<Result> DeleteArchitectureModelAsync(ObjectId id)
+    public async Task<Result> DeleteArchitectureModelAsync(Guid id)
     {
-        // TODO - Not super happy about the id being ObjectId here - this way the caller (frontend) is reliant on the repository using MongoDB. Perhaps it would make more sense to pass a GUID.
-        // Then the repository can parse the GUID to an ObjectId. I could easily do this here, but the FE will still know about mongo when we're getting the models.
-        // Could be solved by making another set of models - one specific for the DB (the one we currently have) and another more generic one for the overall domain (which the frontend would know about).
-        // Would also make more sense if we switched our project structure to use the 'Clean' architecture or so.
-        var deletedModel = await _dependencyRepository.DeleteModelAsync(id);
+        var objectId = ObjectId.Parse(id.ToString()); 
+        var deletedModel = await _dependencyRepository.DeleteModelAsync(objectId);
         return deletedModel is not null
             ? Result.Ok()
             : Result.Fail($"No architecture model found with id: '{id}'");

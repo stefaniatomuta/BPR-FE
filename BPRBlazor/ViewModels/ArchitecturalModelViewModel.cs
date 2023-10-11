@@ -5,7 +5,7 @@ namespace BPRBlazor.ViewModels;
 
 public class ArchitecturalModelViewModel
 {
-    public ObjectId Id { get; set; }
+    public Guid Id { get; set; } = new Guid();
     
     [Required(ErrorMessage = "Please give the model a name")]
     public string Name { get; set; } = string.Empty;

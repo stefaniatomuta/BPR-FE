@@ -1,8 +1,10 @@
 ﻿using BPR.Persistence.Models;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
+using BPRBE.Models;
 using BPRBE.Services;
 using BPRBE.Validators;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 
 namespace BPRBE.Tests;
@@ -13,13 +15,15 @@ public class RuleServiceTests
     private IRuleService uut;
     private IRuleRepository _repositoryStub;
     private IValidatorService _validatorService;
+    private ILogger<RuleService> _logger;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         _repositoryStub = Substitute.For<IRuleRepository>();
         _validatorService = Substitute.For<IValidatorService>();
-        uut = new RuleService(_repositoryStub, _validatorService);
+        _logger = Substitute.For<ILogger<RuleService>>();
+        uut = new RuleService(_repositoryStub, _validatorService, _logger);
     }
 
     [Test]
@@ -52,11 +56,17 @@ public class RuleServiceTests
             Name = "Dependency"
         };
 
-        _validatorService.ValidateRuleAsync(newRule).Returns(new Result(true));
+        var ruleModel = new Rule()
+        {
+            Name = "Dependency"
+
+        };
+
+        _validatorService.ValidateRuleAsync(ruleModel).Returns(new Result(true));
         _repositoryStub.AddRuleAsync(newRule).Returns(new Result(false));
 
         // Act
-        var result = await uut.AddRuleAsync(newRule);
+        var result = await uut.AddRuleAsync(ruleModel);
 
         // Assert
         Assert.That(result.Success, Is.False);
