@@ -1,8 +1,8 @@
-﻿using BPRBE.Models.Persistence;
-using BPRBlazor.ViewModels;
+﻿using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
+using BE = BPRBE.Models.Persistence;
 
 namespace BPRBlazor.Pages;
 
@@ -13,9 +13,9 @@ public partial class Index : ComponentBase
     private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
-    private ArchitecturalModel _selectedArchitectureModel = default!;
+    private BE.ArchitecturalModel _selectedArchitectureModel = default!;
     public List<RuleViewModel> _rulesViewModels = new();
-    
+
     private async Task SendDataAsync()
     {
         await HttpService.PostAsync("http://127.0.0.1:8000/post?item=HelloWorld", string.Empty);
@@ -27,14 +27,16 @@ public partial class Index : ComponentBase
         _architecturalModelViewModel = default!;
         LoadDummyData();
     }
-    private void HandleArchitecturalModelOnChange(ArchitecturalModel architecturalModel)
+
+    private void HandleArchitectureModelOnChange(BE.ArchitecturalModel newValue)
     {
-        _selectedArchitectureModel = architecturalModel;
+        _selectedArchitectureModel = newValue;
+        // TODO - Actually do something with the selected model when analysis is started.
     }
 
     private void HandleRule(RuleViewModel value)
     {
-        var index  = _rulesViewModels.FindIndex(x => x.Name.Equals(value.Name));
+        var index = _rulesViewModels.FindIndex(x => x.Name.Equals(value.Name));
         if (index != -1)
         {
             _rulesViewModels[index] = value;
@@ -71,7 +73,7 @@ public partial class Index : ComponentBase
         {
             oldComponent.NamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
         }
-        
+
         if (componentViewModel != default!)
         {
             componentViewModel.NamespaceComponents.Add(_selectedNamespaceViewModelComponent);

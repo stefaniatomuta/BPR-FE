@@ -1,11 +1,10 @@
 ﻿using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 
-namespace BPRBlazor.Pages;
+namespace BPRBlazor.Components.ModelManagement;
 
-public partial class CreateArchitecturalModelForm : ComponentBase
+public partial class CreateArchitectureComponent : ComponentBase
 {
     private ArchitecturalModelViewModel _modelViewModel = new();
     private List<(string Message, string Class)> _resultMessages = new();
@@ -15,7 +14,7 @@ public partial class CreateArchitecturalModelForm : ComponentBase
     private (double ClientX, double ClientY) _dragStartCoordinates;
     private ArchitecturalComponentViewModel? _draggingComponent;
 
-    private void AddArchitecturalComponent()
+    private void AddArchitectureComponent()
     {
         var component = new ArchitecturalComponentViewModel()
         {
@@ -25,12 +24,12 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         _modelViewModel.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
+    private void RemoveArchitectureComponent(ArchitecturalComponentViewModel component)
     {
         _modelViewModel.Components.Remove(component);
     }
 
-    private async Task CreateArchitecturalModel()
+    private async Task CreateArchitectureModel()
     {
         try
         {
@@ -86,7 +85,7 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         }
 
         var difference = (args.ClientX - _dragStartCoordinates.ClientX, args.ClientY - _dragStartCoordinates.ClientY);
-        var offset = await JS.InvokeAsync<HTMLElementOffset>("getElementOffset", _draggingComponent.Id);
+        var offset = await JS.InvokeAsync<HTMLElementOffset>("getElementOffset", new object[] { _draggingComponent.Id });
         _draggingComponent.Style = $"left: {offset.Left + difference.Item1}px; top: {offset.Top + difference.Item2}px";
     }
 

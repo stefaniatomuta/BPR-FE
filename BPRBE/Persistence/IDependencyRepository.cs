@@ -1,10 +1,11 @@
 ﻿using BPRBE.Models.Persistence;
+using MongoDB.Bson;
 
 namespace BPRBE.Persistence;
 
 public interface IDependencyRepository
 {
-    public Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
-    public Task<Result> AddModelAsync(ArchitecturalModel model);
-    public Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model);
+    Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
+    Task<Result> AddModelAsync(ArchitecturalModel model);
+    Task<ArchitecturalModel?> DeleteModelAsync(ObjectId id);
 }

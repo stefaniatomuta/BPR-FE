@@ -1,30 +1,29 @@
-﻿
-using BPRBE.Models.Persistence;
+﻿using BPRBE.Models.Persistence;
 
-namespace BPRBlazor.ViewModels
+namespace BPRBlazor.ViewModels;
+
+public static class Extensions
 {
-    public static class Extensions
+    public static ArchitecturalModel ToBackendModel(this ArchitecturalModelViewModel model)
     {
-        public static ArchitecturalModel ToBackendModel(this ArchitecturalModelViewModel model)
+        return new ArchitecturalModel
         {
-            return new ArchitecturalModel
-            {
-                Name = model.Name,
-                Components = model.Components
-                    .Select(c => c.ToBackendModel())
-                    .ToList()
-            };
-        }
+            Name = model.Name,
+            Components = model.Components
+                .Select(c => c.ToBackendModel())
+                .ToList()
+        };
+    }
 
-        public static ArchitecturalComponent ToBackendModel(this ArchitecturalComponentViewModel component)
+    public static ArchitecturalComponent ToBackendModel(this ArchitecturalComponentViewModel component)
+    {
+        return new ArchitecturalComponent
         {
-            return new ArchitecturalComponent
-            {
-                Name = component.Name,
-                Dependencies = component.Dependencies
-                    .Select(c => c.Id)
-                    .ToList()
-            };
-        }
+            Id = component.Id,
+            Name = component.Name,
+            Dependencies = component.Dependencies
+                .Select(c => c.Id)
+                .ToList()
+        };
     }
 }

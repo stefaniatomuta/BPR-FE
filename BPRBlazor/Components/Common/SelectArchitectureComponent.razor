@@ -1,0 +1,22 @@
+﻿@using BPRBE.Services
+@inject IDependencyService DependencyService
+@inject IJSRuntime JS
+
+@if (_architectureOptions is null)
+{
+    <p>Loading...</p>
+}
+else if (!_architectureOptions.Any())
+{
+    <p>No architecture models found!</p>
+}
+else
+{
+    <select id="selectArchitecture" class="form-control form-select" @onchange="OnSelectedValueChanged">
+        <option hidden>Select an architecture model</option>
+        @foreach (var op in _architectureOptions)
+        {
+            <option value="@op.Id">@op.Name</option>
+        }
+    </select>
+}

@@ -3,7 +3,6 @@ using BPRBE.Validators;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using MongoDB.Bson;
-using NUnit.Framework;
 
 namespace BPRBE.Tests;
 
@@ -47,7 +46,7 @@ public class ValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.Components)
             .WithErrorMessage("Model cannot have no components");
     }
-    
+
     [Test]
     public void Architectural_Model_Should_Have_Error_When_Duplicate_Component_Names()
     {

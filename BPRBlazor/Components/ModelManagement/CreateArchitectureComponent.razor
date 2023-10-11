@@ -1,13 +1,13 @@
-﻿@page "/new-model"
-@inject IJSRuntime JS
+﻿@inject IJSRuntime JS
 @inject IDependencyService service
 @using BPRBE.Services
 
-<EditForm Model="_modelViewModel" OnValidSubmit="CreateArchitecturalModel">
+<h3>Create architecture models</h3>
+<EditForm Model="_modelViewModel" OnValidSubmit="CreateArchitectureModel">
     <ObjectGraphDataAnnotationsValidator />
     <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_modelViewModel.Name" />
     <ValidationMessage For="(() => _modelViewModel.Name)" />
-    <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
+    <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitectureComponent">Add component</button>
 
     @if (_modelViewModel.Components.Any())
     {
@@ -25,7 +25,7 @@
                 </div>
                 <span>@component.Id</span>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
+                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitectureComponent(component))">Remove</button>
                     <ValidationMessage For="(() => component.Name)" />
                 </div>
             </div>

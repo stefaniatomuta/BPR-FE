@@ -1,6 +1,7 @@
 ﻿using BPRBE.Config;
 using BPRBE.Models.Persistence;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BPRBE.Persistence;
@@ -22,12 +23,7 @@ public class DependencyRepository : IDependencyRepository
     {
         return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
     }
-    
-    public async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
-    {
-        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
-    }
-    
+
     public async Task<Result> AddModelAsync(ArchitecturalModel model)
     {
         try
@@ -41,5 +37,16 @@ public class DependencyRepository : IDependencyRepository
         {
             return Result.Fail<ArchitecturalModel>(e.Message);
         }
+    }
+
+    public async Task<ArchitecturalModel?> DeleteModelAsync(ObjectId id)
+    {
+        var filter = Builders<ArchitecturalModel>.Filter.Eq(model => model.Id, id);
+        return await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
+    }
+
+    private async Task<ArchitecturalModel?> GetArchitecturalModelByName(ArchitecturalModel model)
+    {
+        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
     }
 }
