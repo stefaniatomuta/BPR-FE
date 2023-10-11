@@ -14,4 +14,8 @@
     <ItemGroup>
       <ProjectReference Include="..\BPR.Persistence\BPR.Persistence.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BPR.Analysis\BPR.Analysis.csproj" />
+    </ItemGroup>
 </Project>

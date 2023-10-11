@@ -1,6 +1,6 @@
-namespace BPRBlazor.Models;
+namespace BPRBlazor.ViewModels;
 
-public class Position
+public class PositionViewModel
 {
     public double X { get; set; }
     public double Y { get; set; }

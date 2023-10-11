@@ -54,7 +54,7 @@ public class DependencyService : IDependencyService
         return models;
     }
 
-    public async Task<Result> AddModelAsync(ArchitecturalModel model)
+    public async Task<Result> AddOrEditModelAsync(ArchitecturalModel model)
     {
         var result = await _validatorService.ValidateArchitecturalModelAsync(model);
         // TODO - The dependencyRepository.AddModelAsync() returns Result.Fail if an exception is thrown, but this isn't sent back to the user.
@@ -62,6 +62,11 @@ public class DependencyService : IDependencyService
         // Instead, maybe it would make more sense if the repository would return 'true'/'false' or an 'int' depending on affected documents, and then base the result off that.
         if (result.Success)
         {
+            if (model.Id == default)
+            {
+                return await _dependencyRepository.AddModelAsync(model);
+            }
+            return await _dependencyRepository.EditModelAsync(model);
             var document = new ArchitecturalModelCollection();
             document.Id = ObjectId.Parse(model.Id.ToString());
             document.Name = model.Name;

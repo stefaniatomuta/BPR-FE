@@ -1,9 +1,15 @@
 ﻿@using BPRBlazor.Components.Results
+@using BPRBlazor.State
+@inject StateContainer StateContainer
+@inject IJSRuntime JsRuntime
+@implements IDisposable
 
 @page "/results"
 
 <div class="float-end">
-    <DownloadButton/>
+    <button class="btn btn-primary" @onclick="DownloadPdf">
+        Download as PDF
+    </button>
 </div>
 
 <div id="result-details">

@@ -1,22 +1,29 @@
-﻿@inject IJSRuntime JS
-@inject IDependencyService service
+@inject IJSRuntime JS
+@inject IDependencyService DependencyService
+@inject NavigationManager NavigationManager
 @using BPRBE.Services
 
-<h3>Create architecture models</h3>
-<EditForm Model="_modelViewModel" OnValidSubmit="CreateArchitectureModel">
+<svg class="svg-def">
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" />
+        </marker>
+    </defs>
+</svg>
+
+<EditForm Model="ModelViewModel" OnValidSubmit="CreateOrEditArchitectureModel">
     <ObjectGraphDataAnnotationsValidator />
-    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="_modelViewModel.Name" />
-    <ValidationMessage For="(() => _modelViewModel.Name)" />
+    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
+    <ValidationMessage For="(() => ModelViewModel.Name)" />
     <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
     
     <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
-        @foreach (var component in _modelViewModel.Components)
+        @foreach (var component in ModelViewModel.Components)
         {
-            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
+            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.PositionViewModel.X)px; top: @(component.PositionViewModel.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
                 <div class="component-header mb-2">
                     <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
                 </div>
-                <span>@component.Id</span>
                 <div class="d-flex flex-column p-2 gap-1">
                     <button type="button" class="btn @(component == _dependencyComponent ? "btn-success" : "btn-primary")" @onclick="(() => AddDependency(component))">
                         Dependency
@@ -31,10 +38,10 @@
             </div>
             @foreach (var dependency in component.Dependencies)
             {
-                var startX = component.Position.X + component.Position.Width / 2;
-                var startY = component.Position.Y + component.Position.Height / 2;
-                var endX = dependency.Position.X + dependency.Position.Width / 2;
-                var endY = dependency.Position.Y + dependency.Position.Height / 2;
+                var startX = component.PositionViewModel.X + component.PositionViewModel.Width / 2;
+                var startY = component.PositionViewModel.Y + component.PositionViewModel.Height / 2;
+                var endX = dependency.PositionViewModel.X + dependency.PositionViewModel.Width / 2;
+                var endY = dependency.PositionViewModel.Y + dependency.PositionViewModel.Height / 2;
                 <svg>
                     <polyline
                         points="@(startX),@(startY) @((startX + endX) / 2),@((startY + endY) / 2) @(endX),@(endY)"
@@ -53,10 +60,15 @@
             }
         }
     </div>
-    <ValidationMessage For="(() => _modelViewModel.Components)" />
+    <ValidationMessage For="(() => ModelViewModel.Components)" />
     @foreach (var message in _resultMessages)
     {
         <span class="@message.Class d-block">@message.Message</span>
     }
     <button type="submit" class="btn btn-primary my-2">Submit Model</button>
 </EditForm>
+
+@if (ModelViewModel.Id != default)
+{
+    <button class="btn btn-danger mt-2" @onclick="DeleteSelectedModel">Delete selected model</button>
+}
