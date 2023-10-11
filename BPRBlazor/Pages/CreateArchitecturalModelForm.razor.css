@@ -1,20 +1,15 @@
-﻿button {
-    display: block;
-}
-
-.success {
-    color: forestgreen;
-}
-
-.error {
-    color: orangered;
-}
-
-.draggable-boundary {
+﻿.draggable-boundary {
     width: 100%;
     height: 70vh;
     border: 1px dashed #b3b3b3;
     position: relative;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
 }
 
 .component {

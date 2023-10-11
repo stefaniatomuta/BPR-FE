@@ -6,5 +6,5 @@ function exportHTMLtoPDF(html, fileName) {
 
 function getElementOffset(elementId) {
     const element = document.getElementById(elementId);
-    return { left: element.offsetLeft, top: element.offsetTop }
+    return { x: element.offsetLeft, y: element.offsetTop, height: element.offsetHeight, width: element.offsetWidth }
 }

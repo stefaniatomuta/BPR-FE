@@ -10,13 +10,14 @@ public partial class CreateArchitecturalModelForm : ComponentBase
     private ArchitecturalModel _model = new();
     private List<(string Message, string Class)> _resultMessages = new();
 
-    private string _dependencyString = "";
-
-    private (double ClientX, double ClientY) _dragStartCoordinates;
+    private ArchitecturalComponent? _dependencyComponent;
+    private Position _dragStartCoordinates = new();
     private ArchitecturalComponent? _draggingComponent;
 
     private void AddArchitecturalComponent()
     {
+        _dependencyComponent = null;
+
         var component = new ArchitecturalComponent()
         {
             Id = _model.Components.Any() ? _model.Components.Max(c => c.Id) + 1 : 0
@@ -27,7 +28,17 @@ public partial class CreateArchitecturalModelForm : ComponentBase
 
     private void RemoveArchitecturalComponent(ArchitecturalComponent component)
     {
-        _model.Components.Remove(component);
+        _dependencyComponent = null;
+        _model.Components.Remove(component); 
+        
+        var dependentComponents = _model.Components.
+            Where(dependentComponent => dependentComponent.Dependencies.
+                Any(dependency => component == dependency));
+        
+        foreach (var dependentComponent in dependentComponents)
+        {
+            dependentComponent.Dependencies.Remove(component);
+        }
     }
 
     private async Task CreateArchitecturalModel()
@@ -55,26 +66,34 @@ public partial class CreateArchitecturalModelForm : ComponentBase
         }
     }
 
-    private void AddDependency(int parentComponentId, int dependencyComponentId)
+    private void AddDependency(ArchitecturalComponent dependencyComponent)
     {
-        _dependencyString = "";
-
-        if (parentComponentId == dependencyComponentId)
+        if (_dependencyComponent != null)
         {
-            return;
+            if (_dependencyComponent == dependencyComponent)
+            {
+                _dependencyComponent = null;
+                return;
+            }
+            if (_dependencyComponent.Dependencies.All(c => c.Id != dependencyComponent.Id))
+            {
+                _dependencyComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponent.Id));
+            }
+            _dependencyComponent = null;
         }
-
-        var parentComponent = _model.Components.First(c => c.Id == parentComponentId);
-
-        if (!parentComponent.Dependencies.Any(c => c.Id == dependencyComponentId))
+        else
         {
-            parentComponent.Dependencies.Add(_model.Components.First(c => c.Id == dependencyComponentId));
+            _dependencyComponent = dependencyComponent;
         }
     }
 
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponent component)
     {
-        _dragStartCoordinates = (args.ClientX, args.ClientY);
+        _dragStartCoordinates = new Position()
+        {
+            X = args.ClientX,
+            Y = args.ClientY
+        };
         _draggingComponent = component;
     }
 
@@ -85,14 +104,19 @@ public partial class CreateArchitecturalModelForm : ComponentBase
             return;
         }
 
-        var difference = (args.ClientX - _dragStartCoordinates.ClientX, args.ClientY - _dragStartCoordinates.ClientY);
-        var offset = await JS.InvokeAsync<HTMLElementOffset>("getElementOffset", _draggingComponent.Id);
-        _draggingComponent.Style = $"left: {offset.Left + difference.Item1}px; top: {offset.Top + difference.Item2}px";
-    }
-
-    private class HTMLElementOffset
-    {
-        public double Left { get; set; }
-        public double Top { get; set; }
+        var difference = new Position
+        {
+            X = args.ClientX - _dragStartCoordinates.X,
+            Y = args.ClientY - _dragStartCoordinates.Y
+        };
+        
+        var offset = await JS.InvokeAsync<Position>("getElementOffset", _draggingComponent.Id);
+        _draggingComponent.Position = new Position()
+        {
+            X = offset.X + difference.X,
+            Y = offset.Y + difference.Y,
+            Height = offset.Height,
+            Width = offset.Width
+        };
     }
 }
