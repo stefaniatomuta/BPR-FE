@@ -16,7 +16,8 @@ public class CodebaseService : ICodebaseService {
     }
     
     private string ExtractArchive(ArchiveFile archiveFile) {
-        var directory =  Directory.CreateDirectory("../temp");
+        var guid = Guid.NewGuid();
+        var directory =  Directory.CreateDirectory($"../temp/{guid}");
         var archiveName = archiveFile.Entries.FirstOrDefault()!.FileName;
         archiveFile.Extract(directory.FullName);
         folderPath = directory.FullName;
