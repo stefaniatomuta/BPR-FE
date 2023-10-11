@@ -3,6 +3,7 @@ using BPRBE.Validators;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using MongoDB.Bson;
+using NUnit.Framework;
 
 namespace BPRBE.Tests;
 

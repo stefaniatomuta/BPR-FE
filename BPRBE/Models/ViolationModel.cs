@@ -2,4 +2,6 @@
 
 namespace BPRBE.Models;
 
-public record ViolationModel(int Id, string Name, ViolationType Type, string Description, ViolationSeverity Severity, string Code);
+public record ViolationModel(string Name, ViolationType Type, string Description, ViolationSeverity Severity, string Code,string File) { }
+
+

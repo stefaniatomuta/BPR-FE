@@ -1,4 +1,4 @@
-﻿using BPRBE.Models.Persistence;
+using BPRBE.Models.Persistence;
 
 namespace BPRBlazor.ViewModels;
 

@@ -1,4 +1,4 @@
-﻿using BPRBE.Config;
+using BPRBE.Config;
 using BPRBE.Models.Persistence;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
