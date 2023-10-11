@@ -1,4 +1,6 @@
-﻿using BPRBlazor.ViewModels;
+using BPRBlazor.ViewModels;
+using BPR.Analysis.Models;
+using BPRBE.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
@@ -10,11 +12,15 @@ public partial class Index : ComponentBase
 {
     private string _errorMessage = string.Empty;
     private string _folderPath = string.Empty;
+    private string _analysisMessage = string.Empty;
     private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
     private BE.ArchitecturalModel _selectedArchitectureModel = default!;
     public List<RuleViewModel> _rulesViewModels = new();
+
+    private List<Violation> violations = new();
+    
 
     private async Task SendDataAsync()
     {
@@ -25,6 +31,7 @@ public partial class Index : ComponentBase
     {
         _errorMessage = default!;
         _architecturalModelViewModel = default!;
+        StateContainer.OnChange += StateHasChanged;
         LoadDummyData();
     }
 
@@ -63,6 +70,20 @@ public partial class Index : ComponentBase
             _errorMessage = "Analysis can not start without any rule selected";
             return;
         }
+
+        try {
+            var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
+            violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
+            violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
+            StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
+            _analysisMessage = "The analysis is ready. Check out the results page";
+
+        }
+        catch (Exception e) {
+            _errorMessage = "Oops.. An error occured";
+        }
+
+        
     }
 
     private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
@@ -135,6 +156,7 @@ public partial class Index : ComponentBase
     public void Dispose()
     {
         CodebaseService.Dispose();
+        StateContainer.OnChange -= StateHasChanged;
     }
 
     private void LoadDummyData()

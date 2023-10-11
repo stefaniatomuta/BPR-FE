@@ -1,12 +1,13 @@
 ﻿namespace BPRBE.Services; 
 
 public class DependencyComponentService : IDependencyComponentService {
-    
+    private List<string> foldersToIgnore = new () {"bin","obj" };
+
     public List<string> GetFolderNamesForProjects(string folderPath) {
-        var projectNames = Directory.EnumerateDirectories(folderPath);
+        var projectNames = Directory.EnumerateDirectories(folderPath).ToList();
         var folders = new List<string>();
         foreach (var project in projectNames) {
-            var fd = Directory.EnumerateDirectories(project);
+            var fd = Directory.EnumerateDirectories(project).Where(proj => !foldersToIgnore.Any(folder => proj.Contains(folder))).ToList();
             folders.AddRange(fd.Select(f => RemoveFolderPath(folderPath, f)).ToList());
         }
         return folders;
@@ -20,4 +21,5 @@ public class DependencyComponentService : IDependencyComponentService {
         var projectNames = Directory.EnumerateDirectories(folderPath);
         return projectNames.Select(m=> RemoveFolderPath(folderPath,m)).ToList(); 
     }
+    
 }

@@ -1,4 +1,5 @@
 ﻿using BPRBE.Models.Persistence;
+using BPRBE.Services;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -7,6 +8,7 @@ namespace BPRBE.Validators;
 public class ValidatorService : IValidatorService
 {
     private readonly IValidator<ArchitecturalModel> _architecturalModelValidator;
+    
     private readonly IValidator<Rule> _ruleValidator;
 
     public ValidatorService(IValidator<ArchitecturalModel> architecturalModelValidator, IValidator<Rule> ruleValidator)
@@ -18,9 +20,10 @@ public class ValidatorService : IValidatorService
     public async Task<Result> ValidateArchitecturalModelAsync(ArchitecturalModel model)
     {
         var result = await _architecturalModelValidator.ValidateAsync(model);
-        return HandleValidatorResults(result);
+        if (result.IsValid) return new Result(true);
+        var errorMessages = result.Errors.Select(x=> x.ErrorMessage).ToList();
+        return new Result(false, errorMessages);
     }
-
     public async Task<Result> ValidateRuleAsync(Rule rule)
     {
         var result = await _ruleValidator.ValidateAsync(rule);
