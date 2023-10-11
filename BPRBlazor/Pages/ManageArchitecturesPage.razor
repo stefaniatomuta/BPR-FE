@@ -2,6 +2,15 @@
 @using BPRBlazor.Components.Common
 @using BPRBlazor.Components.ModelManagement
 
-<CreateArchitectureComponent />
-<hr />
-<DeleteArchitectureComponent />
+<h3>Create or edit an architecture model</h3>
+
+@if (_selectedModel == null)
+{
+    <SelectArchitectureComponent ArchitectureModelChanged="HandleModelChange"/>
+    <button type="button" class="btn btn-secondary my-2" @onclick="CreateNewArchitecture">Add new Architecture</button>
+}
+else
+{
+    <CreateEditArchitectureComponent ModelViewModel="@(_selectedModel)"/>
+}
+

@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
 
 namespace BPRBlazor.ViewModels;
 
 public class ArchitecturalModelViewModel
 {
+    public ObjectId Id { get; set; }
+    
     [Required(ErrorMessage = "Please give the model a name")]
     public string Name { get; set; } = string.Empty;
 
