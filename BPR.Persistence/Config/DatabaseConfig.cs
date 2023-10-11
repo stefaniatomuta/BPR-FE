@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Config;
+﻿namespace BPR.Persistence.Config;
 
 public class DatabaseConfig
 {

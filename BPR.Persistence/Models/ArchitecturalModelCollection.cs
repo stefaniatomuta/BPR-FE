@@ -1,12 +1,12 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BPRBE.Models.Persistence;
+namespace BPR.Persistence.Models;
 
-public class Rule
+public class ArchitecturalModelCollection
 {
     [BsonId]
     public ObjectId Id { get; set; }
     public string Name { get; set; } = default!;
-    public string? Description { get; set; }
+    public IList<ArchitecturalComponentCollection> Components { get; set; } = default!;
 }

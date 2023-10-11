@@ -1,6 +1,7 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPR.Persistence.Utils;
 using FluentValidation;
 using FluentValidation.Results;
+using BPRBE.Models;
 
 namespace BPRBE.Validators;
 

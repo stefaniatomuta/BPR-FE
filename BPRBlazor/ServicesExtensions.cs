@@ -1,6 +1,6 @@
-﻿using BPRBE.Config;
-using BPRBE.Models.Persistence;
-using BPRBE.Persistence;
+﻿using BPR.Persistence.Config;
+using BPR.Persistence.Repositories;
+using BPRBE.Models;
 using BPRBE.Services;
 using BPRBE.Validators;
 using BPRBlazor.Services;

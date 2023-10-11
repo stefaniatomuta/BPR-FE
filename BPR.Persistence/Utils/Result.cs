@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Models.Persistence;
+﻿namespace BPR.Persistence.Utils;
 
 public class Result
 {

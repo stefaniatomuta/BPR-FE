@@ -1,5 +1,6 @@
-﻿using BPRBE.Models.Persistence;
-using BPRBE.Persistence;
+﻿using BPR.Persistence.Models;
+using BPR.Persistence.Repositories;
+using BPR.Persistence.Utils;
 using BPRBE.Services;
 using BPRBE.Validators;
 using MongoDB.Bson;
@@ -25,9 +26,9 @@ public class RuleServiceTests
     public async Task GetRules_WhenRulesExist_ReturnsList()
     {
         // Arrange
-        var list = new List<Rule>()
+        var list = new List<RuleCollection>()
         {
-            new Rule()
+            new RuleCollection()
             {
                 Name = "Dependency",
                 Id = new ObjectId(),
@@ -46,7 +47,7 @@ public class RuleServiceTests
     public async Task AddRules_WhenRuleWithSameNameAlreadyExists_ReturnsFalse()
     {
         // Arrange
-        var newRule = new Rule()
+        var newRule = new RuleCollection()
         {
             Name = "Dependency"
         };

@@ -1,4 +1,4 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPR.Persistence.Models;
 using BPRBE.Validators;
 using FluentValidation;
 using FluentValidation.TestHelper;
@@ -9,8 +9,8 @@ namespace BPRBE.Tests;
 [TestFixture]
 public class ValidatorTests
 {
-    private IValidator<ArchitecturalModel> _architecturalModelValidator;
-    private IValidator<Rule> _ruleValidator;
+    private IValidator<ArchitecturalModelCollection> _architecturalModelValidator;
+    private IValidator<RuleCollection> _ruleValidator;
 
     [SetUp]
     public void Setup()
@@ -23,7 +23,7 @@ public class ValidatorTests
     public void Architectural_Model_Should_Have_Error_When_Name_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel { Name = "", Components = new List<ArchitecturalComponent>() };
+        var model = new ArchitecturalModelCollection { Name = "", Components = new List<ArchitecturalComponentCollection>() };
 
         // Act
         var result = _architecturalModelValidator.TestValidate(model);
@@ -37,7 +37,7 @@ public class ValidatorTests
     public void Architectural_Model_Should_Have_Error_When_Components_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel { Name = "ModelName", Components = new List<ArchitecturalComponent>() };
+        var model = new ArchitecturalModelCollection { Name = "ModelName", Components = new List<ArchitecturalComponentCollection>() };
 
         // Act
         var result = _architecturalModelValidator.TestValidate(model);
@@ -51,10 +51,10 @@ public class ValidatorTests
     public void Architectural_Model_Should_Have_Error_When_Duplicate_Component_Names()
     {
         // Arrange
-        var model = new ArchitecturalModel
+        var model = new ArchitecturalModelCollection
         {
             Name = "ModelName",
-            Components = new List<ArchitecturalComponent>
+            Components = new List<ArchitecturalComponentCollection>
             {
                 new() { Name = "Component1" },
                 new() { Name = "Component2" },
@@ -74,10 +74,10 @@ public class ValidatorTests
     public void Architectural_Model_Should_Not_Have_Error_When_Valid_Model()
     {
         // Arrange
-        var model = new ArchitecturalModel
+        var model = new ArchitecturalModelCollection
         {
             Name = "ModelName",
-            Components = new List<ArchitecturalComponent>
+            Components = new List<ArchitecturalComponentCollection>
             {
                 new() { Name = "Component1" },
                 new() { Name = "Component2" }
@@ -95,7 +95,7 @@ public class ValidatorTests
     public void Rule_Does_Not_Have_Name()
     {
         // Arrange
-        var newRule = new Rule()
+        var newRule = new RuleCollection()
         {
             Id = new ObjectId(),
             Description = "Test"
@@ -104,6 +104,6 @@ public class ValidatorTests
         var result = _ruleValidator.TestValidate(newRule);
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Name)
-            .WithErrorMessage("Rule must contain a name");
+            .WithErrorMessage("RuleCollection must contain a name");
     }
 }

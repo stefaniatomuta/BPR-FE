@@ -1,8 +1,8 @@
-﻿using BPRBlazor.ViewModels;
+﻿using BPR.Persistence.Models;
+using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
-using BE = BPRBE.Models.Persistence;
 
 namespace BPRBlazor.Pages;
 
@@ -13,7 +13,7 @@ public partial class Index : ComponentBase
     private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
-    private BE.ArchitecturalModel _selectedArchitectureModel = default!;
+    private ArchitecturalModelCollection _selectedArchitectureModelCollection = default!;
     public List<RuleViewModel> _rulesViewModels = new();
 
     private async Task SendDataAsync()
@@ -28,10 +28,10 @@ public partial class Index : ComponentBase
         LoadDummyData();
     }
 
-    private void HandleArchitectureModelOnChange(BE.ArchitecturalModel newValue)
+    private void HandleArchitectureModelOnChange(ArchitecturalModelCollection newValue)
     {
-        _selectedArchitectureModel = newValue;
-        // TODO - Actually do something with the selected model when analysis is started.
+        _selectedArchitectureModelCollection = newValue;
+        // TODO - Actually do something with the selected modelCollection when analysis is started.
     }
 
     private void HandleRule(RuleViewModel value)
@@ -49,9 +49,9 @@ public partial class Index : ComponentBase
 
     private async Task StartAnalysis()
     {
-        if (_selectedArchitectureModel == null)
+        if (_selectedArchitectureModelCollection == null)
         {
-            _errorMessage = "Analysis cannot start without a selected architectural model";
+            _errorMessage = "Analysis cannot start without a selected architectural modelCollection";
         }
         if (_unmappedNamespaceComponents.Any())
         {

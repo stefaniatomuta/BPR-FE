@@ -1,8 +1,8 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace BPRBE.Models.Persistence;
+namespace BPR.Persistence.Models;
 
-public class ArchitecturalComponent
+public class ArchitecturalComponentCollection
 {
     [BsonId]
     public int Id { get; set; }

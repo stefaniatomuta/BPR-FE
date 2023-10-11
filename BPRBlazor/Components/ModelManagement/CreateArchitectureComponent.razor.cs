@@ -1,5 +1,4 @@
-﻿using BPRBE.Models.Persistence;
-using BPRBlazor.Models;
+﻿using BPRBlazor.Models;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;

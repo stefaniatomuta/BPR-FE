@@ -1,4 +1,4 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPR.Persistence.Models;
 using BPRBlazor.Components.Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -7,20 +7,20 @@ namespace BPRBlazor.Components.ModelManagement;
 
 public partial class DeleteArchitectureComponent : ComponentBase
 {
-    private ArchitecturalModel? _selectedModel;
+    private ArchitecturalModelCollection? _selectedModel;
     private string _resultMessage = string.Empty;
     private string _resultCssClass = string.Empty;
 
     private SelectArchitectureComponent? selectArchitectureComponent;
 
-    private void HandleModelChange(ArchitecturalModel model)
+    private void HandleModelChange(ArchitecturalModelCollection modelCollection)
     {
-        _selectedModel = model;
+        _selectedModel = modelCollection;
     }
 
     private async Task DeleteSelectedModel()
     {
-        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", $"Are you sure you want to delete the '{_selectedModel!.Name}' model?");
+        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", $"Are you sure you want to delete the '{_selectedModel!.Name}' modelCollection?");
         if (!confirmed)
         {
             return;
@@ -34,7 +34,8 @@ public partial class DeleteArchitectureComponent : ComponentBase
             {
                 if (selectArchitectureComponent is not null)
                 {
-                    await selectArchitectureComponent.RemoveOptionById(_selectedModel.Id);
+                    var id = Guid.Parse(_selectedModel.Id.ToString());
+                    await selectArchitectureComponent.RemoveOptionById(id);
                 }
 
                 _resultMessage = "Model successfully deleted!";

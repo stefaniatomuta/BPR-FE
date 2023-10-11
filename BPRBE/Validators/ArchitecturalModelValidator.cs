@@ -1,4 +1,4 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPRBE.Models;
 using FluentValidation;
 
 namespace BPRBE.Validators;

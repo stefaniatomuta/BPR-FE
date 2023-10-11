@@ -1,5 +1,6 @@
-﻿using BPRBE.Models.Persistence;
-using BPRBE.Persistence;
+﻿using BPR.Persistence.Models;
+using BPR.Persistence.Repositories;
+using BPR.Persistence.Utils;
 using BPRBE.Services;
 using BPRBE.Validators;
 using MongoDB.Bson;
@@ -26,11 +27,11 @@ internal class DependencyServiceTests
     public async Task AddModelAsync_WhenModelIsSuccessfullyAdded_ReturnsOkResult()
     {
         // Arrange
-        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
-        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
+        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Ok());
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Ok());
 
         // Act
-        var result = await uut.AddModelAsync(new ArchitecturalModel());
+        var result = await uut.AddModelAsync(new ArchitecturalModelCollection());
 
         // Assert
         Assert.That(result.Success, Is.True);
@@ -40,10 +41,10 @@ internal class DependencyServiceTests
     public async Task AddModelAsync_WhenValidationFails_ReturnsFailResult()
     {
         // Arrange
-        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Fail());
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Fail());
 
         // Act
-        var result = await uut.AddModelAsync(new ArchitecturalModel());
+        var result = await uut.AddModelAsync(new ArchitecturalModelCollection());
 
         // Assert
         Assert.That(result.Success, Is.False);
@@ -53,7 +54,7 @@ internal class DependencyServiceTests
     public async Task DeleteArchitectureModelAsync_WhenModelExists_ReturnsOkResult()
     {
         // Arrange
-        repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).Returns(new ArchitecturalModel());
+        repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).Returns(new ArchitecturalModelCollection());
         var modelId = ObjectId.GenerateNewId();
 
         // Act
