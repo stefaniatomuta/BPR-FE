@@ -31,18 +31,10 @@ public partial class CreateArchitectureComponent : ComponentBase
         _dependencyComponent = null;
         _modelViewModel.Components.Remove(component);
 
-        var dependentComponents = GetDependentComponents(component);
-        foreach (var dependentComponent in dependentComponents)
+        foreach (var dependentComponent in _modelViewModel.GetDependentComponents(component))
         {
             RemoveDependency(dependentComponent, component);
         }
-    }
-
-    private List<ArchitecturalComponentViewModel> GetDependentComponents(ArchitecturalComponentViewModel component)
-    {
-        return _modelViewModel.Components.
-            Where(dependentComponent => dependentComponent.Dependencies.
-                Any(dependency => component == dependency)).ToList();
     }
 
     private async Task CreateArchitectureModel()
@@ -79,9 +71,9 @@ public partial class CreateArchitectureComponent : ComponentBase
                 _dependencyComponent = null;
                 return;
             }
-            if (_dependencyComponent.Dependencies.All(c => c.Id != dependencyComponent.Id))
+            if (!_dependencyComponent.HasDependency(dependencyComponent) && !dependencyComponent.HasDependency(_dependencyComponent))
             {
-                _dependencyComponent.Dependencies.Add(_modelViewModel.Components.First(c => c.Id == dependencyComponent.Id));
+                _dependencyComponent.Dependencies.Add(dependencyComponent);
             }
             _dependencyComponent = null;
         }

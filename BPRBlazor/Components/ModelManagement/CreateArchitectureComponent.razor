@@ -18,12 +18,14 @@
                 </div>
                 <span>@component.Id</span>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <button type="button" class="btn btn-primary" @onclick="(() => AddDependency(component))">
+                    <button type="button" class="btn @(component == _dependencyComponent ? "btn-success" : "btn-primary")" @onclick="(() => AddDependency(component))">
                         Dependency
                     </button>
                 </div>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">Remove</button>
+                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">
+                        Remove
+                    </button>
                     <ValidationMessage For="(() => component.Name)"/>
                 </div>
             </div>
