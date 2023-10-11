@@ -1,5 +1,4 @@
 ﻿using BPRBE.Models.Persistence;
-using BPRBlazor.Models;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -12,7 +11,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     public ArchitecturalModelViewModel ModelViewModel { get; set; } = new();
     private List<(string Message, string Class)> _resultMessages = new();
     private ArchitecturalComponentViewModel? _dependencyComponent;
-    private Position _dragStartCoordinates = new();
+    private PositionViewModel _dragStartCoordinates = new();
     private ArchitecturalComponentViewModel? _draggingComponent;
 
     private void AddArchitecturalComponent()
@@ -88,7 +87,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
-        _dragStartCoordinates = new Position()
+        _dragStartCoordinates = new PositionViewModel()
         {
             X = args.ClientX,
             Y = args.ClientY
@@ -103,14 +102,14 @@ public partial class CreateEditArchitectureComponent : ComponentBase
             return;
         }
 
-        var difference = new Position
+        var difference = new PositionViewModel
         {
             X = args.ClientX - _dragStartCoordinates.X,
             Y = args.ClientY - _dragStartCoordinates.Y
         };
         
-        var offset = await JS.InvokeAsync<Position>("getElementOffset", new object[]{_draggingComponent.Id});
-        _draggingComponent.Position = new Position()
+        var offset = await JS.InvokeAsync<PositionViewModel>("getElementOffset", new object[]{_draggingComponent.Id});
+        _draggingComponent.PositionViewModel = new PositionViewModel()
         {
             X = offset.X + difference.X,
             Y = offset.Y + difference.Y,

@@ -1,5 +1,4 @@
 ﻿using BPRBE.Models.Persistence;
-using MongoDB.Driver.Linq;
 
 namespace BPRBlazor.ViewModels;
 
@@ -25,7 +24,14 @@ public static class Extensions
             Name = component.Name,
             Dependencies = component.Dependencies
                 .Select(c => c.Id)
-                .ToList()
+                .ToList(),
+            Position = new Position
+            {
+                X = component.PositionViewModel.X,
+                Y = component.PositionViewModel.Y,
+                Height = component.PositionViewModel.Height,
+                Width = component.PositionViewModel.Width
+            }
         };
     }
     
@@ -52,7 +58,14 @@ public static class Extensions
         return new ArchitecturalComponentViewModel
         {
             Id = component.Id,
-            Name = component.Name
+            Name = component.Name,
+            PositionViewModel = new PositionViewModel
+            {
+                X = component.Position.X,
+                Y = component.Position.Y,
+                Height = component.Position.Height,
+                Width = component.Position.Width
+            }
         };
     }
 }

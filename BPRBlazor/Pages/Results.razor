@@ -1,9 +1,12 @@
 ﻿@using BPRBlazor.Components.Results
+@inject IJSRuntime JsRuntime
 
 @page "/results"
 
 <div class="float-end">
-    <DownloadButton/>
+    <button class="btn btn-primary" @onclick="DownloadPdf">
+        Download as PDF
+    </button>
 </div>
 
 <div id="result-details">

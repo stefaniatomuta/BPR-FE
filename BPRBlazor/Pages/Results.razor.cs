@@ -1,6 +1,7 @@
 ﻿using BPRBE.Enums;
 using BPRBE.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace BPRBlazor.Pages;
 
@@ -33,5 +34,10 @@ public partial class Results : ComponentBase
             new(2, "Violation name 2", ViolationType.Unknown, "Some other thing I have no idea...", ViolationSeverity.Minor, "public class Two {\n    private IDependency _dependency;\n    \n    public One(IDependency dependency) {\n        _dependency = dependency;\n    }"),
             new(3, "Violation name 3", ViolationType.Unknown, "Some other thing I have no idea...", ViolationSeverity.Critical, "public class Two {\n    private IDependency _dependency;\n    \n    public One(IDependency dependency) {\n        _dependency = dependency;\n    }"),
         };
+    }
+    
+    private async Task DownloadPdf()
+    {
+        await JsRuntime.InvokeVoidAsync("DownloadResultsToPDF");
     }
 }
