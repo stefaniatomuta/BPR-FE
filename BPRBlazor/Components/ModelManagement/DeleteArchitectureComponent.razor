@@ -1,0 +1,12 @@
+﻿@using BPRBE.Services
+@using BPRBlazor.Components.Common
+@inject IDependencyService service
+@inject IJSRuntime JS
+
+<h3>Delete architecture models</h3>
+<SelectArchitectureComponent ArchitectureModelChanged="HandleModelChange" @ref="selectArchitectureComponent" />
+@if (_selectedModel is not null)
+{
+    <button class="btn btn-danger mt-2" @onclick="DeleteSelectedModel">Delete selected model</button>
+}
+<p class="@_resultCssClass mt-2">@_resultMessage</p>

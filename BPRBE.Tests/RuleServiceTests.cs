@@ -3,8 +3,6 @@ using BPRBE.Persistence;
 using BPRBE.Services;
 using BPRBE.Validators;
 using MongoDB.Bson;
-using NSubstitute;
-using NUnit.Framework;
 
 namespace BPRBE.Tests;
 
@@ -14,7 +12,7 @@ public class RuleServiceTests
     private IRuleService uut;
     private IRuleRepository _repositoryStub;
     private IValidatorService _validatorService;
-    
+
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
@@ -22,7 +20,7 @@ public class RuleServiceTests
         _validatorService = Substitute.For<IValidatorService>();
         uut = new RuleService(_repositoryStub, _validatorService);
     }
-    
+
     [Test]
     public async Task GetRules_WhenRulesExist_ReturnsList()
     {
@@ -52,7 +50,7 @@ public class RuleServiceTests
         {
             Name = "Dependency"
         };
-        
+
         _validatorService.ValidateRuleAsync(newRule).Returns(new Result(true));
         _repositoryStub.AddRuleAsync(newRule).Returns(new Result(false));
 
