@@ -1,4 +1,3 @@
-using BPR.Persistence.Models;
 using BPRBlazor.ViewModels;
 using BPR.Analysis.Models;
 using BPRBE.Services.Models;

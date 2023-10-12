@@ -1,6 +1,5 @@
 using BPR.Persistence.Models;
 using BPRBE.Services.Models;
-using MongoDB.Bson;
 
 namespace BPRBlazor.ViewModels;
 
@@ -54,6 +53,7 @@ public static class Extensions
         {
             Id = component.Id,
             Name = component.Name,
+            Dependencies = component.Dependencies.Select(x =>x.ToViewModel()).ToList(),
             PositionViewModel = new PositionViewModel
             {
                 X = component.Position.X,

@@ -1,7 +1,6 @@
 using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
 using BPR.Analysis.Services;
-using BPRBE.Services;
 using BPRBE.Services.Mappers;
 using BPRBE.Services.Models;
 using BPRBE.Services.Services;
