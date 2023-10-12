@@ -1,6 +1,6 @@
 using BPRBlazor.ViewModels;
 using BPR.Analysis.Models;
-using BPRBE.Services.Models;
+using BPR.Mediator.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;

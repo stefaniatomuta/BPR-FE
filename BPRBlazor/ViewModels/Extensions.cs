@@ -1,5 +1,5 @@
 using BPR.Persistence.Models;
-using BPRBE.Services.Models;
+using BPR.Mediator.Models;
 
 namespace BPRBlazor.ViewModels;
 

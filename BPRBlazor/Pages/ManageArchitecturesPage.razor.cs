@@ -1,4 +1,4 @@
-using BPRBE.Services.Models;
+using BPR.Mediator.Models;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 

@@ -1,4 +1,4 @@
-﻿using BPRBE.Services.Models;
+﻿using BPR.Mediator.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace BPRBlazor.Components.Results;
