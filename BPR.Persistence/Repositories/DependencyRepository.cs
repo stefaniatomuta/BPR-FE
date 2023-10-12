@@ -39,9 +39,7 @@ public class DependencyRepository : IDependencyRepository
         }
         catch (Exception e)
         {
-            var message = e.Message;
-            _logger.LogError(message);
-            return Result.Fail<ArchitecturalModelCollection>(message, _logger);
+            return Result.Fail<ArchitecturalModelCollection>(e.Message, _logger);
         }
     }
     
@@ -61,6 +59,7 @@ public class DependencyRepository : IDependencyRepository
                 .Set(old => old.Components, model.Components);
             
             await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
+            _logger.LogInformation("Architectural model successfully edited");
 
             return Result.Ok(model);
         }
