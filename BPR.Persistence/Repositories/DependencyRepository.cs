@@ -3,7 +3,6 @@ using BPR.Persistence.Models;
 using BPR.Persistence.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BPR.Persistence.Repositories;
@@ -22,16 +21,6 @@ public class DependencyRepository : IDependencyRepository
         _dependenciesRuleCollection =
             mongoDatabase.GetCollection<ArchitecturalModelCollection>(databaseSettings.Value.DependenciesRuleCollectionName);
     }
-    //
-    // public async Task<ArchitecturalModelCollection> GetArchitecuralModelById(Guid guid)
-    // {
-    //
-    //     _logger.LogInformation($"Searching for document with Id: {bsonGuid}");
-    //
-    //     var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(old => old.Id, bsonGuid);
-    //     return (await _dependenciesRuleCollection.FindAsync(filter)).FirstOrDefault();
-    //
-    // }
 
     public async Task<IList<ArchitecturalModelCollection>> GetArchitecturalModelsAsync()
     {
@@ -66,15 +55,13 @@ public class DependencyRepository : IDependencyRepository
                 return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists", _logger);
             }
 
-            //var m = await GetArchitecuralModelById(model.Id);
-            //var sth = m.Id;
-            
             var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(old => old.Id, model.Id);
             var update = Builders<ArchitecturalModelCollection>.Update
                 .Set(old => old.Name, model.Name)
                 .Set(old => old.Components, model.Components);
             
-            var res = await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
+            await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
+
             return Result.Ok(model);
         }
         catch (Exception e)
