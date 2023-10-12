@@ -1,11 +1,10 @@
 using BPR.Persistence.Models;
 using BPRBlazor.ViewModels;
 using BPR.Analysis.Models;
-using BPRBE.Models;
+using BPRBE.Services.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SevenZipExtractor;
-using BE = BPRBE.Models.Persistence;
 
 namespace BPRBlazor.Pages;
 
@@ -60,18 +59,21 @@ public partial class Index : ComponentBase
         {
             _errorMessage = "Analysis cannot start without a selected architectural modelCollection";
         }
+
         if (_unmappedNamespaceComponents.Any())
         {
             _errorMessage = "Analysis can not start while there are unmapped namespaces";
             return;
         }
+
         if (_rulesViewModels.All(r => !r.IsChecked))
         {
             _errorMessage = "Analysis can not start without any rule selected";
             return;
         }
 
-        try {
+        try
+        {
             var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
             violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
             violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
@@ -79,11 +81,17 @@ public partial class Index : ComponentBase
             _analysisMessage = "The analysis is ready. Check out the results page";
 
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             _errorMessage = "Oops.. An error occured";
         }
 
-        
+        var rule = new Rule()
+        {
+            Name = "Framework",
+            Description = "Checks against end of life frameworks",
+        };
+        await RuleService.AddRuleAsync(rule);
     }
 
     private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)

@@ -39,8 +39,7 @@ public class RuleRepository : IRuleRepository
             if (result != null)
             {
                 var message = $"RuleCollection with the same name {result.Name} already exists";
-                _logger.LogError(message);
-                return Result.Fail<RuleCollection>(message);
+                return Result.Fail<RuleCollection>(message, _logger);
             }
             
             await _rulesCollection.InsertOneAsync(ruleCollection);
@@ -50,9 +49,7 @@ public class RuleRepository : IRuleRepository
         }
         catch (Exception e)
         {
-            var message = e.Message;
-            _logger.LogError(message);
-            return Result.Fail<RuleCollection>(message);
+            return Result.Fail<RuleCollection>(e.Message, _logger);
         }
     }
 }

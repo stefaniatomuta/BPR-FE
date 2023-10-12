@@ -1,6 +1,6 @@
 ﻿using BPR.Persistence.Models;
-using BPRBE.Models;
-using BPRBE.Validators;
+using BPRBE.Services.Models;
+using BPRBE.Services.Validators;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using MongoDB.Bson;

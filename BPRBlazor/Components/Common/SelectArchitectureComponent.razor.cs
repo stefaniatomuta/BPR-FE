@@ -1,5 +1,5 @@
 ﻿using BPR.Persistence.Models;
-using BPRBE.Models;
+using BPRBE.Services.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MongoDB.Bson;
@@ -25,6 +25,7 @@ public partial class SelectArchitectureComponent : ComponentBase
 
     private async Task OnSelectedValueChanged(ChangeEventArgs e)
     {
+        //TODO:
         var selectedModelId = Guid.Parse(e.Value?.ToString()!);
         var selectedModel = _architectureOptions.First(option => option.Id == selectedModelId);
         await ArchitectureModelChanged.InvokeAsync(selectedModel);

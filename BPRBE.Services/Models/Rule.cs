@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Models;
+﻿namespace BPRBE.Services.Models;
 
 public class Rule
 {

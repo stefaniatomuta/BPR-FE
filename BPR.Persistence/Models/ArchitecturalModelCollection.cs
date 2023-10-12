@@ -6,7 +6,8 @@ namespace BPR.Persistence.Models;
 public class ArchitecturalModelCollection
 {
     [BsonId]
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.String)]
+    public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public IList<ArchitecturalComponentCollection> Components { get; set; } = default!;
 }

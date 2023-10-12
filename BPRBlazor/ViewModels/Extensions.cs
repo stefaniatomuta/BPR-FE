@@ -1,6 +1,5 @@
 using BPR.Persistence.Models;
-using BPRBE.Models;
-using BPRBE.Models.Persistence;
+using BPRBE.Services.Models;
 using MongoDB.Bson;
 
 namespace BPRBlazor.ViewModels;

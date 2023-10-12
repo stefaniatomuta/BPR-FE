@@ -1,6 +1,6 @@
 ﻿using SevenZipExtractor;
 
-namespace BPRBE.Services; 
+namespace BPRBE.Services.Services; 
 
 public interface ICodebaseService : IDisposable {
 

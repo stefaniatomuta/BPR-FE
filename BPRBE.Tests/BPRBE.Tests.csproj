@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BPRBE\BPRBE.csproj" />
+    <ProjectReference Include="..\BPRBE.Services\BPRBE.Services.csproj" />
     <ProjectReference Include="..\BPRBlazor\BPRBlazor.csproj" />
   </ItemGroup>
 

@@ -1,10 +1,11 @@
-﻿using BPR.Persistence.Models;
+﻿using AutoMapper;
+using BPR.Persistence.Models;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
-using BPRBE.Models;
-using BPRBE.Services;
-using BPRBE.Validators;
-using MongoDB.Bson;
+using BPRBE.Services.Models;
+using BPRBE.Services.Services;
+using BPRBE.Services.Validators;
+using Microsoft.Extensions.Logging;
 using NSubstitute.ReturnsExtensions;
 
 namespace BPRBE.Tests;
@@ -15,21 +16,30 @@ internal class DependencyServiceTests
     private IDependencyService uut;
     private IDependencyRepository repositoryStub;
     private IValidatorService validatorStub;
+    private IMapper _mapper;
+    private ILogger<DependencyService> _logger;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         repositoryStub = Substitute.For<IDependencyRepository>();
         validatorStub = Substitute.For<IValidatorService>();
-        uut = new DependencyService(repositoryStub, validatorStub);
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<ArchitecturalModel, ArchitecturalModelCollection>().ReverseMap();
+        });
+        _mapper = new Mapper(mapperConfig);
+        _logger = Substitute.For<ILogger<DependencyService>>();
+        uut = new DependencyService(repositoryStub, _mapper, validatorStub, _logger);
     }
 
     [Test]
     public async Task AddModelAsync_WhenModelIsSuccessfullyAdded_ReturnsOkResult()
     {
         // Arrange
-        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(Result.Ok());
-        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(Result.Ok());
+        var okResult = Result.Ok(_logger, "");
+        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(okResult);
+        validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(okResult);
 
         // Act
         var result = await uut.AddOrEditModelAsync(new ArchitecturalModel());
@@ -55,7 +65,7 @@ internal class DependencyServiceTests
     public async Task DeleteArchitectureModelAsync_WhenModelExists_ReturnsOkResult()
     {
         // Arrange
-        repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).Returns(new ArchitecturalModelCollection());
+        repositoryStub.DeleteModelAsync(Arg.Any<Guid>()).Returns(new ArchitecturalModelCollection());
         var modelId = new Guid();
 
         // Act
@@ -69,7 +79,7 @@ internal class DependencyServiceTests
     public async Task DeleteArchitectureModelAsync_WhenModelDoesNotExist_ReturnsFailResult()
     {
         // Arrange
-        repositoryStub.DeleteModelAsync(Arg.Any<ObjectId>()).ReturnsNull();
+        repositoryStub.DeleteModelAsync(Arg.Any<Guid>()).ReturnsNull();
         var modelId = new Guid();
 
         // Act

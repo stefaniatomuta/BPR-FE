@@ -1,6 +1,6 @@
 ﻿using SevenZipExtractor;
 
-namespace BPRBE.Services; 
+namespace BPRBE.Services.Services; 
 
 public class CodebaseService : ICodebaseService {
     private string folderPath = null!;

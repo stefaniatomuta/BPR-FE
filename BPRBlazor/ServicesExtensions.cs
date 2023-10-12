@@ -1,9 +1,11 @@
 using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
-using BPRBE.Models;
 using BPR.Analysis.Services;
 using BPRBE.Services;
-using BPRBE.Validators;
+using BPRBE.Services.Mappers;
+using BPRBE.Services.Models;
+using BPRBE.Services.Services;
+using BPRBE.Services.Validators;
 using BPRBlazor.Mappers;
 using BPRBlazor.Services;
 using BPRBlazor.State;
@@ -32,6 +34,7 @@ public static class ServicesExtensions
         services.AddScoped<IRuleRepository, RuleRepository>();
         services.AddScoped<IRuleService, RuleService>();
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
+        services.AddAutoMapper(typeof(ServiceMappers).Assembly);
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)

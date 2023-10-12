@@ -1,4 +1,4 @@
-﻿using BPRBE.Models;
+﻿using BPRBE.Services.Models;
 
 namespace BPRBlazor.State; 
 

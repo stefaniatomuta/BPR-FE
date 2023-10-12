@@ -3,6 +3,7 @@
 @using BPRBE.Services
 @using BPR.Analysis.Services
 @using AutoMapper
+@using BPRBE.Services.Services
 @using BPRBlazor.State
 @inject IHttpService HttpService
 @inject IDependencyComponentService DependencyComponentService
@@ -10,6 +11,7 @@
 @inject IAnalysisService AnalysisService
 @inject IMapper Mapper
 @inject StateContainer StateContainer
+@inject IRuleService RuleService
 @implements IDisposable
 
 @page "/"

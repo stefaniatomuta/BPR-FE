@@ -1,7 +1,7 @@
 ﻿using BPR.Persistence.Utils;
-using BPRBE.Models;
+using BPRBE.Services.Models;
 
-namespace BPRBE.Validators;
+namespace BPRBE.Services.Validators;
 
 public interface IValidatorService
 {

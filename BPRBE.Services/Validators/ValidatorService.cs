@@ -1,9 +1,9 @@
-using FluentValidation;
 using BPR.Persistence.Utils;
+using BPRBE.Services.Models;
+using FluentValidation;
 using FluentValidation.Results;
-using BPRBE.Models;
 
-namespace BPRBE.Validators;
+namespace BPRBE.Services.Validators;
 
 public class ValidatorService : IValidatorService
 {

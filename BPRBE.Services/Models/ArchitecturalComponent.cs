@@ -1,6 +1,6 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPR.Persistence.Models;
 
-namespace BPRBE.Models;
+namespace BPRBE.Services.Models;
 
 public class ArchitecturalComponent
 {

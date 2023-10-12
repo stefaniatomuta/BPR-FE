@@ -1,4 +1,4 @@
-﻿using BPRBE.Models;
+﻿using BPRBE.Services.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 

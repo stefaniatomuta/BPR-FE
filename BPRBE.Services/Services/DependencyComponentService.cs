@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Services; 
+﻿namespace BPRBE.Services.Services; 
 
 public class DependencyComponentService : IDependencyComponentService {
     private List<string> foldersToIgnore = new () {"bin","obj" };

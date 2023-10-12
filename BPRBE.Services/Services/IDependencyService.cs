@@ -1,8 +1,7 @@
 ﻿using BPR.Persistence.Utils;
-using BPRBE.Models;
-using MongoDB.Bson;
+using BPRBE.Services.Models;
 
-namespace BPRBE.Services;
+namespace BPRBE.Services.Services;
 
 public interface IDependencyService
 {

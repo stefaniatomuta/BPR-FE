@@ -1,4 +1,4 @@
-namespace BPRBE.Models.Persistence;
+namespace BPR.Persistence.Models;
 
 public class Position
 {

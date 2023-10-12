@@ -1,11 +1,12 @@
-﻿using BPR.Persistence.Models;
+﻿using AutoMapper;
+using BPR.Persistence.Models;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
-using BPRBE.Models;
 using BPRBE.Services;
-using BPRBE.Validators;
+using BPRBE.Services.Models;
+using BPRBE.Services.Services;
+using BPRBE.Services.Validators;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 
 namespace BPRBE.Tests;
 
@@ -16,6 +17,7 @@ public class RuleServiceTests
     private IRuleRepository _repositoryStub;
     private IValidatorService _validatorService;
     private ILogger<RuleService> _logger;
+    private IMapper _mapper;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
@@ -23,7 +25,14 @@ public class RuleServiceTests
         _repositoryStub = Substitute.For<IRuleRepository>();
         _validatorService = Substitute.For<IValidatorService>();
         _logger = Substitute.For<ILogger<RuleService>>();
-        uut = new RuleService(_repositoryStub, _validatorService, _logger);
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Rule, RuleCollection>();
+            cfg.CreateMap<RuleCollection, Rule>();
+
+        }); 
+        _mapper = new Mapper(mapperConfig);
+        uut = new RuleService(_repositoryStub, _validatorService,_mapper, _logger);
     }
 
     [Test]
@@ -32,10 +41,10 @@ public class RuleServiceTests
         // Arrange
         var list = new List<RuleCollection>()
         {
-            new RuleCollection()
+            new ()
             {
                 Name = "Dependency",
-                Id = new ObjectId(),
+                Id = new Guid(),
                 Description = "Check dependencies between components"
             }
         };
@@ -43,33 +52,28 @@ public class RuleServiceTests
 
         // Act
         var result = await uut.GetRulesAsync();
-
         // Assert
-        Assert.That(list, Is.EqualTo(result));
+        Assert.That(result, Has.Count.EqualTo(list.Count));
     }
     [Test]
     public async Task AddRules_WhenRuleWithSameNameAlreadyExists_ReturnsFalse()
     {
         // Arrange
-        var newRule = new RuleCollection()
+        var rule = new Rule()
         {
+            Id = Guid.NewGuid(),
             Name = "Dependency"
         };
-
-        var ruleModel = new Rule()
-        {
-            Name = "Dependency"
-
-        };
-
-        _validatorService.ValidateRuleAsync(ruleModel).Returns(new Result(true));
-        _repositoryStub.AddRuleAsync(newRule).Returns(new Result(false));
+        
+        _validatorService.ValidateRuleAsync(rule).Returns(new Result(true));
+        _repositoryStub.AddRuleAsync(Arg.Any<RuleCollection>()).Returns(new Result(false));
 
         // Act
-        var result = await uut.AddRuleAsync(ruleModel);
-
+        var result = await uut.AddRuleAsync(rule);
+        
         // Assert
+        await _validatorService.Received(1).ValidateRuleAsync(Arg.Is(rule));
+        await _repositoryStub.Received(1).AddRuleAsync(Arg.Any<RuleCollection>());
         Assert.That(result.Success, Is.False);
     }
-
 }

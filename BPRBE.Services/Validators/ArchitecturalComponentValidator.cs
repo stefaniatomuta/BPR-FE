@@ -1,7 +1,7 @@
-﻿using BPRBE.Models;
+﻿using BPRBE.Services.Models;
 using FluentValidation;
 
-namespace BPRBE.Validators;
+namespace BPRBE.Services.Validators;
 
 public class ArchitecturalComponentValidator : AbstractValidator<ArchitecturalComponent>
 {

@@ -22,6 +22,16 @@ public class DependencyRepository : IDependencyRepository
         _dependenciesRuleCollection =
             mongoDatabase.GetCollection<ArchitecturalModelCollection>(databaseSettings.Value.DependenciesRuleCollectionName);
     }
+    //
+    // public async Task<ArchitecturalModelCollection> GetArchitecuralModelById(Guid guid)
+    // {
+    //
+    //     _logger.LogInformation($"Searching for document with Id: {bsonGuid}");
+    //
+    //     var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(old => old.Id, bsonGuid);
+    //     return (await _dependenciesRuleCollection.FindAsync(filter)).FirstOrDefault();
+    //
+    // }
 
     public async Task<IList<ArchitecturalModelCollection>> GetArchitecturalModelsAsync()
     {
@@ -33,7 +43,7 @@ public class DependencyRepository : IDependencyRepository
         try
         {
             var result = await GetArchitecturalModelCollectionByName(modelCollection);
-            if (result != null) return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists");
+            if (result != null) return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists", _logger);
             await _dependenciesRuleCollection.InsertOneAsync(modelCollection);
             _logger.LogInformation("Architectural modelCollection added" + modelCollection);
             return Result.Ok(modelCollection);
@@ -42,7 +52,7 @@ public class DependencyRepository : IDependencyRepository
         {
             var message = e.Message;
             _logger.LogError(message);
-            return Result.Fail<ArchitecturalModelCollection>(message);
+            return Result.Fail<ArchitecturalModelCollection>(message, _logger);
         }
     }
     
@@ -53,27 +63,31 @@ public class DependencyRepository : IDependencyRepository
             var result = await GetArchitecturalModelCollectionByName(model);
             if (result != null && result.Id != model.Id)
             {
-                return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists");
+                return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists", _logger);
             }
+
+            //var m = await GetArchitecuralModelById(model.Id);
+            //var sth = m.Id;
             
             var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(old => old.Id, model.Id);
             var update = Builders<ArchitecturalModelCollection>.Update
                 .Set(old => old.Name, model.Name)
                 .Set(old => old.Components, model.Components);
             
-            await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
+            var res = await _dependenciesRuleCollection.UpdateOneAsync(filter, update);
             return Result.Ok(model);
         }
         catch (Exception e)
         {
-            return Result.Fail<ArchitecturalModelCollection>(e.Message);
+            return Result.Fail<ArchitecturalModelCollection>(e.Message, _logger);
         }
     }
 
-    public async Task<ArchitecturalModelCollection?> DeleteModelAsync(ObjectId id)
+    public async Task<ArchitecturalModelCollection?> DeleteModelAsync(Guid id)
     {
         var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(model => model.Id, id);
-        return await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
+        var result = await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
+        return result;
     }
 
     private async Task<ArchitecturalModelCollection?> GetArchitecturalModelCollectionByName(ArchitecturalModelCollection model)

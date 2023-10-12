@@ -1,37 +1,37 @@
-﻿using BPR.Persistence.Models;
+﻿using AutoMapper;
+using BPR.Persistence.Models;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
-using BPRBE.Models;
-using BPRBE.Validators;
+using BPRBE.Services.Models;
+using BPRBE.Services.Validators;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 
-namespace BPRBE.Services;
+namespace BPRBE.Services.Services;
 
 public class RuleService : IRuleService
 {
     private readonly IRuleRepository _ruleRepository;
     private readonly IValidatorService _validatorService;
-
-    public RuleService(IRuleRepository ruleRepository, IValidatorService validatorService, ILogger<RuleService> logger)
+    private readonly IMapper _mapper;
+    private readonly ILogger<RuleService> _logger;
+    
+    public RuleService(IRuleRepository ruleRepository, IValidatorService validatorService, IMapper mapper, ILogger<RuleService> logger)
     {
         _ruleRepository = ruleRepository;
         _validatorService = validatorService;
+        _mapper = mapper;
+        _logger = logger;
     }
 
     // TODO - Is this method necessary? We have no user stories related to being able to add new rules.
+    // The user will have no access to add new rules to the system, it is used for facilitating BE operations
     public async Task<Result> AddRuleAsync(Rule rule)
     {
         var result = await _validatorService.ValidateRuleAsync(rule);
         if (result.Success)
         {
-            var document = new RuleCollection()
-            {
-                Id = ObjectId.Parse(rule.Id.ToString()),
-                Name = rule.Name,
-                Description = rule.Description
-            };
-            return await _ruleRepository.AddRuleAsync(document);
+            var addResult = await _ruleRepository.AddRuleAsync(_mapper.Map<Rule, RuleCollection>(rule));
+            return addResult.Success ? Result.Ok(addResult) : Result.Fail<RuleCollection>(addResult.Errors, _logger);
         }
         return result;
     }
@@ -42,13 +42,7 @@ public class RuleService : IRuleService
         var documents = new List<Rule>();
         foreach (var doc in rules)
         {
-            var document = new Rule()
-            {
-                Id = Guid.Parse(doc.Id.ToString()),
-                Name = doc.Name,
-                Description = doc.Description
-            };
-            documents.Add(document);
+            documents.Add(_mapper.Map<RuleCollection, Rule>(doc));
         }
         return documents;
     }

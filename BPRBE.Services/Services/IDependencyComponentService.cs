@@ -1,4 +1,4 @@
-﻿namespace BPRBE.Services; 
+﻿namespace BPRBE.Services.Services; 
 
 public interface IDependencyComponentService {
 
