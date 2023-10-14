@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BPR.Analysis.Models;
-using BPRBE.Models;
+using BPR.Mediator.Models;
 using BPRBlazor.ViewModels;
 
 

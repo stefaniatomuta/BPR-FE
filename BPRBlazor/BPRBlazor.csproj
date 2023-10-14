@@ -15,6 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BPRBE\BPRBE.csproj" />
+      <ProjectReference Include="..\BPR.Mediator\BPR.Mediator.csproj" />
     </ItemGroup>
 </Project>

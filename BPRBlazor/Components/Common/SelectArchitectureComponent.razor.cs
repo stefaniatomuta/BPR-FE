@@ -1,4 +1,5 @@
-﻿using BPRBE.Models.Persistence;
+﻿using BPR.Persistence.Models;
+using BPR.Mediator.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MongoDB.Bson;
@@ -24,12 +25,13 @@ public partial class SelectArchitectureComponent : ComponentBase
 
     private async Task OnSelectedValueChanged(ChangeEventArgs e)
     {
-        var selectedModelId = ObjectId.Parse(e.Value?.ToString()!);
+        //TODO:
+        var selectedModelId = Guid.Parse(e.Value?.ToString()!);
         var selectedModel = _architectureOptions.First(option => option.Id == selectedModelId);
         await ArchitectureModelChanged.InvokeAsync(selectedModel);
     }
 
-    public async Task RemoveOptionById(ObjectId modelId)
+    public async Task RemoveOptionById(Guid modelId)
     {
         var model = _architectureOptions.First(option => option.Id == modelId);
         _architectureOptions.Remove(model);

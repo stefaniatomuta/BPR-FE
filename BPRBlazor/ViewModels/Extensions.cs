@@ -1,4 +1,5 @@
-using BPRBE.Models.Persistence;
+using BPR.Persistence.Models;
+using BPR.Mediator.Models;
 
 namespace BPRBlazor.ViewModels;
 
@@ -22,9 +23,7 @@ public static class Extensions
         {
             Id = component.Id,
             Name = component.Name,
-            Dependencies = component.Dependencies
-                .Select(c => c.Id)
-                .ToList(),
+            Dependencies = component.Dependencies.Select(x =>x.ToBackendModel()).ToList(),
             Position = new Position
             {
                 X = component.PositionViewModel.X,
@@ -39,11 +38,6 @@ public static class Extensions
     {
         var components = model.Components
             .Select(c => c.ToViewModel()).ToList();
-        foreach (var component in components)
-        {
-            component.Dependencies.AddRange(components
-                .Where(dependency => model.Components.First(modelComponent => modelComponent.Id == component.Id).Dependencies.Contains(dependency.Id)));
-        }
 
         return new ArchitecturalModelViewModel
         {
@@ -59,6 +53,7 @@ public static class Extensions
         {
             Id = component.Id,
             Name = component.Name,
+            Dependencies = component.Dependencies.Select(x =>x.ToViewModel()).ToList(),
             PositionViewModel = new PositionViewModel
             {
                 X = component.Position.X,
