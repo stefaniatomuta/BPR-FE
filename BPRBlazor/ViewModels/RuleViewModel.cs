@@ -2,7 +2,14 @@
 
 public class RuleViewModel
 {
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
+    public string Name { get; init; }
+    public string? Description { get; init; }
     public bool IsChecked { get; set; }
+
+    public RuleViewModel(string name, string? description)
+    {
+        Name = name;
+        Description = description;
+        IsChecked = Name == "Dependency";
+    }
 }

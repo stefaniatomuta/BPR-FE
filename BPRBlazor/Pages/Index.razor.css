@@ -1,34 +1,19 @@
 .unmapped-namespaces {
-    border: solid 1px black;
-    padding: 1rem;
+    border: dashed 1px #b3b3b3;
 }
 
 .namespace-container {
-    border: solid 1px black;
-    padding: 1rem;
-}
-
-h3 {
-    word-break: break-all;
-    display: flex;
+    border: dashed 1px #b3b3b3;
+    padding: .6rem;
+    min-height: 4rem;
 }
 
 .namespace-component {
-    background-color: #69a2ef;
-    margin: 1rem 0 0 1rem;
-    width: fit-content;
-    padding: 1rem;
+    margin: .25rem;
     display: inline-block;
-    justify-content: center;
-    align-items: center;
-    word-break: break-all;
-    border-radius: 1rem;
+    cursor: move;
 }
 
 .namespace-component p {
     margin: 0;
-}
-
-.namespace-component:hover {
-    background-color: #99bbf1;
 }

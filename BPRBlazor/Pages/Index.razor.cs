@@ -1,42 +1,35 @@
-using BPRBlazor.ViewModels;
 using BPR.Analysis.Models;
 using BPR.Mediator.Models;
+using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 using SevenZipExtractor;
 
 namespace BPRBlazor.Pages;
 
 public partial class Index : ComponentBase
 {
-    private string _errorMessage = string.Empty;
+    private IBrowserFile? _uploadedFile;
+    private readonly string[] _allowedFileTypes = { ".7z", ".zip" };
     private string _folderPath = string.Empty;
-    private string _analysisMessage = string.Empty;
-    private ArchitecturalModelViewModel _architecturalModelViewModel = default!;
+    private string _resultMessage = string.Empty;
+    private string _resultMessageCss = string.Empty;
+    private ArchitecturalModelViewModel? _selectedArchitectureViewModel;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
-    private NamespaceViewModel _selectedNamespaceViewModelComponent = default!;
-    private ArchitecturalModel _selectedArchitectureModelCollection = default!;
-    public List<RuleViewModel> _rulesViewModels = new();
-
+    private NamespaceViewModel? _selectedNamespaceViewModelComponent;
+    private List<RuleViewModel> _rulesViewModels = new();
     private List<Violation> violations = new();
-    
-
-    private async Task SendDataAsync()
-    {
-        await HttpService.PostAsync("http://127.0.0.1:8000/post?item=HelloWorld", string.Empty);
-    }
+    private bool isAnalysisComplete;
 
     protected override void OnInitialized()
     {
-        _errorMessage = default!;
-        _architecturalModelViewModel = default!;
         StateContainer.OnChange += StateHasChanged;
     }
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
-        _selectedArchitectureModelCollection = newValue;
-        // TODO - Actually do something with the selected modelCollection when analysis is started.
+        _selectedArchitectureViewModel = newValue.ToViewModel();
     }
 
     private void HandleRule(RuleViewModel value)
@@ -54,63 +47,56 @@ public partial class Index : ComponentBase
 
     private async Task StartAnalysis()
     {
-        if (_selectedArchitectureModelCollection == null)
+        _resultMessageCss = "error";
+        if (_selectedArchitectureViewModel is null)
         {
-            _errorMessage = "Analysis cannot start without a selected architectural modelCollection";
+            _resultMessage = "Please select an architectural model";
+            return;
         }
 
-        if (_unmappedNamespaceComponents.Any())
+        if (_uploadedFile is null)
         {
-            _errorMessage = "Analysis can not start while there are unmapped namespaces";
+            _resultMessage = "Please upload the source code";
             return;
         }
 
         if (_rulesViewModels.All(r => !r.IsChecked))
         {
-            _errorMessage = "Analysis can not start without any rule selected";
+            _resultMessage = "Please select one or more rules to analyse against";
+            return;
+        }
+
+        if (_unmappedNamespaceComponents.Any())
+        {
+            _resultMessage = "Please make sure all namespaces are mapped to a component";
             return;
         }
 
         try
         {
-            var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_architecturalModelViewModel);
+            isAnalysisComplete = false;
+            var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
             violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
             violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
             StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
-            _analysisMessage = "The analysis is ready. Check out the results page";
-
+            _resultMessage = "The analysis is ready!";
+            _resultMessageCss = "success";
+            isAnalysisComplete = true;
+            await Reset();
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            _errorMessage = "Oops.. An error occured";
+            _resultMessage = "An error occured...";
+            throw;
         }
-
-        var rule = new Rule()
-        {
-            Name = "Framework",
-            Description = "Checks against end of life frameworks",
-        };
-        await RuleService.AddRuleAsync(rule);
     }
 
-    private void HandleDrop(ArchitecturalComponentViewModel componentViewModel = default!)
+    private async Task Reset()
     {
-        var oldComponent = _architecturalModelViewModel.Components.FirstOrDefault(architecturalComponent =>
-            architecturalComponent.NamespaceComponents.Contains(_selectedNamespaceViewModelComponent)) ?? default!;
-        if (oldComponent != default!)
-        {
-            oldComponent.NamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
-        }
-
-        if (componentViewModel != default!)
-        {
-            componentViewModel.NamespaceComponents.Add(_selectedNamespaceViewModelComponent);
-            _unmappedNamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
-        }
-        else
-        {
-            _unmappedNamespaceComponents.Add(_selectedNamespaceViewModelComponent);
-        }
+        _uploadedFile = null;
+        _unmappedNamespaceComponents = new();
+        _selectedArchitectureViewModel = null;
+        await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
     private void HandleDragStart(NamespaceViewModel namespaceViewModelComponent)
@@ -118,12 +104,42 @@ public partial class Index : ComponentBase
         _selectedNamespaceViewModelComponent = namespaceViewModelComponent;
     }
 
+    private void HandleDrop(ArchitecturalComponentViewModel? componentViewModel = null)
+    {
+        if (_selectedArchitectureViewModel is null || _selectedNamespaceViewModelComponent is null)
+        {
+            return;
+        }
+
+        var oldComponent = _selectedArchitectureViewModel.Components.FirstOrDefault(architecturalComponent =>
+            architecturalComponent.NamespaceComponents.Contains(_selectedNamespaceViewModelComponent));
+
+        oldComponent?.NamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
+
+        if (componentViewModel is not null)
+        {
+            componentViewModel.NamespaceComponents.Add(_selectedNamespaceViewModelComponent);
+            _unmappedNamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
+        }
+        else
+        {
+            if (_unmappedNamespaceComponents.Contains(_selectedNamespaceViewModelComponent))
+            {
+                return;
+            }
+
+            _unmappedNamespaceComponents.Add(_selectedNamespaceViewModelComponent);
+        }
+    }
+
     private async Task LoadCodeSource(InputFileChangeEventArgs eventArgs)
     {
-        OnInitialized();
-        if (!eventArgs.File.Name.EndsWith(".7z"))
+        var fileExtension = Path.GetExtension(eventArgs.File.Name);
+        _resultMessageCss = "error";
+
+        if (!_allowedFileTypes.Any(e => e == fileExtension))
         {
-            _errorMessage = "The file uploaded needs to be a .7z type";
+            _resultMessage = $"The uploaded file needs to be one of the following types: {string.Join(", ", _allowedFileTypes)}";
             return;
         }
 
@@ -131,12 +147,12 @@ public partial class Index : ComponentBase
         {
             await LoadCodebaseAsync(eventArgs.File);
             SetNamespaceComponents();
+            _uploadedFile = eventArgs.File;
         }
         catch (Exception e)
         {
-            _unmappedNamespaceComponents = new();
             _folderPath = string.Empty;
-            _errorMessage = e.Message + " " + e.StackTrace;
+            _resultMessage = e.Message;
             CodebaseService.Dispose();
         }
     }
@@ -144,17 +160,28 @@ public partial class Index : ComponentBase
     private async Task LoadCodebaseAsync(IBrowserFile file)
     {
         await using var memoryStream = new MemoryStream();
-        await file.OpenReadStream(Int32.MaxValue).CopyToAsync(memoryStream);
+        await file.OpenReadStream(int.MaxValue).CopyToAsync(memoryStream);
         memoryStream.Position = 0;
-        using var archiveFile = new ArchiveFile(memoryStream, SevenZipFormat.SevenZip);
+        using var archiveFile = new ArchiveFile(memoryStream);
         _folderPath = CodebaseService.LoadCodebaseInTemp(archiveFile);
     }
 
     private void SetNamespaceComponents()
     {
-        _unmappedNamespaceComponents = new List<NamespaceViewModel>();
         var folderNames = DependencyComponentService.GetFolderNamesForProjects(_folderPath);
-        for (var id = 0; id < folderNames.Count(); id++)
+        _resultMessage = string.Empty;
+
+        if (!folderNames.Any())
+        {
+            _resultMessageCss = "error";
+            _resultMessage = "No projects found in uploaded file...";
+            return;
+        }
+
+        _unmappedNamespaceComponents.Clear();
+        _selectedArchitectureViewModel?.Components.ForEach(component => component.NamespaceComponents.Clear());
+
+        for (var id = 0; id < folderNames.Count; id++)
         {
             _unmappedNamespaceComponents.Add(new NamespaceViewModel(id, folderNames[id]));
         }
@@ -162,8 +189,8 @@ public partial class Index : ComponentBase
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         CodebaseService.Dispose();
         StateContainer.OnChange -= StateHasChanged;
     }
-    
 }
