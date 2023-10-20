@@ -1,5 +1,6 @@
 using BPR.Analysis.Models;
 using BPR.Mediator.Models;
+using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -19,8 +20,9 @@ public partial class Index : ComponentBase
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel? _selectedNamespaceViewModelComponent;
     private List<RuleViewModel> _rulesViewModels = new();
-    private List<Violation> violations = new();
-    private bool isAnalysisComplete;
+    private List<Violation> _violations = new();
+    private bool _isAnalysisComplete;
+    private LoadingIndicator? _loadingIndicator;
 
     protected override void OnInitialized()
     {
@@ -74,14 +76,27 @@ public partial class Index : ComponentBase
 
         try
         {
-            isAnalysisComplete = false;
+            _loadingIndicator?.ToggleLoading();
+            _isAnalysisComplete = false;
             var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
-            violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
-            violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
-            StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
+
+            // TODO - Would probably make a lot more sense to just call a StartAnalysis method on the AnalysisService.
+            // Could then pass all required parameters and have the service figure out what rules to analyse against.
+            if (_rulesViewModels.Any(r => r.Name == "Dependency" && r.IsChecked))
+            {
+                _violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
+            }
+
+            if (_rulesViewModels.Any(r => r.Name == "Namespace" && r.IsChecked))
+            {
+                _violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
+            }
+
+            StateContainer.Property = Mapper.Map<List<ViolationModel>>(_violations);
             _resultMessage = "The analysis is ready!";
             _resultMessageCss = "success";
-            isAnalysisComplete = true;
+            _loadingIndicator?.ToggleLoading();
+            _isAnalysisComplete = true;
             await Reset();
         }
         catch (Exception)
@@ -96,6 +111,7 @@ public partial class Index : ComponentBase
         _uploadedFile = null;
         _unmappedNamespaceComponents = new();
         _selectedArchitectureViewModel = null;
+        _violations = new();
         await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
@@ -143,6 +159,8 @@ public partial class Index : ComponentBase
             return;
         }
 
+        _loadingIndicator?.ToggleLoading();
+
         try
         {
             await LoadCodebaseAsync(eventArgs.File);
@@ -155,6 +173,8 @@ public partial class Index : ComponentBase
             _resultMessage = e.Message;
             CodebaseService.Dispose();
         }
+
+        _loadingIndicator?.ToggleLoading();
     }
 
     private async Task LoadCodebaseAsync(IBrowserFile file)

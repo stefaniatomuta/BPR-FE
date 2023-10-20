@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\build-and-test.yaml = .github\workflows\build-and-test.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPR.Analysis", "BPR.Analysis\BPR.Analysis.csproj", "{976677D4-F21C-47EA-9B8A-FC311EB7AC42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Analysis", "BPR.Analysis\BPR.Analysis.csproj", "{976677D4-F21C-47EA-9B8A-FC311EB7AC42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPR.Persistence", "BPR.Persistence\BPR.Persistence.csproj", "{70304D45-885D-453E-96DA-6601EFFFEFD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Persistence", "BPR.Persistence\BPR.Persistence.csproj", "{70304D45-885D-453E-96DA-6601EFFFEFD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

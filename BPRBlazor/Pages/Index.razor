@@ -16,14 +16,10 @@
 
 @page "/"
 
-<div class="mb-3">
-    <h3>Step 1</h3>
-    <p>Select an architecture model</p>
-    <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange"/>
-</div>
+<LoadingIndicator @ref="_loadingIndicator" />
 
 <div class="mb-3">
-    <h3>Step 2</h3>
+    <h3>Step 1</h3>
     <p>Upload file containing source code</p>
     <div class="d-flex gap-2 align-items-center">
         <label for="inputFile" class="btn btn-secondary">
@@ -32,6 +28,12 @@
         </label>
         <a>@_uploadedFile?.Name</a>
     </div>
+</div>
+
+<div class="mb-3">
+    <h3>Step 2</h3>
+    <p>Select an architecture model</p>
+    <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange"/>
 </div>
 
 <div class="mb-3">
@@ -81,7 +83,7 @@
 
 <button class="btn btn-primary mb-3" @onclick="StartAnalysis">Start Analysis</button>
 <p class="@_resultMessageCss">@_resultMessage</p>
-@if (isAnalysisComplete)
+@if (_isAnalysisComplete)
 {
     <a href="results">See analysis results</a>
 }

@@ -12,7 +12,7 @@ public class CodeExtractionService : ICodeExtractionService {
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
                 var content = File.ReadLines(file,Encoding.UTF8);
-                var result = content.Where(s => Regex.Match(s, AnalysisRegex.usingRegex).Success).ToList();
+                var result = content.Where(s => Regex.Match(s, AnalysisRegex.UsingRegex).Success).ToList();
                 foreach (var match in result) {
                     matches.Add(new UsingDirective() {
                         Using = match,
@@ -40,11 +40,11 @@ public class CodeExtractionService : ICodeExtractionService {
 
     public List<NamespaceDirective> GetNamespaceDirectives(string folderPath) {
         List<NamespaceDirective> matches = new ();
-        var files  = Directory.GetFiles(folderPath,"*",SearchOption.AllDirectories).ToList();
+        var files = Directory.GetFiles(folderPath,"*",SearchOption.AllDirectories).ToList();
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
                 var content = File.ReadLines(file,Encoding.UTF8);
-                var result = content.Where(s => Regex.Match(s, AnalysisRegex.namespaceRegex).Success).ToList();
+                var result = content.Where(s => Regex.Match(s, AnalysisRegex.NamespaceRegex).Success).ToList();
                 foreach (var match in result) {
                     matches.Add(new NamespaceDirective() {
                         Namespace = match,
