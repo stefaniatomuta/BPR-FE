@@ -207,6 +207,11 @@ public partial class Index : ComponentBase
         }
     }
 
+    private void ShowAnalysisResults()
+    {
+        NavigationManager.NavigateTo("/results");
+    }
+
     public void Dispose()
     {
         GC.SuppressFinalize(this);

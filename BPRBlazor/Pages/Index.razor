@@ -12,6 +12,7 @@
 @inject StateContainer StateContainer
 @inject IRuleService RuleService
 @inject IJSRuntime JS
+@inject NavigationManager NavigationManager
 @implements IDisposable
 
 @page "/"
@@ -85,5 +86,5 @@
 <p class="@_resultMessageCss">@_resultMessage</p>
 @if (_isAnalysisComplete)
 {
-    <a href="results">See analysis results</a>
+    <button class="btn btn-outline-success" @onclick="ShowAnalysisResults">View analysis results</button>
 }
