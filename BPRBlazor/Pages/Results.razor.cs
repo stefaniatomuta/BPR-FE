@@ -12,11 +12,14 @@ public partial class Results : ComponentBase
     {
         base.OnInitialized();
         StateContainer.OnChange += StateHasChanged;
-        _resultModel = new ResultModel();
-        _resultModel.Violations = StateContainer.Property;
+        _resultModel = new ResultModel
+        {
+            Violations = StateContainer.Property
+        };
     }
 
     public void Dispose() {
+        GC.SuppressFinalize(this);
         StateContainer.OnChange -= StateHasChanged;
     }
     
