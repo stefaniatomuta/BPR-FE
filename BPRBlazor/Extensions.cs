@@ -47,7 +47,7 @@ public static class Extensions
         services.AddScoped<StateContainer>();
     }
 
-    public static void CleanUp(this WebApplication app)
+    public static void CleanUp()
     {
         if (Directory.Exists("../temp"))
         {

@@ -35,6 +35,6 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.CleanUp();
+Extensions.CleanUp();
 
 app.Run();
