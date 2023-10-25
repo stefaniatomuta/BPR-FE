@@ -1,10 +1,10 @@
-using BPR.Persistence.Config;
-using BPR.Persistence.Repositories;
 using BPR.Analysis.Services;
 using BPR.Mediator.Mappers;
 using BPR.Mediator.Models;
 using BPR.Mediator.Services;
 using BPR.Mediator.Validators;
+using BPR.Persistence.Config;
+using BPR.Persistence.Repositories;
 using BPRBlazor.Mappers;
 using BPRBlazor.Services;
 using BPRBlazor.State;
@@ -12,7 +12,7 @@ using FluentValidation;
 
 namespace BPRBlazor;
 
-public static class ServicesExtensions
+public static class Extensions
 {
     public static void AddValidators(this IServiceCollection services)
     {
@@ -22,7 +22,8 @@ public static class ServicesExtensions
         services.AddScoped<IValidatorService, ValidatorService>();
     }
 
-    public static void AddServices(this IServiceCollection services) {
+    public static void AddServices(this IServiceCollection services)
+    {
         services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
@@ -41,7 +42,16 @@ public static class ServicesExtensions
         services.Configure<DatabaseConfig>(configuration.GetSection(DatabaseConfig.Section));
     }
 
-    public static void AddStateMachine(this IServiceCollection services) {
+    public static void AddStateMachine(this IServiceCollection services)
+    {
         services.AddScoped<StateContainer>();
+    }
+
+    public static void CleanUp()
+    {
+        if (Directory.Exists("../temp"))
+        {
+            Directory.Delete("../temp");
+        }
     }
 }

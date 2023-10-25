@@ -1,5 +1,6 @@
 using System.Text.Json;
 using BPRBlazor;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,7 +11,6 @@ builder.Services.AddValidators();
 builder.Services.AddServices();
 builder.Services.AddStateMachine();
 builder.Services.AddDbConfiguration(builder.Configuration);
-
 
 // Database config
 builder.Services.AddSingleton(new JsonSerializerOptions
@@ -34,5 +34,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+
+Extensions.CleanUp();
 
 app.Run();
