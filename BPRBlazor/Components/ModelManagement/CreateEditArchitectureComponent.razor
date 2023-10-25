@@ -38,8 +38,8 @@
             </div>
             @foreach (var dependency in component.Dependencies)
             {
-                var startPosition = GetPositionForComponentAsync(component);
-                var endPosition = GetPositionForComponentAsync(dependency);
+                var startPosition = GetMiddlePositionForComponent(component);
+                var endPosition = GetMiddlePositionForComponent(dependency);
                 <svg>
                     <polyline
                         points="@(startPosition.X),@(startPosition.Y) @((startPosition.X + endPosition.X) / 2),@((startPosition.Y + endPosition.Y) / 2) @(endPosition.X),@(endPosition.Y)"
