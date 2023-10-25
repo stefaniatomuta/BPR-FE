@@ -12,7 +12,17 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();
     private ArchitecturalComponentViewModel? _draggingComponent;
+    private SizeViewModel? _componentSize;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_componentSize == null && ModelViewModel.Components.Any())
+        {
+            _componentSize = await JS.InvokeAsync<SizeViewModel>("getElementSizeByClass", new object[]{"component"});
+            StateHasChanged();
+        }    
+    }
+    
     private void AddArchitecturalComponent()
     {
         _dependencyComponent = null;
@@ -112,14 +122,26 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         {
             X = offset.X + difference.X,
             Y = offset.Y + difference.Y,
-            Height = offset.Height,
-            Width = offset.Width
+        };
+    }
+
+    private PositionViewModel GetMiddlePositionForComponent(ArchitecturalComponentViewModel component)
+    {
+        if (_componentSize == null)
+        {
+            return new PositionViewModel();
+        }
+        
+        return new PositionViewModel()
+        {
+            X = component.PositionViewModel.X + _componentSize.Width / 2,
+            Y = component.PositionViewModel.Y + _componentSize.Height / 2
         };
     }
     
     private async Task DeleteSelectedModel()
     {
-        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the '{ModelViewModel!.Name}' model?"});
+        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the '{ModelViewModel.Name}' model?"});
         _resultMessages = new List<(string Message, string Class)>();
         
         if (!confirmed)
