@@ -16,7 +16,15 @@ function DownloadResultsToPDF() {
 
 function getElementOffset(elementId) {
     const element = document.getElementById(elementId);
-    return { x: element.offsetLeft, y: element.offsetTop, height: element.offsetHeight, width: element.offsetWidth }
+    return { x: element.offsetLeft, y: element.offsetTop }
+}
+
+function getElementSizeByClass(className) {
+    const element = document.getElementsByClassName(className)[0];
+    if (element === undefined) {
+        return null
+    }
+    return { height: element.offsetHeight, width: element.offsetWidth }
 }
 
 function removeSelectedElement(elementId) {

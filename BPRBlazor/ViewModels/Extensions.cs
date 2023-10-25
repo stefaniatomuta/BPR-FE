@@ -30,9 +30,7 @@ public static class Extensions
             Position = new Position
             {
                 X = component.PositionViewModel.X,
-                Y = component.PositionViewModel.Y,
-                Height = component.PositionViewModel.Height,
-                Width = component.PositionViewModel.Width
+                Y = component.PositionViewModel.Y
             }
         };
     }
@@ -67,9 +65,7 @@ public static class Extensions
             PositionViewModel = new PositionViewModel
             {
                 X = component.Position.X,
-                Y = component.Position.Y,
-                Height = component.Position.Height,
-                Width = component.Position.Width
+                Y = component.Position.Y
             }
         };
     }

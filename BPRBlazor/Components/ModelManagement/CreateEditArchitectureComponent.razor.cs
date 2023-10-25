@@ -12,7 +12,17 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();
     private ArchitecturalComponentViewModel? _draggingComponent;
+    private SizeViewModel? _sizeViewModel;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_sizeViewModel == null && ModelViewModel.Components.Any())
+        {
+            _sizeViewModel = await JS.InvokeAsync<SizeViewModel>("getElementSizeByClass", new object[]{"component"});
+            StateHasChanged();
+        }    
+    }
+    
     private void AddArchitecturalComponent()
     {
         _dependencyComponent = null;
@@ -112,8 +122,20 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         {
             X = offset.X + difference.X,
             Y = offset.Y + difference.Y,
-            Height = offset.Height,
-            Width = offset.Width
+        };
+    }
+
+    private PositionViewModel GetPositionForComponentAsync(ArchitecturalComponentViewModel component)
+    {
+        if (_sizeViewModel == null)
+        {
+            return new PositionViewModel();
+        }
+        
+        return new PositionViewModel()
+        {
+            X = component.PositionViewModel.X + _sizeViewModel.Width / 2,
+            Y = component.PositionViewModel.Y + _sizeViewModel.Height / 2
         };
     }
     
