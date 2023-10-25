@@ -17,7 +17,7 @@ public class AnalysisServiceTests {
     
     //Namespace test
     [Test]
-    public async Task AnalyseNamespace_Returns_NoViolation() {
+    public void AnalyseNamespace_Returns_NoViolation() {
         //Arrange
         var list = new List<NamespaceDirective>() {
             new () {
@@ -36,7 +36,7 @@ public class AnalysisServiceTests {
     }
 
     [Test]
-    public async Task AnalyseNamespace_Returns_Violation() {
+    public void AnalyseNamespace_Returns_Violation() {
         //Arrange
         var list = new List<NamespaceDirective>() {
             new () {
@@ -57,7 +57,7 @@ public class AnalysisServiceTests {
     }
 
     [Test]
-    public async Task AnalyseDependency_With1Component_Returns_NoViolation() {
+    public void AnalyseDependency_With1Component_Returns_NoViolation() {
         //Arrange
         var usingList = new List<UsingDirective>() {
             new () {
@@ -84,7 +84,7 @@ public class AnalysisServiceTests {
     
     
     [Test]
-    public async Task AnalyseDependency_With1Component_Returns_Violation() {
+    public void AnalyseDependency_With1Component_Returns_Violation() {
         //Arrange
         var usingList = new List<UsingDirective>() {
             new () {
@@ -113,7 +113,7 @@ public class AnalysisServiceTests {
     
     
     [Test]
-    public async Task AnalyseDependency_WithComponents_Returns_NoViolation() {
+    public void AnalyseDependency_WithComponents_Returns_NoViolation() {
         //Arrange
         var usingListComponent = new List<UsingDirective>() {
             new () {
@@ -160,7 +160,7 @@ public class AnalysisServiceTests {
     }
     
     [Test]
-    public async Task AnalyseDependency_WithComponents_Returns_Violation() {
+    public void AnalyseDependency_WithComponents_Returns_Violation() {
         //Arrange
         var usingList = new List<UsingDirective>() {
             new() {

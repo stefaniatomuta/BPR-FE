@@ -3,33 +3,30 @@
 namespace BPR.Mediator.Services; 
 
 public class CodebaseService : ICodebaseService {
-    private string folderPath = null!;
+    private string? folderPath;
 
-    public string LoadCodebaseInTemp(ArchiveFile file) {
-        var tempfolder  = ExtractArchive(file);
-        try {
-            return tempfolder;
-        }
-        catch (Exception e) {
-            throw new Exception(e.Message);
-        }
+    public string LoadCodebaseInTemp(ArchiveFile file)
+    {
+        var uploadedRootFolderName = file.Entries.First().FileName;
+        folderPath = ExtractArchive(file);
+        return $"{folderPath}/{uploadedRootFolderName}";
     }
     
-    private string ExtractArchive(ArchiveFile archiveFile) {
+    private static string ExtractArchive(ArchiveFile file)
+    {
         var guid = Guid.NewGuid();
-        var directory =  Directory.CreateDirectory($"../temp/{guid}");
-        var archiveName = archiveFile.Entries.FirstOrDefault()!.FileName;
-        archiveFile.Extract(directory.FullName);
-        folderPath = directory.FullName;
-        var fullpath = $"{directory.FullName}/{archiveName}";
-        return fullpath;
+        var directory = Directory.CreateDirectory($"../temp/{guid}");
+        file.Extract(directory.FullName);
+        return directory.FullName;
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+
         if (Directory.Exists(folderPath))
         {
             Directory.Delete(folderPath, true);
         }
     }
-
 }
