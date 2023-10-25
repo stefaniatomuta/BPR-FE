@@ -23,7 +23,10 @@ public static class Extensions
         {
             Id = component.Id,
             Name = component.Name,
-            Dependencies = component.Dependencies.Select(x =>x.ToBackendModel()).ToList(),
+            Dependencies = component.Dependencies.Select(dependency => new ArchitecturalComponent()
+            {
+                Id = dependency.Id
+            }).ToList(),
             Position = new Position
             {
                 X = component.PositionViewModel.X,
