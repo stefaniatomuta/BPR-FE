@@ -9,7 +9,6 @@ public class DependencyComponentService : IDependencyComponentService
     {
         return Directory.EnumerateDirectories(folderPath)
             .Where(IsNotIgnoredFolder)
-            .Where(DoesContainCSharpFiles)
             .SelectMany(project => Directory.EnumerateDirectories(project)
                 .Where(IsNotIgnoredFolder)
                 .Where(DoesContainCSharpFiles))
