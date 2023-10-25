@@ -1,4 +1,5 @@
-﻿using BPR.Analysis.Enums;
+﻿using System.ComponentModel;
+using BPR.Analysis.Enums;
 
 namespace BPR.Analysis.Mappers;
 
@@ -10,7 +11,7 @@ public static class AnalysisRuleMapper
         {
             "Dependency" => AnalysisRule.Dependency,
             "Namespace" => AnalysisRule.Namespace,
-            _ => default
+            _ => throw new InvalidEnumArgumentException("No valid rule with this name")
         };
     }
 }
