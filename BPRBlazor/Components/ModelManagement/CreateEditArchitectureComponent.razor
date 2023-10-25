@@ -20,6 +20,7 @@
     <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
         @foreach (var component in ModelViewModel.Components)
         {
+            var startPosition = GetMiddlePositionForComponent(component);
             <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.PositionViewModel.X)px; top: @(component.PositionViewModel.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
                 <div class="component-header mb-2">
                     <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
@@ -38,7 +39,6 @@
             </div>
             @foreach (var dependency in component.Dependencies)
             {
-                var startPosition = GetMiddlePositionForComponent(component);
                 var endPosition = GetMiddlePositionForComponent(dependency);
                 <svg>
                     <polyline

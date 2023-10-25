@@ -141,7 +141,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     
     private async Task DeleteSelectedModel()
     {
-        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the '{ModelViewModel!.Name}' model?"});
+        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the '{ModelViewModel.Name}' model?"});
         _resultMessages = new List<(string Message, string Class)>();
         
         if (!confirmed)
