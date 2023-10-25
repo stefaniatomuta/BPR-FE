@@ -10,6 +10,5 @@ public class RuleViewModel
     {
         Name = name;
         Description = description;
-        IsChecked = Name == "Dependency";
     }
 }

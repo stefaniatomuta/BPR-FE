@@ -6,9 +6,9 @@ public partial class LoadingIndicator : ComponentBase
 {
     public bool IsLoading { get; private set; }
 
-    public void ToggleLoading()
+    public void ToggleLoading(bool loading)
     {
-        IsLoading = !IsLoading;
+        IsLoading = loading;
         StateHasChanged();
     }
 }
