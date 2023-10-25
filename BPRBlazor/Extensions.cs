@@ -51,7 +51,7 @@ public static class Extensions
     {
         if (Directory.Exists("../temp"))
         {
-            Directory.Delete("../temp");
+            Directory.Delete("../temp", true);
         }
     }
 }
