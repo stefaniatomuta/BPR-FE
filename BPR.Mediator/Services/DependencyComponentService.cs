@@ -10,7 +10,10 @@ public class DependencyComponentService : IDependencyComponentService
         return Directory.EnumerateDirectories(folderPath)
             .Where(IsNotIgnoredFolder)
             .Where(DoesContainCSharpFiles)
-            .Select(folderPath => folderPath.Split("\\")[^1])
+            .SelectMany(project => Directory.EnumerateDirectories(project)
+                .Where(IsNotIgnoredFolder)
+                .Where(DoesContainCSharpFiles))
+            .Select(projectFolderPath => RemoveFolderPath(folderPath, projectFolderPath))
             .ToList();
     }
 
