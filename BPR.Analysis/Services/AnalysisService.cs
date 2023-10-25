@@ -13,18 +13,31 @@ public class AnalysisService : IAnalysisService {
     }
 
 
-    public List<Violation> GetDependencyAnalysis(string folderPath, AnalysisArchitecturalModel model) {
+    public List<Violation> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules) {
+        List<Violation> violations = new();
+        if (rules.Contains(AnalysisRule.Dependency)) 
+        {
+            violations.AddRange(GetDependencyAnalysis(folderPath, model));
+        }
+        if (rules.Contains(AnalysisRule.Namespace))
+        {
+            violations.AddRange(GetNamespaceAnalysis(folderPath));
+        }
+        return violations;
+    }
+    
+    private List<Violation> GetDependencyAnalysis(string folderPath, AnalysisArchitecturalModel model) {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
         List<Violation> violations = new();
         violations.AddRange(GetDependencyAnalysisOnNamespaceComponents(folderPath,projectNames,model.Components));
         foreach (var component in model.Components) {
-                violations.AddRange(GetDependencyAnalysisOnNamespaceComponents(folderPath,projectNames,component.Dependencies));
+            violations.AddRange(GetDependencyAnalysisOnNamespaceComponents(folderPath,projectNames,component.Dependencies));
         }
 
         return violations;
     }
 
-    public List<Violation> GetDependencyAnalysisOnNamespaceComponents(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components) {
+    private List<Violation> GetDependencyAnalysisOnNamespaceComponents(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components) {
         List<Violation> violations = new();
         foreach (var component in components) {
             var usings = GetUsingsPerComponent(folderPath, component.NamespaceComponents);

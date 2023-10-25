@@ -1,3 +1,4 @@
+using BPR.Analysis.Mappers;
 using BPR.Analysis.Models;
 using BPR.Mediator.Models;
 using BPRBlazor.Components.Common;
@@ -19,8 +20,7 @@ public partial class Index : ComponentBase
     private ArchitecturalModelViewModel? _selectedArchitectureViewModel;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel? _selectedNamespaceViewModelComponent;
-    private List<RuleViewModel> _rulesViewModels = new();
-    private List<Violation> _violations = new();
+    private readonly List<RuleViewModel> _rulesViewModels = new();
     private bool _isAnalysisComplete;
     private LoadingIndicator? _loadingIndicator;
 
@@ -31,7 +31,15 @@ public partial class Index : ComponentBase
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
+        if (_selectedArchitectureViewModel != null)
+        {
+            foreach (var component in _selectedArchitectureViewModel.Components)
+            {
+                _unmappedNamespaceComponents.AddRange(component.NamespaceComponents);
+            }
+        }
         _selectedArchitectureViewModel = newValue.ToViewModel();
+        AutoMapNamespaceComponents();
     }
 
     private void HandleRule(RuleViewModel value)
@@ -76,26 +84,20 @@ public partial class Index : ComponentBase
 
         try
         {
-            _loadingIndicator?.ToggleLoading();
+            _loadingIndicator?.ToggleLoading(true);
             _isAnalysisComplete = false;
+            
             var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
-
-            // TODO - Would probably make a lot more sense to just call a StartAnalysis method on the AnalysisService.
-            // Could then pass all required parameters and have the service figure out what rules to analyse against.
-            if (_rulesViewModels.Any(r => r.Name == "Dependency" && r.IsChecked))
-            {
-                _violations.AddRange(AnalysisService.GetDependencyAnalysis(_folderPath, architecturalModel));
-            }
-
-            if (_rulesViewModels.Any(r => r.Name == "Namespace" && r.IsChecked))
-            {
-                _violations.AddRange(AnalysisService.GetNamespaceAnalysis(_folderPath));
-            }
-
-            StateContainer.Property = Mapper.Map<List<ViolationModel>>(_violations);
+            var ruleList = _rulesViewModels
+                .Where(rule => rule.IsChecked)
+                .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
+                .ToList();
+            var violations = AnalysisService.GetAnalysis(_folderPath, architecturalModel, ruleList);
+            StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
+            
             _resultMessage = "The analysis is ready!";
             _resultMessageCss = "success";
-            _loadingIndicator?.ToggleLoading();
+            _loadingIndicator?.ToggleLoading(false);
             _isAnalysisComplete = true;
             await Reset();
         }
@@ -111,7 +113,6 @@ public partial class Index : ComponentBase
         _uploadedFile = null;
         _unmappedNamespaceComponents = new();
         _selectedArchitectureViewModel = null;
-        _violations = new();
         await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
@@ -153,18 +154,19 @@ public partial class Index : ComponentBase
         var fileExtension = Path.GetExtension(eventArgs.File.Name);
         _resultMessageCss = "error";
 
-        if (!_allowedFileTypes.Any(e => e == fileExtension))
+        if (_allowedFileTypes.All(e => e != fileExtension))
         {
             _resultMessage = $"The uploaded file needs to be one of the following types: {string.Join(", ", _allowedFileTypes)}";
             return;
         }
 
-        _loadingIndicator?.ToggleLoading();
+        _loadingIndicator?.ToggleLoading(true);
 
         try
         {
             await LoadCodebaseAsync(eventArgs.File);
             SetNamespaceComponents();
+            AutoMapNamespaceComponents();
             _uploadedFile = eventArgs.File;
         }
         catch (Exception e)
@@ -174,7 +176,7 @@ public partial class Index : ComponentBase
             CodebaseService.Dispose();
         }
 
-        _loadingIndicator?.ToggleLoading();
+        _loadingIndicator?.ToggleLoading(false);
     }
 
     private async Task LoadCodebaseAsync(IBrowserFile file)
@@ -205,6 +207,23 @@ public partial class Index : ComponentBase
         {
             _unmappedNamespaceComponents.Add(new NamespaceViewModel(id, folderNames[id]));
         }
+    }
+
+    private void AutoMapNamespaceComponents()
+    {
+        foreach (var namespaceComponent in _unmappedNamespaceComponents)
+        {
+            var autoMappingComponent = _selectedArchitectureViewModel?.Components
+                .FirstOrDefault(component => namespaceComponent.Name.ToLower().Contains(component.Name.ToLower()));
+            
+            if (autoMappingComponent != null)
+            {
+                autoMappingComponent.NamespaceComponents.Add(namespaceComponent);
+            }
+        }
+        
+        _unmappedNamespaceComponents.RemoveAll(namespaceComponent => _selectedArchitectureViewModel?.Components
+            .SelectMany(component => component.NamespaceComponents).Contains(namespaceComponent) ?? false);
     }
 
     private void ShowAnalysisResults()
