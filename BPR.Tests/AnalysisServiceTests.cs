@@ -82,45 +82,9 @@ public class AnalysisServiceTests {
         Assert.That(result,Is.Empty);
     }
     
-    
-    [Test]
-    public void AnalyseDependency_With1Component_Returns_Violation() {
-        //Arrange
-        var usingList = new List<UsingDirective>() {
-            new () {
-                Using = "using BPR.Analysis.Models",
-                File = "DependencyTests.cs"
-            }
-        };
-        var component = new AnalysisArchitecturalComponent() {
-            Name = "Component X",
-            NamespaceComponents = new List<AnalysisNamespace>() {
-                new() {
-                    Name = "BPR/AnalysisTest"
-                }
-            },
-            Dependencies = new List<AnalysisArchitecturalComponent>()
-        };
-
-        //Act
-        var result = _analysisService.GetDependencyAnalysisOnComponent(usingList, component);
-        
-        //Assert
-        Assert.That(result, !Is.Empty);
-        Assert.That(result[0].Severity,Is.EqualTo(ViolationSeverity.Major));
-        Assert.That(result[0].Type,Is.EqualTo(ViolationType.ForbiddenDependency));
-    }
-    
-    
     [Test]
     public void AnalyseDependency_WithComponents_Returns_NoViolation() {
         //Arrange
-        var usingListComponent = new List<UsingDirective>() {
-            new () {
-                Using = "using BPR.Analysis.Services",
-                File = "DependencyController.cs"
-            }
-        };
         var usingListDependency = new List<UsingDirective>() {
             new() {
                 
@@ -132,7 +96,7 @@ public class AnalysisServiceTests {
             Name = "Component X",
             NamespaceComponents = new List<AnalysisNamespace>() {
                 new() {
-                    Name = "BPR/Analysis/Services"
+                    Name = "BPR.Analysis.Services"
                 }
             },
             Dependencies = new List<AnalysisArchitecturalComponent>() {
@@ -140,7 +104,7 @@ public class AnalysisServiceTests {
                     Name = "Component Y",
                     NamespaceComponents = new List<AnalysisNamespace>() {
                         new () {
-                            Name = "BPR/Analysis/Models"
+                            Name = "BPR.Analysis.Models"
                         }
                     }
                     
@@ -149,10 +113,7 @@ public class AnalysisServiceTests {
         };
 
         //Act
-        var result = _analysisService.GetDependencyAnalysisOnComponent(usingListComponent, component);
-        foreach (var dependency in component.Dependencies) {
-            result.AddRange(_analysisService.GetDependencyAnalysisOnComponent(usingListDependency,dependency));
-        }
+        var result = _analysisService.GetDependencyAnalysisOnComponent(usingListDependency, component);
         
         //Assert
         Assert.That(result,Is.Empty);

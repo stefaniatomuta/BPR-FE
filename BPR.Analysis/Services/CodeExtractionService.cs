@@ -8,7 +8,7 @@ public class CodeExtractionService : ICodeExtractionService {
     
     public List<UsingDirective> GetUsingDirectives(string folderPath) {
         List<UsingDirective> matches = new ();
-        var files  = Directory.GetFiles(folderPath).ToList();
+        var files  = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories).ToList();
         foreach (var file in files) {
             if (file.EndsWith(".cs") || file.EndsWith(".cshtml")) {
                 var content = File.ReadLines(file,Encoding.UTF8);

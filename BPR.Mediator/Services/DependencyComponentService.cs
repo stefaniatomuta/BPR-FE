@@ -3,15 +3,14 @@
 public class DependencyComponentService : IDependencyComponentService
 {
     private static readonly string[] IgnoredFolders = new[] { "bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests" };
-    private static readonly string[] RequiredFileExtensions = new[] { ".cs" };
+    private static readonly string[] RequiredFileExtensions = new[] { ".cs", ".cshtml" };
 
     public IList<string> GetFolderNamesForProjects(string folderPath)
     {
-        return Directory.EnumerateDirectories(folderPath)
+        return Directory
+            .EnumerateDirectories(folderPath)
             .Where(IsNotIgnoredFolder)
-            .SelectMany(project => Directory.EnumerateDirectories(project)
-                .Where(IsNotIgnoredFolder)
-                .Where(DoesContainCSharpFiles))
+            .Where(DoesContainCSharpFiles)
             .Select(projectFolderPath => RemoveFolderPath(folderPath, projectFolderPath))
             .ToList();
     }
