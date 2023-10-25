@@ -58,15 +58,16 @@ public partial class Index : ComponentBase
     private async Task StartAnalysis()
     {
         _resultMessageCss = "error";
-        if (_selectedArchitectureViewModel is null)
-        {
-            _resultMessage = "Please select an architectural model";
-            return;
-        }
 
         if (_uploadedFile is null)
         {
             _resultMessage = "Please upload the source code";
+            return;
+        }
+
+        if (_selectedArchitectureViewModel is null)
+        {
+            _resultMessage = "Please select an architectural model";
             return;
         }
 
@@ -86,15 +87,15 @@ public partial class Index : ComponentBase
         {
             _loadingIndicator?.ToggleLoading(true);
             _isAnalysisComplete = false;
-            
             var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
             var ruleList = _rulesViewModels
                 .Where(rule => rule.IsChecked)
                 .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
                 .ToList();
+
             var violations = AnalysisService.GetAnalysis(_folderPath, architecturalModel, ruleList);
+
             StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
-            
             _resultMessage = "The analysis is ready!";
             _resultMessageCss = "success";
             _loadingIndicator?.ToggleLoading(false);
@@ -156,7 +157,7 @@ public partial class Index : ComponentBase
 
         if (_allowedFileTypes.All(e => e != fileExtension))
         {
-            _resultMessage = $"The uploaded file needs to be one of the following types: {string.Join(", ", _allowedFileTypes)}";
+            _resultMessage = $"The uploaded file needs to be one of the following types: '{string.Join(", ", _allowedFileTypes)}'";
             return;
         }
 

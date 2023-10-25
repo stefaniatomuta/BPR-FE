@@ -3,7 +3,6 @@ using BPR.Analysis.Models;
 using BPR.Mediator.Models;
 using BPRBlazor.ViewModels;
 
-
 namespace BPRBlazor.Mappers; 
 
 public class MapperProfile : Profile {
