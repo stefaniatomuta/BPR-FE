@@ -88,8 +88,8 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     {
         _dragStartCoordinates = new PositionViewModel()
         {
-            X = args.ClientX,
-            Y = args.ClientY
+            X = (int)args.ClientX,
+            Y = (int)args.ClientY
         };
         _draggingComponent = component;
     }
@@ -103,8 +103,8 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
         var difference = new PositionViewModel
         {
-            X = args.ClientX - _dragStartCoordinates.X,
-            Y = args.ClientY - _dragStartCoordinates.Y
+            X = (int)args.ClientX - _dragStartCoordinates.X,
+            Y = (int)args.ClientY - _dragStartCoordinates.Y
         };
         
         var offset = await JS.InvokeAsync<PositionViewModel>("getElementOffset", new object[]{_draggingComponent.Id});

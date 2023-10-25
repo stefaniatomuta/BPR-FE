@@ -38,6 +38,7 @@
             </div>
             @foreach (var dependency in component.Dependencies)
             {
+                @* TODO - Move to codebehind? *@
                 var startX = component.PositionViewModel.X + component.PositionViewModel.Width / 2;
                 var startY = component.PositionViewModel.Y + component.PositionViewModel.Height / 2;
                 var endX = dependency.PositionViewModel.X + dependency.PositionViewModel.Width / 2;
