@@ -1,4 +1,5 @@
 ﻿using BPR.Mediator.Models;
+using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -7,20 +8,41 @@ namespace BPRBlazor.Pages;
 public partial class Results : ComponentBase
 {
     private ResultModel? _resultModel;
-
-    protected override void OnInitialized()
+    private List<ViolationModel> _filteredViolations = new();
+    
+    protected override async Task OnAfterRenderAsync (bool firstRender) 
     {
-        base.OnInitialized();
-        StateContainer.OnChange += StateHasChanged;
-        _resultModel = new ResultModel
+        if (firstRender)
         {
-            Violations = StateContainer.Property
-        };
+            _resultModel = new ResultModel
+            {
+                Violations = (await ProtectedLocalStore.GetAsync<List<ViolationModel>>("violations")).Value ?? new()
+            };
+            _filteredViolations = new List<ViolationModel>(_resultModel.Violations);
+            StateHasChanged();
+        }
+    } 
+    
+    private void HandleViolationType(ViolationTypeViewModel value)
+    {
+        if (value.IsChecked && _resultModel != null)
+        {
+            _filteredViolations.AddRange(_resultModel.Violations.Where(violation => violation.Type == value.ViolationType));
+        }
+        else
+        {
+            _filteredViolations.RemoveAll(violation => violation.Type == value.ViolationType);
+        }
     }
 
-    public void Dispose() {
-        GC.SuppressFinalize(this);
-        StateContainer.OnChange -= StateHasChanged;
+    private List<ViolationTypeViewModel> GetCurrentViolationTypes()
+    {
+        if (_resultModel == null || !_resultModel.Violations.Any())
+        {
+            return new List<ViolationTypeViewModel>();
+        }
+        var violationTypes = _resultModel.Violations.Select(violation => violation.Type).ToHashSet();
+        return violationTypes.Select(violation => new ViolationTypeViewModel(violation)).ToList();
     }
     
     private async Task DownloadPdf()

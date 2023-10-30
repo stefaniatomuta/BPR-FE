@@ -1,8 +1,8 @@
 ﻿@using BPRBlazor.Components.Results
-@using BPRBlazor.State
-@inject StateContainer StateContainer
+@using BPRBlazor.Components.Common
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage ProtectedLocalStore
 @inject IJSRuntime JsRuntime
-@implements IDisposable
 
 @page "/results"
 
@@ -12,27 +12,32 @@
     </button>
 </div>
 
-<div id="result-details">
-    <h1>Results</h1>
-
-    @if (_resultModel is null) {
-        <h2>No results to display...</h2>
-    }
-    else {
+<h1 class="result-pdf">Results</h1>
+@if (_resultModel is null) 
+{
+    <h2>No results to display...</h2>
+}
+else 
+{
+    <div class="result-pdf">
         <h2>Score: @($"{_resultModel.Score:0.00}")%</h2>
         
-        @if (_resultModel.Violations.Count == 1)
+        @if (_filteredViolations.Count == 1)
         {
-            <h3>@_resultModel.Violations.Count violation:</h3>
+            <h3>@_filteredViolations.Count violation:</h3>
         }
         else
         {
-            <h3>@_resultModel.Violations.Count violations:</h3>
+            <h3>@_filteredViolations.Count violations:</h3>
         }
-        
-        @foreach (var violation in _resultModel.Violations)
+    </div>
+    <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
+    <div class="result-pdf">
+        @foreach (var violation in _filteredViolations)
         {
-            <Violation Model="violation" />
+            <div class="violation">
+                <Violation Model="violation" />
+            </div>
         }
-    }
-</div>
+    </div>
+}

@@ -1,16 +1,21 @@
 const fileName = "Download";
 
 function DownloadResultsToPDF() {
-    const element = document.getElementById('result-details');
+    const elementToPrint = document.createElement('div');
+    const elements = document.getElementsByClassName('result-pdf');
 
+    for (let i = 0; i < elements.length; i++) {
+        elementToPrint.appendChild(elements[i].cloneNode(true));
+    }
+    
     const opt = {
-        margin: 10,
+        margin: 15,
         filename: fileName,
     };
 
     html2pdf()
         .set(opt)
-        .from(element)
+        .from(elementToPrint)
         .save();
 }
 
@@ -28,7 +33,7 @@ function getElementSizeByClass(className) {
 }
 
 function removeSelectedElement(elementId) {
-    var element = document.getElementById(elementId);
+    const element = document.getElementById(elementId);
     element.selectedIndex = 0;
 }
 

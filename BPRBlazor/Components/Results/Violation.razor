@@ -1,7 +1,7 @@
-﻿<div class="violation">
+﻿@using BPR.Mediator.Mappers
+<div class="violation">
     <p class="violation-name">
-        #@Model.Name 
-        (<strong>@Model.Type.ToString()</strong>)
+        <strong>#@ViolationTypeMapper.GetViolationTypeName(Model.Type)</strong>
     </p>
     <p class="violation-description">@Model.Description</p>
     <p>Severity: 

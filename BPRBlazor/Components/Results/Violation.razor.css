@@ -33,7 +33,7 @@
     background-color: orangered;
 }
 
-.violation, .violation-code-wrapper, p, code { 
+.violation, .violation-name, .violation-severity, .violation-code-wrapper, p, code { 
     page-break-inside: avoid !important;
     display: block;
 }

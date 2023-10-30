@@ -1,16 +1,13 @@
 ﻿@using BPRBlazor.Components.Common
-@using BPRBlazor.Services
 @using BPR.Analysis.Services
 @using AutoMapper
 @using BPR.Mediator.Services
-@using BPRBlazor.State
-@inject IHttpService HttpService
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage ProtectedLocalStore
 @inject IDependencyComponentService DependencyComponentService
 @inject ICodebaseService CodebaseService
 @inject IAnalysisService AnalysisService
 @inject IMapper Mapper
-@inject StateContainer StateContainer
-@inject IRuleService RuleService
 @inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 @implements IDisposable
