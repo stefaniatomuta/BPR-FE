@@ -24,11 +24,6 @@ public partial class Index : ComponentBase
     private bool _isAnalysisComplete;
     private LoadingIndicator? _loadingIndicator;
 
-    protected override void OnInitialized()
-    {
-        StateContainer.OnChange += StateHasChanged;
-    }
-
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
         if (_selectedArchitectureViewModel != null)
@@ -95,7 +90,7 @@ public partial class Index : ComponentBase
 
             var violations = AnalysisService.GetAnalysis(_folderPath, architecturalModel, ruleList);
 
-            StateContainer.Property = Mapper.Map<List<ViolationModel>>(violations);
+            await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
             _resultMessage = "The analysis is ready!";
             _resultMessageCss = "success";
             _loadingIndicator?.ToggleLoading(false);
@@ -236,6 +231,5 @@ public partial class Index : ComponentBase
     {
         GC.SuppressFinalize(this);
         CodebaseService.Dispose();
-        StateContainer.OnChange -= StateHasChanged;
     }
 }

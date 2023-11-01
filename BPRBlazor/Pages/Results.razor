@@ -1,38 +1,41 @@
 ﻿@using BPRBlazor.Components.Results
-@using BPRBlazor.State
-@inject StateContainer StateContainer
+@using BPRBlazor.Components.Common
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage ProtectedLocalStore
 @inject IJSRuntime JsRuntime
-@implements IDisposable
 
 @page "/results"
 
 <div class="float-end">
-    <button class="btn btn-primary" @onclick="DownloadPdf">
-        Download as PDF
-    </button>
+    <button class="btn btn-primary" @onclick="DownloadPdf">Download as PDF</button>
 </div>
 
-<div id="result-details">
-    <h1>Results</h1>
-
-    @if (_resultModel is null) {
-        <h2>No results to display...</h2>
-    }
-    else {
-        <h2>Score: @($"{_resultModel.Score:0.00}")%</h2>
-        
-        @if (_resultModel.Violations.Count == 1)
+<h1 class="result-pdf mb-3">Analysis results</h1>
+@if (_resultModel is null) 
+{
+    <h2>No results to display...</h2>
+}
+else 
+{
+    <div class="result-pdf">
+        <h2 class="mb-3">Score: @($"{_resultModel.Score:0.00}")%</h2>
+        @if (_resultModel.Violations.Count != _filteredViolations.Count)
         {
-            <h3>@_resultModel.Violations.Count violation:</h3>
+            <h3>Showing @_filteredViolations.Count of the @_resultModel.Violations.Count total violation@(_resultModel.Violations.Count != 1 ? "s" : "")</h3>
         }
         else
         {
-            <h3>@_resultModel.Violations.Count violations:</h3>
+            <h3>Showing @_resultModel.Violations.Count total violation@(_resultModel.Violations.Count != 1 ? "s" : "")</h3>
         }
-        
-        @foreach (var violation in _resultModel.Violations)
+    </div>
+    <p>Filter violations based on type</p>
+    <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
+    <div class="result-pdf">
+        @foreach (var violation in _filteredViolations)
         {
-            <Violation Model="violation" />
+            <div class="violation">
+                <Violation Model="violation" />
+            </div>
         }
-    }
-</div>
+    </div>
+}
