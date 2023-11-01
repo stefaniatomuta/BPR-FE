@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BPR.Domain;
 using BPR.Mediator.Models;
 using BPR.Persistence.Models;
 
@@ -11,5 +12,7 @@ public class ServiceMappers : Profile
         CreateMap<Rule, RuleCollection>().ReverseMap();
         CreateMap<ArchitecturalComponentCollection, ArchitecturalComponent>().ReverseMap();
         CreateMap<ArchitecturalModelCollection, ArchitecturalModel>().ReverseMap();
+
+        var testId = new Class2().Id;
     }
 }

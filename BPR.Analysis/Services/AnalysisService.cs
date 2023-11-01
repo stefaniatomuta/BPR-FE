@@ -13,7 +13,6 @@ public class AnalysisService : IAnalysisService
         _codeExtractionService = codeExtractionService;
     }
 
-
     public List<Violation> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
     {
         List<Violation> violations = new();
@@ -65,7 +64,7 @@ public class AnalysisService : IAnalysisService
                 violations.Add(new Violation()
                 {
                     Type = ViolationType.ForbiddenDependency,
-                    Description = $"Dependency: '{directive.Using}' cannot be in '{directive.File}'. Component '{component.Name}' does not have this dependency",
+                    Description = $"'{directive.Using}' cannot be in '{directive.FilePath}'. Component '{component.Name}' does not have this dependency",
                     Severity = ViolationSeverity.Major,
                     Code = directive.Using,
                     File = directive.File,
@@ -110,7 +109,7 @@ public class AnalysisService : IAnalysisService
                     File = directive.File,
                     Severity = ViolationSeverity.Minor,
                     Code = directive.Namespace,
-                    Description = $"Namespace '{directive.Namespace}' in '{directive.File}' does not match.",
+                    Description = $"Namespace '{directive.Namespace}' in '{directive.File}' does not match",
                     Type = ViolationType.MismatchedNamespace
                 });
             }

@@ -15,7 +15,7 @@
     <ObjectGraphDataAnnotationsValidator />
     <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
     <ValidationMessage For="(() => ModelViewModel.Name)" />
-    <button type="button" class="btn btn-secondary my-2" @onclick="AddArchitecturalComponent">Add component</button>
+    <button type="button" class="btn btn-secondary mb-2" @onclick="AddArchitecturalComponent">Add component</button>
     
     <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
         @foreach (var component in ModelViewModel.Components)
@@ -63,10 +63,10 @@
     {
         <span class="@message.Class d-block">@message.Message</span>
     }
-    <button type="submit" class="btn btn-primary my-2">Submit Model</button>
+    <button type="submit" class="btn btn-primary mb-2">Save model</button>
 </EditForm>
 
 @if (ModelViewModel.Id != default)
 {
-    <button class="btn btn-danger mt-2" @onclick="DeleteSelectedModel">Delete selected model</button>
+    <button class="btn btn-danger" @onclick="DeleteSelectedModel">Delete selected model</button>
 }
