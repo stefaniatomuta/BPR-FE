@@ -11,8 +11,7 @@ public static class ViolationTypeMapper
         {
             ViolationType.Unknown => "Unknown violation type",
             ViolationType.ForbiddenDependency => "Forbidden dependency",
-            ViolationType.ForbiddenDependencyDirection => "Forbidden dependency direction",
-            ViolationType.MismatchedNamespace => "Mismatched Namespace",
+            ViolationType.MismatchedNamespace => "Mismatched namespace",
             _ => throw new InvalidEnumArgumentException("No valid rule with this name")
         };
     }

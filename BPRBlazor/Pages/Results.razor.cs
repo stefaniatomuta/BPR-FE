@@ -41,8 +41,11 @@ public partial class Results : ComponentBase
         {
             return new List<ViolationTypeViewModel>();
         }
-        var violationTypes = _resultModel.Violations.Select(violation => violation.Type).ToHashSet();
-        return violationTypes.Select(violation => new ViolationTypeViewModel(violation)).ToList();
+        
+        return _resultModel.Violations.Select(violation => violation.Type)
+            .Distinct()
+            .Select(violation => new ViolationTypeViewModel(violation))
+            .ToList();
     }
     
     private async Task DownloadPdf()
