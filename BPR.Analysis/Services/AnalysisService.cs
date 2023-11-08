@@ -13,7 +13,7 @@ public class AnalysisService : IAnalysisService
         _codeExtractionService = codeExtractionService;
     }
 
-    public async Task<List<Violation>> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
+    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
     {
         List<Violation> violations = new();
 
@@ -86,7 +86,7 @@ public class AnalysisService : IAnalysisService
         List<UsingDirective> usings = new();
 
         foreach (var n in namespaces) {
-            var result = await _codeExtractionService.GetUsingDirectives($"{folderPath}/{n.Name}");
+            var result = await _codeExtractionService.GetUsingDirectivesAsync($"{folderPath}/{n.Name}");
             result.ForEach(u => u.FilePath = u.FilePath.Split($"{folderPath}/")[1]);
             result.ForEach(u => u.ComponentName = n.Name);
             usings.AddRange(result);
@@ -98,7 +98,7 @@ public class AnalysisService : IAnalysisService
 
     internal async Task<List<Violation>> GetNamespaceAnalysis(string folderPath)
     {
-        var namespaces = await _codeExtractionService.GetNamespaceDirectives(folderPath);
+        var namespaces = await _codeExtractionService.GetNamespaceDirectivesAsync(folderPath);
         return GetNamespaceAnalysis(namespaces, folderPath);
     }
 

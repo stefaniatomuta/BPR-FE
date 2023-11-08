@@ -6,7 +6,7 @@ namespace BPR.Analysis.Services;
 
 public class CodeExtractionService : ICodeExtractionService
 {
-    public async Task<List<UsingDirective>> GetUsingDirectives(string folderPath)
+    public async Task<List<UsingDirective>> GetUsingDirectivesAsync(string folderPath)
     {
         List<UsingDirective> matches = new();
         var files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
@@ -53,7 +53,7 @@ public class CodeExtractionService : ICodeExtractionService
         return projectNames;
     }
 
-    public async Task<List<NamespaceDirective>> GetNamespaceDirectives(string folderPath)
+    public async Task<List<NamespaceDirective>> GetNamespaceDirectivesAsync(string folderPath)
     {
         List<NamespaceDirective> matches = new();
         var files = Directory.GetFiles(folderPath,"*",SearchOption.AllDirectories);

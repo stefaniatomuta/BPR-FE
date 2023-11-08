@@ -98,7 +98,7 @@ public partial class Index : ComponentBase
                 .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
                 .ToList();
 
-            var violations = await AnalysisService.GetAnalysis(_folderPath, architecturalModel, ruleList);
+            var violations = await AnalysisService.GetAnalysisAsync(_folderPath, architecturalModel, ruleList);
 
             await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
             _resultMessage = "The analysis is ready!";

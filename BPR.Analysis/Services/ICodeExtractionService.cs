@@ -8,7 +8,7 @@ public interface ICodeExtractionService {
     /// </summary>
     /// <param name="folderPath">path to the parent folder  </param>
     /// <returns>list of using directives</returns>
-    Task<List<UsingDirective>> GetUsingDirectives(string folderPath);
+    Task<List<UsingDirective>> GetUsingDirectivesAsync(string folderPath);
 
     /// <summary>
     /// Extracts the projects names within the codebase based on the csproj files
@@ -22,5 +22,5 @@ public interface ICodeExtractionService {
     /// </summary>
     /// <param name="folderPath">The path to the temp directory where the codebase is stored</param>
     /// <returns>A list with all namespaces, the file name of the file they were extracted from and the path to the file</returns>
-    Task<List<NamespaceDirective>> GetNamespaceDirectives(string folderPath);
+    Task<List<NamespaceDirective>> GetNamespaceDirectivesAsync(string folderPath);
 }
