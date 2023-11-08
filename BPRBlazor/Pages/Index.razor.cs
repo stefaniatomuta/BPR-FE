@@ -1,3 +1,4 @@
+using BPR.Analysis.Enums;
 using BPR.Analysis.Mappers;
 using BPR.Analysis.Models;
 using BPR.Mediator.Models;
@@ -50,6 +51,13 @@ public partial class Index : ComponentBase
         }
     }
 
+    private bool IsDependencyRuleChecked()
+    {
+        var dependencyRule = _rulesViewModels.FirstOrDefault(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name) == AnalysisRule.Dependency);
+        if (dependencyRule == null) return false;
+        return dependencyRule.IsChecked;
+    }
+
     private async Task StartAnalysis()
     {
         _resultMessageCss = "error";
@@ -60,22 +68,25 @@ public partial class Index : ComponentBase
             return;
         }
 
-        if (_selectedArchitectureViewModel is null)
-        {
-            _resultMessage = "Please select an architectural model";
-            return;
-        }
-
         if (_rulesViewModels.All(r => !r.IsChecked))
         {
             _resultMessage = "Please select one or more rules to analyse against";
             return;
         }
 
-        if (_unmappedNamespaceComponents.Any())
+        if (IsDependencyRuleChecked())
         {
-            _resultMessage = "Please make sure all namespaces are mapped to a component";
-            return;
+            if (_selectedArchitectureViewModel is null)
+            {
+                _resultMessage = "Please select an architectural model";
+                return;
+            }
+
+            if (_unmappedNamespaceComponents.Any())
+            {
+                _resultMessage = "Please make sure all namespaces are mapped to a component";
+                return;
+            }
         }
 
         try
@@ -83,12 +94,11 @@ public partial class Index : ComponentBase
             _loadingIndicator?.ToggleLoading(true);
             _isAnalysisComplete = false;
             var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
-            var ruleList = _rulesViewModels
-                .Where(rule => rule.IsChecked)
+            var ruleList = _rulesViewModels.Where(rule => rule.IsChecked)
                 .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
                 .ToList();
 
-            var violations = AnalysisService.GetAnalysis(_folderPath, architecturalModel, ruleList);
+            var violations = await AnalysisService.GetAnalysis(_folderPath, architecturalModel, ruleList);
 
             await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
             _resultMessage = "The analysis is ready!";
@@ -109,7 +119,8 @@ public partial class Index : ComponentBase
         _uploadedFile = null;
         _unmappedNamespaceComponents = new();
         _selectedArchitectureViewModel = null;
-        await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
+        _rulesViewModels.ForEach(rule => rule.IsChecked = false);
+        if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
     private void HandleDragStart(NamespaceViewModel namespaceViewModelComponent)

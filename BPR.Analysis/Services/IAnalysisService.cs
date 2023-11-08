@@ -12,5 +12,5 @@ public interface IAnalysisService {
     /// <param name="model">Architectural model </param>\
     /// <param name="rules">List of rules as enums </param>\
     /// <returns>A list of all violations and their severity</returns>
-    List<Violation> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules);
+    Task<List<Violation>> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules);
 }

@@ -16,7 +16,9 @@ else
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
             <label class="form-check-label" for="@item.Name">@item.Name</label>
-            <div>@item.Description</div>
+            <div>
+                <i>@item.Description</i>
+            </div>
         </div>
     }
 }

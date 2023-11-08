@@ -16,9 +16,8 @@
 
 <LoadingIndicator @ref="_loadingIndicator" />
 
-<div class="mb-3">
-    <h3>Step 1</h3>
-    <p>Upload file containing source code</p>
+<div class="mb-5">
+    <h3>Upload file containing source code</h3>
     <div class="d-flex gap-2 align-items-center">
         <label for="inputFile" class="btn btn-secondary">
             <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=@string.Join(", ", _allowedFileTypes) />
@@ -28,58 +27,58 @@
     </div>
 </div>
 
-<div class="mb-3">
-    <h3>Step 2</h3>
-    <p>Select an architecture model</p>
-    <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange"/>
-</div>
-
-<div class="mb-3">
-    <h3>Step 3</h3>
-    <p>Select rules to analyse against</p>
+<div class="mb-5">
+    <h3>Select rules to analyse against</h3>
     <SelectRuleComponent OnChange="HandleRule" />
 </div>
 
-<div class="row">
-    <h3>Step 4</h3>
-    <p>Map namespaces according to the selected architectural model</p>
-    @if (_unmappedNamespaceComponents.Any())
-    {
-        <div class="col-4 mb-3">
-            <h4>Unmapped namespaces:</h4>
-            <div class="namespace-container" ondragover="return false;" @ondrop="() => HandleDrop()">
-                @foreach (var namespaceComponent in _unmappedNamespaceComponents)
+@if (IsDependencyRuleChecked())
+{
+    <div class="mb-5">
+        <h3>Select an architecture model</h3>
+        <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" />
+    </div>
+
+    <div class="row">
+        <h3>Map namespaces according to the selected architectural model</h3>
+        @if (_unmappedNamespaceComponents.Any())
+        {
+            <div class="col-4 mb-3">
+                <h4>Unmapped namespaces:</h4>
+                <div class="namespace-container" ondragover="return false;" @ondrop="() => HandleDrop()">
+                    @foreach (var namespaceComponent in _unmappedNamespaceComponents)
+                    {
+                        <div class="namespace-component btn btn-danger" draggable="true" @ondragstart=@(() => HandleDragStart(namespaceComponent))>
+                            <p>@namespaceComponent.Name</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        @if (_selectedArchitectureViewModel is not null)
+        {
+            <div class="col mb-5">
+                <h4>Architectural model</h4>
+                @foreach (var component in _selectedArchitectureViewModel.Components)
                 {
-                    <div class="namespace-component btn btn-danger" draggable="true" @ondragstart=@(() => HandleDragStart(namespaceComponent))>
-                        <p>@namespaceComponent.Name</p>
+                    <div class="mt-3">
+                        <h5>@component.Name</h5>
+                        <div class="namespace-container" ondragover="return false;" @ondrop="() => HandleDrop(component)">
+                            @foreach (var namespaceComponent in component.NamespaceComponents)
+                            {
+                                <div class="namespace-component btn btn-success" draggable="true" @ondragstart=@(() => HandleDragStart(namespaceComponent))>
+                                    <p>@namespaceComponent.Name</p>
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
             </div>
-        </div>
-    }
-    @if (_selectedArchitectureViewModel is not null)
-    {
-        <div class="col mb-3">
-            <h4>Architectural model</h4>
-            @foreach (var component in _selectedArchitectureViewModel.Components)
-            {
-                <div class="mt-3">
-                    <h5>@component.Name</h5>
-                    <div class="namespace-container" ondragover="return false;" @ondrop="() => HandleDrop(component)">
-                        @foreach (var namespaceComponent in component.NamespaceComponents)
-                        {
-                            <div class="namespace-component btn btn-success" draggable="true" @ondragstart=@(() => HandleDragStart(namespaceComponent))>
-                                <p>@namespaceComponent.Name</p>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    }
-</div>
+        }
+    </div>
+}
 
-<button class="btn btn-primary mb-3" @onclick="StartAnalysis">Start Analysis</button>
+<button class="btn btn-primary mb-5" @onclick="StartAnalysis">Start Analysis</button>
 <p class="@_resultMessageCss">@_resultMessage</p>
 @if (_isAnalysisComplete)
 {

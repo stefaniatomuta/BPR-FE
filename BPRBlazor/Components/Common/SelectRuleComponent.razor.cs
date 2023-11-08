@@ -13,9 +13,13 @@ public partial class SelectRuleComponent : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         _rules = await GetRulesAsync();
-        foreach (var rule in _rules)
+        
+        if (_rules != null)
         {
-            await OnChange.InvokeAsync(rule);
+            foreach (var rule in _rules)
+            {
+                await OnChange.InvokeAsync(rule);
+            }
         }
     }
 
@@ -23,6 +27,7 @@ public partial class SelectRuleComponent : ComponentBase
     {
         var rules = await Service.GetRulesAsync();
         return rules.Select(rule => new RuleViewModel(rule.Name, rule.Description))
+                    .OrderBy(rule => rule.Name)
                     .ToList();
     }
 

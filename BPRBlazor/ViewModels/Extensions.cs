@@ -38,7 +38,9 @@ public static class Extensions
     public static ArchitecturalModelViewModel ToViewModel(this ArchitecturalModel model)
     {
         var components = model.Components
-            .Select(c => c.ToViewModel()).ToList();
+            .Select(c => c.ToViewModel())
+            .OrderBy(c => c.Name)
+            .ToList();
         
         foreach (var component in components)
         {
