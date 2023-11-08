@@ -12,8 +12,4 @@ public class MLAnalysisRequestModel
         Path = path.Replace("\\", "/");
         Rules = rules;
     }
-
-    private MLAnalysisRequestModel() // Might be needed for the serializer?
-    {
-    }
 }
