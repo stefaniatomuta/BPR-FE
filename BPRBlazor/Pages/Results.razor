@@ -31,11 +31,10 @@ else
     <p>Filter violations based on type</p>
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
     <div class="result-pdf">
-        @foreach (var violation in _filteredViolations)
-        {
+        <Virtualize Items="_filteredViolations" Context="violation">
             <div class="violation">
                 <Violation Model="violation" />
             </div>
-        }
+        </Virtualize>
     </div>
 }

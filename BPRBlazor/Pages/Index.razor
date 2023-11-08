@@ -40,12 +40,12 @@
     <SelectRuleComponent OnChange="HandleRule" />
 </div>
 
-<div class="row mb-3">
+<div class="row">
     <h3>Step 4</h3>
     <p>Map namespaces according to the selected architectural model</p>
     @if (_unmappedNamespaceComponents.Any())
     {
-        <div class="col-4">
+        <div class="col-4 mb-3">
             <h4>Unmapped namespaces:</h4>
             <div class="namespace-container" ondragover="return false;" @ondrop="() => HandleDrop()">
                 @foreach (var namespaceComponent in _unmappedNamespaceComponents)
@@ -59,7 +59,7 @@
     }
     @if (_selectedArchitectureViewModel is not null)
     {
-        <div class="col">
+        <div class="col mb-3">
             <h4>Architectural model</h4>
             @foreach (var component in _selectedArchitectureViewModel.Components)
             {

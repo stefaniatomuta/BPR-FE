@@ -13,18 +13,20 @@ public class AnalysisService : IAnalysisService
         _codeExtractionService = codeExtractionService;
     }
 
-
     public List<Violation> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
     {
         List<Violation> violations = new();
+
         if (rules.Contains(AnalysisRule.Dependency))
         {
             violations.AddRange(GetDependencyAnalysis(folderPath, model));
         }
+        
         if (rules.Contains(AnalysisRule.Namespace))
         {
             violations.AddRange(GetNamespaceAnalysis(folderPath));
         }
+
         return violations;
     }
 
@@ -65,7 +67,7 @@ public class AnalysisService : IAnalysisService
                 violations.Add(new Violation()
                 {
                     Type = ViolationType.ForbiddenDependency,
-                    Description = $"Dependency: '{directive.Using}' cannot be in '{directive.File}'. Component '{component.Name}' does not have this dependency",
+                    Description = $"'{directive.Using}' cannot be in '{directive.FilePath}'. Component '{directive.ComponentName}' in '{component.Name}' cannot have this dependency",
                     Severity = ViolationSeverity.Major,
                     Code = directive.Using,
                     File = directive.File,
@@ -79,9 +81,11 @@ public class AnalysisService : IAnalysisService
     {
         List<UsingDirective> usings = new();
 
-        foreach (var n in namespaces)
-        {
-            usings.AddRange(_codeExtractionService.GetUsingDirectives($"{folderPath}/{n.Name}"));
+        foreach (var n in namespaces) {
+            var result = _codeExtractionService.GetUsingDirectives($"{folderPath}/{n.Name}");
+            result.ForEach(u => u.FilePath = u.FilePath.Split($"{folderPath}/")[1]);
+            result.ForEach(u => u.ComponentName=n.Name);
+            usings.AddRange(result);
         }
         return usings.Distinct().ToList();
     }
@@ -110,7 +114,7 @@ public class AnalysisService : IAnalysisService
                     File = directive.File,
                     Severity = ViolationSeverity.Minor,
                     Code = directive.Namespace,
-                    Description = $"Namespace '{directive.Namespace}' in '{directive.File}' does not match.",
+                    Description = $"Namespace '{directive.Namespace}' in '{directive.File}' does not match",
                     Type = ViolationType.MismatchedNamespace
                 });
             }

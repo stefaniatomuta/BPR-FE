@@ -2,5 +2,5 @@
 
 public interface IHttpService
 {
-    Task PostAsync(string endpoint, object body);
+    Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest body);
 }
