@@ -16,14 +16,17 @@ public class AnalysisService : IAnalysisService
     public List<Violation> GetAnalysis(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
     {
         List<Violation> violations = new();
+
         if (rules.Contains(AnalysisRule.Dependency))
         {
             violations.AddRange(GetDependencyAnalysis(folderPath, model));
         }
+        
         if (rules.Contains(AnalysisRule.Namespace))
         {
             violations.AddRange(GetNamespaceAnalysis(folderPath));
         }
+
         return violations;
     }
 
