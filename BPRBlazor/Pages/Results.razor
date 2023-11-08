@@ -32,7 +32,9 @@ else
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
     <div class="result-pdf">
         <Virtualize Items="_filteredViolations" Context="violation">
-            <Violation Model="violation" />
+            <div class="violation">
+                <Violation Model="violation" />
+            </div>
         </Virtualize>
     </div>
 }
