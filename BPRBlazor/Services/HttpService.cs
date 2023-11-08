@@ -13,12 +13,22 @@ public class HttpService : IHttpService
         _jsonSerializerOptions = jsonSerializerOptions;
     }
 
-    public async Task PostAsync(string endpoint, object body)
+    public async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest body)
     {
-        var request = new HttpRequestMessage(
-            HttpMethod.Post,
-            endpoint);
-        request.Content = JsonContent.Create(body);
+        var content = JsonSerializer.Serialize(body, _jsonSerializerOptions);
+        var request = new HttpRequestMessage(HttpMethod.Post, endpoint)
+        {
+            Content = new StringContent(content)
+        };
+
         var response = await _httpClient.SendAsync(request);
+        var json = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"Error - Status code: '{response.StatusCode}', Response body: '{json}'");
+        }
+
+        return JsonSerializer.Deserialize<TResponse>(json, _jsonSerializerOptions)!;
     }
 }

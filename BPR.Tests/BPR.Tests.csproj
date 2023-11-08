@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BPR.Analysis\BPR.Analysis.csproj" />
     <ProjectReference Include="..\BPR.Mediator\BPR.Mediator.csproj" />
     <ProjectReference Include="..\BPRBlazor\BPRBlazor.csproj" />
   </ItemGroup>
