@@ -19,37 +19,37 @@ public class AnalysisService : IAnalysisService
 
         if (rules.Contains(AnalysisRule.Dependency))
         {
-            violations.AddRange(await GetDependencyAnalysis(folderPath, model));
+            violations.AddRange(await GetDependencyAnalysisAsync(folderPath, model));
         }
         
         if (rules.Contains(AnalysisRule.Namespace))
         {
-            violations.AddRange(await GetNamespaceAnalysis(folderPath));
+            violations.AddRange(await GetNamespaceAnalysisAsync(folderPath));
         }
 
         return violations;
     }
 
-    private async Task<List<Violation>> GetDependencyAnalysis(string folderPath, AnalysisArchitecturalModel model)
+    private async Task<List<Violation>> GetDependencyAnalysisAsync(string folderPath, AnalysisArchitecturalModel model)
     {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
-        List<Violation> violations = await GetDependencyAnalysisOnNamespaceComponents(folderPath, projectNames, model.Components);
+        List<Violation> violations = await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, model.Components);
 
         foreach (var component in model.Components)
         {
-            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponents(folderPath, projectNames, component.Dependencies));
+            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, component.Dependencies));
         }
 
         return violations;
     }
 
-    private async Task<List<Violation>> GetDependencyAnalysisOnNamespaceComponents(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components)
+    private async Task<List<Violation>> GetDependencyAnalysisOnNamespaceComponentsAsync(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components)
     {
         List<Violation> violations = new();
 
         foreach (var component in components)
         {
-            var usings = await GetUsingsPerComponent(folderPath, component.NamespaceComponents);
+            var usings = await GetUsingsPerComponentAsync(folderPath, component.NamespaceComponents);
             var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj => u.Using.Contains(proj) && !component.NamespaceComponents.Any(ns => proj.Contains(ns.Name))));
             violations.AddRange(GetDependencyAnalysisOnComponent(usingsWithProjectNames, component));
         }
@@ -81,7 +81,7 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private async Task<IEnumerable<UsingDirective>> GetUsingsPerComponent(string folderPath, List<AnalysisNamespace> namespaces)
+    private async Task<IEnumerable<UsingDirective>> GetUsingsPerComponentAsync(string folderPath, List<AnalysisNamespace> namespaces)
     {
         List<UsingDirective> usings = new();
 
@@ -96,7 +96,7 @@ public class AnalysisService : IAnalysisService
             .Distinct();
     }
 
-    internal async Task<List<Violation>> GetNamespaceAnalysis(string folderPath)
+    internal async Task<List<Violation>> GetNamespaceAnalysisAsync(string folderPath)
     {
         var namespaces = await _codeExtractionService.GetNamespaceDirectivesAsync(folderPath);
         return GetNamespaceAnalysis(namespaces, folderPath);

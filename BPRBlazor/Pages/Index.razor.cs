@@ -58,7 +58,7 @@ public partial class Index : ComponentBase
         return dependencyRule.IsChecked;
     }
 
-    private async Task StartAnalysis()
+    private async Task StartAnalysisAsync()
     {
         _resultMessageCss = "error";
 
