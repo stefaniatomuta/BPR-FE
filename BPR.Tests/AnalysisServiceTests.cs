@@ -6,16 +6,6 @@ namespace BPR.Tests;
 
 [TestFixture]
 public class AnalysisServiceTests {
-    private AnalysisService _analysisService;
-    private ICodeExtractionService _codeExtractionService;
-
-    [OneTimeSetUp]
-    public void OneTimeSetup() {
-        _codeExtractionService = Substitute.For<ICodeExtractionService>();
-        _analysisService = new AnalysisService(_codeExtractionService);
-    }
-    
-    //Namespace test
     [Test]
     public void AnalyseNamespace_Returns_NoViolation() {
         //Arrange
@@ -29,7 +19,7 @@ public class AnalysisServiceTests {
         var folderPath = "BPR";
         
         //Act
-        var result = _analysisService.GetNamespaceAnalysis(list,folderPath);
+        var result = AnalysisService.GetNamespaceAnalysis(list,folderPath);
         
         //Assert
         Assert.That(result, Is.Empty);
@@ -48,7 +38,7 @@ public class AnalysisServiceTests {
         var folderPath = "BPR";
         
         //Act
-        var result = _analysisService.GetNamespaceAnalysis(list,folderPath);
+        var result = AnalysisService.GetNamespaceAnalysis(list,folderPath);
         
         //Assert
         Assert.That(result, !Is.Empty);
@@ -76,7 +66,7 @@ public class AnalysisServiceTests {
         };
 
         //Act
-        var result = _analysisService.GetDependencyAnalysisOnComponent(usingList, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
         
         //Assert
         Assert.That(result,Is.Empty);
@@ -113,7 +103,7 @@ public class AnalysisServiceTests {
         };
 
         //Act
-        var result = _analysisService.GetDependencyAnalysisOnComponent(usingListDependency, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingListDependency, component);
         
         //Assert
         Assert.That(result,Is.Empty);
@@ -156,9 +146,9 @@ public class AnalysisServiceTests {
         };
 
         //Act
-        var result = _analysisService.GetDependencyAnalysisOnComponent(usingList, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
         foreach (var dependency in component.Dependencies) {
-            result.AddRange(_analysisService.GetDependencyAnalysisOnComponent(usingListDependency,dependency));
+            result.AddRange(AnalysisService.GetDependencyAnalysisOnComponent(usingListDependency,dependency));
         }
         //Assert
         Assert.That(result, !Is.Empty);

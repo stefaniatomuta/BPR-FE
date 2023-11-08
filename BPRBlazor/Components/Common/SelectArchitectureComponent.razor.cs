@@ -13,12 +13,14 @@ public partial class SelectArchitectureComponent : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        _architectureOptions = await GetArchitecturalModels();
+        _architectureOptions = (await GetArchitecturalModels())
+            .OrderBy(option => option.Name)
+            .ToList();
     }
 
-    private async Task<IList<ArchitecturalModel>> GetArchitecturalModels()
+    private Task<IList<ArchitecturalModel>> GetArchitecturalModels()
     {
-        return await DependencyService.GetArchitecturalModelsAsync();
+        return DependencyService.GetArchitecturalModelsAsync();
     }
 
     private async Task OnSelectedValueChanged(ChangeEventArgs e)
