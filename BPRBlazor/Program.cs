@@ -9,7 +9,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddValidators();
 builder.Services.AddServices();
-builder.Services.AddStateMachine();
 builder.Services.AddDbConfiguration(builder.Configuration);
 
 // Database config

@@ -7,7 +7,6 @@ using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
 using BPRBlazor.Mappers;
 using BPRBlazor.Services;
-using BPRBlazor.State;
 using FluentValidation;
 
 namespace BPRBlazor;
@@ -19,6 +18,7 @@ public static class Extensions
         services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
         services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
         services.AddScoped<IValidator<Rule>, RuleValidator>();
+        services.AddScoped<IValidator<ResultModel>, ResultModelValidator>();
         services.AddScoped<IValidatorService, ValidatorService>();
     }
 
@@ -27,7 +27,9 @@ public static class Extensions
         services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
+        services.AddScoped<IResultService, ResultService>();
         services.AddScoped<IDependencyRepository, DependencyRepository>();
+        services.AddScoped<IResultRepository, ResultRepository>();
         services.AddScoped<ICodeExtractionService, CodeExtractionService>();
         services.AddScoped<IAnalysisService, AnalysisService>();
         services.AddScoped<IDependencyService, DependencyService>();
@@ -40,11 +42,6 @@ public static class Extensions
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<DatabaseConfig>(configuration.GetSection(DatabaseConfig.Section));
-    }
-
-    public static void AddStateMachine(this IServiceCollection services)
-    {
-        services.AddScoped<StateContainer>();
     }
 
     public static void CleanUp()

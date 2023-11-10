@@ -1,40 +1,20 @@
-﻿@using BPRBlazor.Components.Results
-@using BPRBlazor.Components.Common
-@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
-@inject ProtectedLocalStorage ProtectedLocalStore
-@inject IJSRuntime JsRuntime
+﻿@using BPR.Mediator.Services
+@using AutoMapper
+@using BPRBlazor.Components.Results
+
+@inject IResultService ResultService
+@inject IMapper Mapper
 
 @page "/results"
 
-<div class="float-end">
-    <button class="btn btn-primary" @onclick="DownloadPdf">Download as PDF</button>
-</div>
+<h3>Results</h3>
 
-<h1 class="result-pdf mb-3">Analysis results</h1>
-@if (_resultModel is null) 
+@if (_results.Any())
 {
-    <h2>No results to display...</h2>
-}
-else 
-{
-    <div class="result-pdf">
-        <h2 class="mb-3">Score: @($"{_resultModel.Score:0.00}")%</h2>
-        @if (_resultModel.Violations.Count != _filteredViolations.Count)
-        {
-            <h3>Showing @_filteredViolations.Count of the @_resultModel.Violations.Count total violation@(_resultModel.Violations.Count != 1 ? "s" : "")</h3>
-        }
-        else
-        {
-            <h3>Showing @_resultModel.Violations.Count total violation@(_resultModel.Violations.Count != 1 ? "s" : "")</h3>
-        }
-    </div>
-    <p>Filter violations based on type</p>
-    <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
-    <div class="result-pdf">
-        <Virtualize Items="_filteredViolations" Context="violation">
-            <div class="violation">
-                <Violation Model="violation" />
-            </div>
-        </Virtualize>
+    <div class="d-flex flex-wrap">
+    @foreach (var result in _results)
+    {
+        <ResultRow Result="result" ResultDeleted="HandleResultDeleted"/>
+    }
     </div>
 }

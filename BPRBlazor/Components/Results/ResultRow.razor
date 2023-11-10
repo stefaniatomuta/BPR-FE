@@ -1,0 +1,17 @@
+﻿@using BPR.Mediator.Services
+@using System.Globalization
+@using BPR.Mediator.Enums
+@inject NavigationManager NavigationManager
+@inject IResultService ResultService
+
+<div class="result-row col-3">
+    <p>Started: @Result.ResultStart.ToString(CultureInfo.InvariantCulture)</p>
+    <p>Ended: @(Result.ResultStatus == ResultStatus.Finished ? Result.ResultEnd.ToString(CultureInfo.InvariantCulture) : string.Empty)</p>
+    <p>Status: @Result.ResultStatus.ToString()</p>
+    @if (Result.ResultStatus == ResultStatus.Finished)
+    {
+        <button class="btn btn-primary" @onclick="() => SeeDetails(Result.Id)">See details</button>
+    }
+
+    <button class="btn btn-danger mx-3" @onclick="() => DeleteAsync(Result.Id)">Delete</button>
+</div>

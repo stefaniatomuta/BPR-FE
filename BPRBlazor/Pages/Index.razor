@@ -1,15 +1,11 @@
 ﻿@using BPRBlazor.Components.Common
-@using BPR.Analysis.Services
 @using AutoMapper
 @using BPR.Mediator.Services
-@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
-@inject ProtectedLocalStorage ProtectedLocalStore
 @inject IDependencyComponentService DependencyComponentService
 @inject ICodebaseService CodebaseService
-@inject IAnalysisService AnalysisService
+@inject IResultService ResultService
 @inject IMapper Mapper
 @inject IJSRuntime JS
-@inject NavigationManager NavigationManager
 @implements IDisposable
 
 @page "/"
@@ -81,7 +77,3 @@
 
 <button class="btn btn-primary mb-3" @onclick="StartAnalysis">Start Analysis</button>
 <p class="@_resultMessageCss">@_resultMessage</p>
-@if (_isAnalysisComplete)
-{
-    <button class="btn btn-outline-success" @onclick="ShowAnalysisResults">View analysis results</button>
-}
