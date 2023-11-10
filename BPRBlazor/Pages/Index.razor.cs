@@ -90,10 +90,8 @@ public partial class Index : ComponentBase
 
         try
         {
-            var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
-            var ruleList = _rulesViewModels.Where(rule => rule.IsChecked)
-                .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
-                .ToList();
+            var architecturalModel = Mapper.Map<ArchitecturalModel>(_selectedArchitectureViewModel);
+            var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
             await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             await Reset();
         }

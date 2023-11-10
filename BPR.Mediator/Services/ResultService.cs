@@ -73,7 +73,7 @@ public class ResultService : IResultService
         try
         {
             resultModel.Id = added.Val?.Id ?? default;
-            resultModel.Violations = GetViolationsFromAnalysis(folderPath, model, rules);
+            resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             var result = await _validatorService.ValidateResultAsync(resultModel);
             if (result.Success)
             {
@@ -101,14 +101,14 @@ public class ResultService : IResultService
             : Result.Fail($"No result found with id: '{id}'", _logger);
     }
 
-    private List<ViolationModel> GetViolationsFromAnalysis(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    private async Task<List<ViolationModel>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
     {
         var ruleList = rules
             .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
             .ToList();
         var architecturalModel = _mapper.Map<AnalysisArchitecturalModel>(model);
    
-        var violations = _analysisService.GetAnalysis(folderPath, architecturalModel, ruleList);
+        var violations = await _analysisService.GetAnalysisAsync(folderPath, architecturalModel, ruleList);
         return _mapper.Map<List<ViolationModel>>(violations);
     }
 }
