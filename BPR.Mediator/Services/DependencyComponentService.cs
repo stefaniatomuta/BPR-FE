@@ -15,10 +15,10 @@ public class DependencyComponentService : IDependencyComponentService
             .ToList();
     }
 
-    private static Func<string, bool> IsNotIgnoredFolder => folderPath => 
+    private readonly static Func<string, bool> IsNotIgnoredFolder = (folderPath) => 
         !IgnoredFolders.Any(folderPath.EndsWith);
 
-    private static Func<string, bool> DoesContainCSharpFiles => folderPath =>
+    private readonly static Func<string, bool> DoesContainCSharpFiles = (folderPath) =>
         Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories)
                  .Any(file => RequiredFileExtensions.Any(file.EndsWith));
 

@@ -10,5 +10,3 @@ public class ViolationModel
     public string Code { get; set; }
     public string File { get; set; } 
 }
-
-
