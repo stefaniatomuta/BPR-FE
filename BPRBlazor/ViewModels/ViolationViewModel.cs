@@ -1,8 +1,8 @@
 ﻿using BPR.Mediator.Enums;
 
-namespace BPR.Mediator.Models;
+namespace BPRBlazor.ViewModels;
 
-public class ViolationModel
+public class ViolationViewModel
 {
     public ViolationType Type { get; set; }
     public string Description { get; set; } = default!;

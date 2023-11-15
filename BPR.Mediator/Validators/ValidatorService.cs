@@ -9,11 +9,13 @@ public class ValidatorService : IValidatorService
 {
     private readonly IValidator<ArchitecturalModel> _architecturalModelValidator;
     private readonly IValidator<Rule> _ruleValidator;
+    private readonly IValidator<ResultModel> _resultValidator;
 
-    public ValidatorService(IValidator<ArchitecturalModel> architecturalModelValidator, IValidator<Rule> ruleValidator)
+    public ValidatorService(IValidator<ArchitecturalModel> architecturalModelValidator, IValidator<Rule> ruleValidator, IValidator<ResultModel> resultValidator)
     {
         _architecturalModelValidator = architecturalModelValidator;
         _ruleValidator = ruleValidator;
+        _resultValidator = resultValidator;
     }
 
     public async Task<Result> ValidateArchitecturalModelAsync(ArchitecturalModel model)
@@ -26,6 +28,12 @@ public class ValidatorService : IValidatorService
     public async Task<Result> ValidateRuleAsync(Rule rule)
     {
         var result = await _ruleValidator.ValidateAsync(rule);
+        return HandleValidatorResults(result);
+    }
+
+    public async Task<Result> ValidateResultAsync(ResultModel resultModel)
+    {
+        var result = await _resultValidator.ValidateAsync(resultModel);
         return HandleValidatorResults(result);
     }
 

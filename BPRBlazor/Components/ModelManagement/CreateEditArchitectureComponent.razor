@@ -1,16 +1,11 @@
+@using BPRBlazor.Components.Common;
+
 @inject IJSRuntime JS
 @inject IDependencyService DependencyService
 @inject NavigationManager NavigationManager
 @using BPR.Mediator.Services
 
-<svg class="svg-def">
-    <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-            <polygon points="0 0, 10 3.5, 0 7" />
-        </marker>
-    </defs>
-</svg>
-
+<SvgArrowHead/>
 <EditForm Model="ModelViewModel" OnValidSubmit="CreateOrEditArchitectureModel">
     <ObjectGraphDataAnnotationsValidator />
     <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
