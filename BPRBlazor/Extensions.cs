@@ -18,7 +18,6 @@ public static class Extensions
         services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
         services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
         services.AddScoped<IValidator<Rule>, RuleValidator>();
-        services.AddScoped<IValidator<ResultModel>, ResultModelValidator>();
         services.AddScoped<IValidatorService, ValidatorService>();
     }
 

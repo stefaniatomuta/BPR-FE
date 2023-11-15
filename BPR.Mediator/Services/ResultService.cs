@@ -2,7 +2,6 @@ using AutoMapper;
 using BPR.Analysis.Mappers;
 using BPR.Analysis.Models;
 using BPR.Analysis.Services;
-using BPR.Mediator.Enums;
 using BPR.Mediator.Models;
 using BPR.Mediator.Validators;
 using BPR.Persistence.Models;
@@ -16,7 +15,6 @@ public class ResultService : IResultService
 {
     private readonly IResultRepository _resultRepository;
     private readonly IAnalysisService _analysisService;
-    private readonly IValidatorService _validatorService;
     private readonly IMapper _mapper;
     private readonly ILogger<ResultService> _logger;
     
@@ -24,7 +22,6 @@ public class ResultService : IResultService
     {
         _analysisService = analysisService;
         _resultRepository = resultRepository;
-        _validatorService = validatorService;
         _mapper = mapper;
         _logger = logger;
     }
@@ -73,15 +70,10 @@ public class ResultService : IResultService
         {
             resultModel.Id = added.Value?.Id ?? default;
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
-            var result = await _validatorService.ValidateResultAsync(resultModel);
-            if (result.Success)
-            {
-                resultModel.ResultEnd = DateTime.UtcNow;
-                resultModel.ResultStatus = ResultStatus.Finished;
-                var addResult = await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
-                return addResult.Success ? Result.Ok(addResult) : Result.Fail<RuleCollection>(addResult.Errors, _logger);
-            }
-            return result;
+            resultModel.ResultEnd = DateTime.UtcNow;
+            resultModel.ResultStatus = ResultStatus.Finished;
+            var addResult = await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
+            return addResult.Success ? Result.Ok(addResult) : Result.Fail<RuleCollection>(addResult.Errors, _logger);
         }
         catch (Exception e)
         {
