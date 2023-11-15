@@ -13,13 +13,13 @@ public class AnalysisService : IAnalysisService
         _codeExtractionService = codeExtractionService;
     }
 
-    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
+    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules, bool isOpenArchitecture)
     {
         List<Violation> violations = new();
 
         if (rules.Contains(AnalysisRule.Dependency))
         {
-            violations.AddRange(await GetDependencyAnalysisAsync(folderPath, model));
+            violations.AddRange(await GetDependencyAnalysisAsync(folderPath, model, isOpenArchitecture));
         }
         
         if (rules.Contains(AnalysisRule.Namespace))
@@ -30,42 +30,46 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private async Task<List<Violation>> GetDependencyAnalysisAsync(string folderPath, AnalysisArchitecturalModel model)
+    private async Task<List<Violation>> GetDependencyAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, bool isOpenArchitecture)
     {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
-        List<Violation> violations = await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, model.Components);
+        List<Violation> violations = await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, model.Components, isOpenArchitecture);
 
         foreach (var component in model.Components)
         {
-            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, component.Dependencies));
+            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, component.Dependencies, isOpenArchitecture));
         }
 
         return violations;
     }
 
-    private async Task<List<Violation>> GetDependencyAnalysisOnNamespaceComponentsAsync(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components)
+    private async Task<List<Violation>> GetDependencyAnalysisOnNamespaceComponentsAsync(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components, bool isOpenArchitecture)
     {
         List<Violation> violations = new();
 
         foreach (var component in components)
         {
             var usings = await GetUsingsPerComponentAsync(folderPath, component.NamespaceComponents);
-            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj => u.Using.Contains(proj) && !component.NamespaceComponents.Any(ns => proj.Contains(ns.Name))));
-            violations.AddRange(GetDependencyAnalysisOnComponent(usingsWithProjectNames, component));
+            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj => u.Using.Contains(proj))).ToList();
+            violations.AddRange(GetDependencyAnalysisOnComponent(usingsWithProjectNames, component, isOpenArchitecture));
         }
 
         return violations;
     }
 
-    internal static List<Violation> GetDependencyAnalysisOnComponent(IEnumerable<UsingDirective> usingDirectives, AnalysisArchitecturalComponent component)
+    internal static List<Violation> GetDependencyAnalysisOnComponent(IList<UsingDirective> usingDirectives, AnalysisArchitecturalComponent component, bool isOpenArchitecture)
     {
         List<Violation> violations = new();
 
         foreach (var directive in usingDirectives)
         {
-            if (component.Dependencies
+            if ((!component.Dependencies
                 .SelectMany(dep => dep.NamespaceComponents)
-                .Any(ns => !directive.Using.Contains(ns.Name)))
+                .Any(ns => directive.Using.Contains(ns.Name)) // a using statement in X to Y but X does not have Y as dependency
+                || component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName)
+                && !component.Dependencies.Any()) // a using statement in X to Y but component has no dependencies, i.e X cannot have dependency to Y
+                && !directive.Using.Contains(directive.ComponentName) // ignore away self-dependencies, i.e. a using statement in X to X
+                && (!isOpenArchitecture || !IsUsingRecursiveDependency(directive, component, component.Dependencies))) // check for recursive dependencies if model is considered "Open"
             {
                 violations.Add(new Violation()
                 {
@@ -81,7 +85,25 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private async Task<IEnumerable<UsingDirective>> GetUsingsPerComponentAsync(string folderPath, List<AnalysisNamespace> namespaces)
+    private static bool IsUsingRecursiveDependency(UsingDirective directive, AnalysisArchitecturalComponent component, List<AnalysisArchitecturalComponent> dependencies)
+    {
+        foreach (var nameSpace in dependencies.SelectMany(dep => dep.NamespaceComponents))
+        {
+            if (directive.Using.Contains(nameSpace.Name) && component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName))
+            {
+                return true;
+            }
+        }
+
+        foreach (var innerDependencies in dependencies.Select(dep => dep.Dependencies))
+        {
+            return IsUsingRecursiveDependency(directive, component, innerDependencies);
+        }
+
+        return false;
+    }
+
+    private async Task<IList<UsingDirective>> GetUsingsPerComponentAsync(string folderPath, List<AnalysisNamespace> namespaces)
     {
         List<UsingDirective> usings = new();
 
@@ -92,11 +114,10 @@ public class AnalysisService : IAnalysisService
             usings.AddRange(result);
         }
 
-        return usings
-            .Distinct();
+        return usings.Distinct().ToList();
     }
 
-    internal async Task<List<Violation>> GetNamespaceAnalysisAsync(string folderPath)
+    private async Task<List<Violation>> GetNamespaceAnalysisAsync(string folderPath)
     {
         var namespaces = await _codeExtractionService.GetNamespaceDirectivesAsync(folderPath);
         return GetNamespaceAnalysis(namespaces, folderPath);

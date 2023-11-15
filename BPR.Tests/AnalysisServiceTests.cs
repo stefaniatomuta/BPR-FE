@@ -2,12 +2,14 @@
 using BPR.Analysis.Models;
 using BPR.Analysis.Services;
 
-namespace BPR.Tests; 
+namespace BPR.Tests;
 
 [TestFixture]
-public class AnalysisServiceTests {
+public class AnalysisServiceTests
+{
     [Test]
-    public void AnalyseNamespace_Returns_NoViolation() {
+    public void GetNamespaceAnalysis_WithCorrectNamespace_ReturnsNoViolation()
+    {
         //Arrange
         var list = new List<NamespaceDirective>() {
             new () {
@@ -17,16 +19,17 @@ public class AnalysisServiceTests {
             }
         };
         var folderPath = "BPR";
-        
+
         //Act
-        var result = AnalysisService.GetNamespaceAnalysis(list,folderPath);
-        
+        var result = AnalysisService.GetNamespaceAnalysis(list, folderPath);
+
         //Assert
         Assert.That(result, Is.Empty);
     }
 
     [Test]
-    public void AnalyseNamespace_Returns_Violation() {
+    public void GetNamespaceAnalysis_WithIncorrectNamespace_ReturnsViolation()
+    {
         //Arrange
         var list = new List<NamespaceDirective>() {
             new () {
@@ -36,123 +39,197 @@ public class AnalysisServiceTests {
             }
         };
         var folderPath = "BPR";
-        
+
         //Act
-        var result = AnalysisService.GetNamespaceAnalysis(list,folderPath);
-        
+        var result = AnalysisService.GetNamespaceAnalysis(list, folderPath);
+
         //Assert
-        Assert.That(result, !Is.Empty);
-        Assert.That(result[0].Severity,Is.EqualTo(ViolationSeverity.Minor));
-        Assert.That(result[0].Type,Is.EqualTo(ViolationType.MismatchedNamespace));
+        Assert.That(result, Is.Not.Empty);
+        Assert.That(result[0].Severity, Is.EqualTo(ViolationSeverity.Minor));
+        Assert.That(result[0].Type, Is.EqualTo(ViolationType.MismatchedNamespace));
     }
 
     [Test]
-    public void AnalyseDependency_With1Component_Returns_NoViolation() {
+    public void GetDependencyAnalysisOnComponent_WithUsingStatementButNoDependencies_ReturnsViolation()
+    {
         //Arrange
-        var usingList = new List<UsingDirective>() {
-            new () {
-                Using = "using BPR.AnalysisTest.Tests",
-                File = "DependencyTests.cs"
-            }
-        };
-        var component = new AnalysisArchitecturalComponent() {
-            Name = "Component X",
-            NamespaceComponents = new List<AnalysisNamespace>() {
-                new() {
-                    Name = "BPR/AnalysisTest"
-                }
-            },
-            Dependencies = new List<AnalysisArchitecturalComponent>()
-        };
+        var usingList = GenerateDummyUsingDirectives();
+        var component = GenerateDummyComponentWithNoDependencies();
 
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
-        
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
+
         //Assert
-        Assert.That(result,Is.Empty);
+        Assert.That(result, Is.Not.Empty);
     }
-    
+
     [Test]
-    public void AnalyseDependency_WithComponents_Returns_NoViolation() {
+    public void GetDependencyAnalysisOnComponent_WithUsingStatementInDependencies_ReturnsNoViolation()
+    {
         //Arrange
-        var usingListDependency = new List<UsingDirective>() {
-            new() {
-                
-                Using = "using BPR.Analysis.Models",
-                File = "DependencyTests.cs"
-            }
-        };
-        var component = new AnalysisArchitecturalComponent() {
-            Name = "Component X",
-            NamespaceComponents = new List<AnalysisNamespace>() {
-                new() {
-                    Name = "BPR.Analysis.Services"
-                }
-            },
-            Dependencies = new List<AnalysisArchitecturalComponent>() {
-                new () {
-                    Name = "Component Y",
-                    NamespaceComponents = new List<AnalysisNamespace>() {
-                        new () {
-                            Name = "BPR.Analysis.Models"
-                        }
-                    }
-                    
-                }
-            }
-        };
+        var usingList = GenerateDummyUsingDirectives();
+        var component = GenerateDummyComponent();
 
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingListDependency, component);
-        
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
+
         //Assert
-        Assert.That(result,Is.Empty);
+        Assert.That(result, Is.Empty);
 
     }
-    
+
     [Test]
-    public void AnalyseDependency_WithComponents_Returns_Violation() {
+    public void GetDependencyAnalysisOnComponent_WithUsingStatementNotInDependencies_ReturnsViolation()
+    {
         //Arrange
-        var usingList = new List<UsingDirective>() {
-            new() {
-                Using = "using BPR.Analysis.Models",
-                File = "DependencyTests.cs"
+        var usingList = GenerateDummyUsingDirectivesForNestedDependencies();
+        var component = GenerateDummyComponent();
+
+        //Act
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
+
+        //Assert
+        Assert.That(result, Is.Not.Empty);
+        Assert.That(result[0].Severity, Is.EqualTo(ViolationSeverity.Major));
+        Assert.That(result[0].Type, Is.EqualTo(ViolationType.ForbiddenDependency));
+    }
+
+    [Test]
+    public void GetDependencyAnalysisOnComponent_WithNestedDependencyAndClosedArchitecture_ReturnsViolations()
+    {
+        // Arrange
+        var usingDirectives = GenerateDummyUsingDirectivesForNestedDependencies();
+        var component = GenerateDummyComponent();
+
+        // Act
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, false);
+
+        // Assert
+        Assert.That(result, Is.Not.Empty);
+    }
+
+    [Test]
+    public void GetDependencyAnalysisOnComponent_WithNestedDependencyAndOpenArchitecture_ReturnsNoViolations()
+    {
+        // Arrange
+        var usingDirectives = GenerateDummyUsingDirectivesForNestedDependencies();
+        var component = GenerateDummyComponent();
+
+        // Act
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, true);
+
+        // Assert
+        Assert.That(result, Is.Empty);
+    }
+
+    [Test]
+    public void GetDependencyAnalysisOnComponent_WithSelfReferencingUsingStatement_ReturnsNoViolations()
+    {
+        // Arrange
+        var usingDirectives = GenerateDummySelfReferencingUsingDirectives();
+        var component = GenerateDummyComponent();
+
+        // Act
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, false);
+
+        // Assert
+        Assert.That(result, Is.Empty);
+    }
+
+    private static List<UsingDirective> GenerateDummyUsingDirectives()
+    {
+        return new List<UsingDirective>
+        {
+            new()
+            {
+                Using = "using BPR.Mediator",
+                ComponentName = "BPRBlazor"
             }
         };
-        var usingListDependency = new List<UsingDirective>(){
-            new () {
+    }
+
+    private static List<UsingDirective> GenerateDummyUsingDirectivesForNestedDependencies()
+    {
+        return new List<UsingDirective>
+        {
+            new()
+            {
                 Using = "using BPR.Persistence",
-                File = "DependencyController.cs"
+                ComponentName = "BPRBlazor"
             }
         };
-        var component = new AnalysisArchitecturalComponent() {
-            Name = "Component X",
-            NamespaceComponents = new List<AnalysisNamespace>() {
-                new() {
-                    Name = "BPR/Analysis/Services"
+    }
+
+    private static List<UsingDirective> GenerateDummySelfReferencingUsingDirectives()
+    {
+        return new List<UsingDirective>
+        {
+            new()
+            {
+                Using = "using BPRBlazor",
+                ComponentName = "BPRBlazor"
+            }
+        };
+    }
+
+    private static AnalysisArchitecturalComponent GenerateDummyComponent()
+    {
+        return new AnalysisArchitecturalComponent
+        {
+            Name = "1",
+            NamespaceComponents = new()
+            {
+                new()
+                {
+                    Name = "BPRBlazor"
                 }
             },
-            Dependencies = new List<AnalysisArchitecturalComponent>() {
-                new (){
-                    Name = "Component Y",
-                    NamespaceComponents = new List<AnalysisNamespace>() {
-                        new () {
-                            Name = "BPR/Analysis/Models"
+            Dependencies = new()
+            {
+                new()
+                {
+                    Name = "2",
+                    NamespaceComponents = new()
+                    {
+                        new()
+                        {
+                            Name = "BPR.Mediator"
+                        }
+                    },
+                    Dependencies = new()
+                    {
+                        new()
+                        {
+                            Name = "3",
+                            NamespaceComponents = new()
+                            {
+                                new()
+                                {
+                                    Name = "BPR.Persistence"
+                                }
+                            }
                         }
                     }
-                    
                 }
             }
         };
+    }
 
-        //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
-        foreach (var dependency in component.Dependencies) {
-            result.AddRange(AnalysisService.GetDependencyAnalysisOnComponent(usingListDependency,dependency));
-        }
-        //Assert
-        Assert.That(result, !Is.Empty);
-        Assert.That(result[0].Severity,Is.EqualTo(ViolationSeverity.Major));
-        Assert.That(result[0].Type,Is.EqualTo(ViolationType.ForbiddenDependency));
+    private static AnalysisArchitecturalComponent GenerateDummyComponentWithNoDependencies()
+    {
+        return new AnalysisArchitecturalComponent
+        {
+            Name = "1",
+            NamespaceComponents = new()
+            {
+                new()
+                {
+                    Name = "BPRBlazor"
+                }
+            },
+            Dependencies = new()
+            {
+            }
+        };
     }
 }

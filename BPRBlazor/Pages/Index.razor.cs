@@ -24,6 +24,7 @@ public partial class Index : ComponentBase
     private readonly List<RuleViewModel> _rulesViewModels = new();
     private bool _isAnalysisComplete;
     private LoadingIndicator? _loadingIndicator;
+    private bool _isOpenArchitecture = true;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
@@ -98,7 +99,7 @@ public partial class Index : ComponentBase
                 .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
                 .ToList();
 
-            var violations = await AnalysisService.GetAnalysisAsync(_folderPath, architecturalModel, ruleList);
+            var violations = await AnalysisService.GetAnalysisAsync(_folderPath, architecturalModel, ruleList, _isOpenArchitecture);
 
             await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
             _resultMessage = "The analysis is ready!";
