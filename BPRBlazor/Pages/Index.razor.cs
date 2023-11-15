@@ -25,6 +25,7 @@ public partial class Index : ComponentBase
     private bool _isAnalysisComplete;
     private LoadingIndicator? _loadingIndicator;
     private bool _isOpenArchitecture = true;
+    private bool _isStartAnalysisButtonDisabled;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
@@ -99,12 +100,12 @@ public partial class Index : ComponentBase
                 .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
                 .ToList();
 
+            _isStartAnalysisButtonDisabled = true;
             var violations = await AnalysisService.GetAnalysisAsync(_folderPath, architecturalModel, ruleList, _isOpenArchitecture);
 
             await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
             _resultMessage = "The analysis is ready!";
             _resultMessageCss = "success";
-            _loadingIndicator?.ToggleLoading(false);
             _isAnalysisComplete = true;
             await Reset();
         }
@@ -121,6 +122,8 @@ public partial class Index : ComponentBase
         _unmappedNamespaceComponents = new();
         _selectedArchitectureViewModel = null;
         _rulesViewModels.ForEach(rule => rule.IsChecked = false);
+        _isStartAnalysisButtonDisabled = false;
+        _loadingIndicator?.ToggleLoading(false);
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
