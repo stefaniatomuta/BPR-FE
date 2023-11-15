@@ -31,7 +31,7 @@ public class ResultService : IResultService
     
     public async Task<IList<ResultModel>> GetAllResultsAsync()
     {
-        var result = (await _resultRepository.GetAllResultsAsync()).Val;
+        var result = (await _resultRepository.GetAllResultsAsync()).Value;
 
         if (result == null || !result.Any())
         {
@@ -45,11 +45,10 @@ public class ResultService : IResultService
 
     public async Task<ResultModel> GetResultAsync(Guid id)
     {
-        var result = (await _resultRepository.GetResultAsync(id)).Val;
+        var result = (await _resultRepository.GetResultAsync(id)).Value;
         if (result != null)
         {
-            var resultModel = _mapper.Map<ResultModel>(result);
-            return resultModel;
+            return _mapper.Map<ResultModel>(result);
         }
 
         return new ResultModel();
@@ -60,7 +59,7 @@ public class ResultService : IResultService
     {
         var resultModel = new ResultModel()
         {
-            ResultStart = DateTime.Now,
+            ResultStart = DateTime.UtcNow,
             ResultStatus = (int)ResultStatus.Processing
         };
         var added = await _resultRepository.AddResultAsync(_mapper.Map<ResultCollection>(resultModel));
@@ -72,12 +71,12 @@ public class ResultService : IResultService
 
         try
         {
-            resultModel.Id = added.Val?.Id ?? default;
+            resultModel.Id = added.Value?.Id ?? default;
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             var result = await _validatorService.ValidateResultAsync(resultModel);
             if (result.Success)
             {
-                resultModel.ResultEnd = DateTime.Now;
+                resultModel.ResultEnd = DateTime.UtcNow;
                 resultModel.ResultStatus = ResultStatus.Finished;
                 var addResult = await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
                 return addResult.Success ? Result.Ok(addResult) : Result.Fail<RuleCollection>(addResult.Errors, _logger);
@@ -87,8 +86,9 @@ public class ResultService : IResultService
         catch (Exception e)
         {
             resultModel.ResultStatus = ResultStatus.Failed;
+            resultModel.ResultEnd = DateTime.UtcNow;
             await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
-            Console.WriteLine(e);
+            _logger.LogError(e.Message);
             throw;
         }
     }

@@ -11,6 +11,6 @@ public class ResultCollection
     public double Score { get; set; }
     public DateTime ResultStart { get; set; }
     public DateTime ResultEnd { get; set; }
-    public int ResultStatus { get; set; }
+    public ResultStatus ResultStatus { get; set; }
     public List<Violation> Violations { get; set; } = new();
 }

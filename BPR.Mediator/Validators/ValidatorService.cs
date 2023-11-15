@@ -31,11 +31,10 @@ public class ValidatorService : IValidatorService
         return HandleValidatorResults(result);
     }
 
-    public async Task<Result> ValidateResultAsync(ResultModel? resultModel)
+    public async Task<Result> ValidateResultAsync(ResultModel resultModel)
     {
         var result = await _resultValidator.ValidateAsync(resultModel);
         return HandleValidatorResults(result);
-        
     }
 
     private Result HandleValidatorResults(ValidationResult? result)

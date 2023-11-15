@@ -38,7 +38,7 @@ public class ResultRepository : IResultRepository
         try
         {
             var result = await GetResultAsync(modelCollection.Id);
-            if (result.Val != null)
+            if (result.Value != null)
             {
                 modelCollection.Id = new Guid();
                 await AddResultAsync(modelCollection);

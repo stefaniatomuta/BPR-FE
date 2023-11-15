@@ -1,4 +1,4 @@
-﻿namespace BPR.Mediator.Enums;
+﻿namespace BPR.Persistence.Models;
 
 public enum ResultStatus
 {
