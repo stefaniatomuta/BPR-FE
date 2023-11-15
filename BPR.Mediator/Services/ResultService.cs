@@ -52,7 +52,7 @@ public class ResultService : IResultService
     }
 
 
-    public async Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    public async Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, bool isOpenArchitecture)
     {
         var resultModel = new ResultModel()
         {
@@ -69,7 +69,7 @@ public class ResultService : IResultService
         try
         {
             resultModel.Id = added.Value?.Id ?? default;
-            resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
+            resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules, isOpenArchitecture);
             resultModel.ResultEnd = DateTime.UtcNow;
             resultModel.ResultStatus = ResultStatus.Finished;
             var addResult = await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
@@ -93,14 +93,14 @@ public class ResultService : IResultService
             : Result.Fail($"No result found with id: '{id}'", _logger);
     }
 
-    private async Task<List<ViolationModel>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    private async Task<List<ViolationModel>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, bool isOpenArchitecture)
     {
         var ruleList = rules
             .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
             .ToList();
         var architecturalModel = _mapper.Map<AnalysisArchitecturalModel>(model);
    
-        var violations = await _analysisService.GetAnalysisAsync(folderPath, architecturalModel, ruleList);
+        var violations = await _analysisService.GetAnalysisAsync(folderPath, architecturalModel, ruleList, isOpenArchitecture);
         return _mapper.Map<List<ViolationModel>>(violations);
     }
 }
