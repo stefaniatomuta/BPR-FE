@@ -34,9 +34,12 @@
 
 @if (IsDependencyRuleChecked())
 {
-    <div class="mb-5">
+    <div class="mb-2">
         <h3>Select an architecture model</h3>
         <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" />
+    </div>
+    <div class="mb-5">
+        <SelectComponent @bind-Value=@_isOpenArchitecture Label="Open architecture" Id="@nameof(_isOpenArchitecture)" Description="Include nested dependencies. Allow 'A' in scenario A->B->C to directly use classes from 'C'" />
     </div>
 
     <div class="row">
@@ -84,3 +87,4 @@
 {
     <button class="btn btn-outline-success" @onclick="ShowAnalysisResults">View analysis results</button>
 }
+ 
