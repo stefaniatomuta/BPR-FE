@@ -1,0 +1,8 @@
+﻿.result-row {
+    border: solid black 1px;
+    border-radius: 15px;
+    margin: 2rem;
+    padding: 2rem;
+    white-space: nowrap;
+    width: fit-content;
+}

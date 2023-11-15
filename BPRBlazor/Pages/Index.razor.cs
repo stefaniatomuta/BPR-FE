@@ -22,7 +22,6 @@ public partial class Index : ComponentBase
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel? _selectedNamespaceViewModelComponent;
     private readonly List<RuleViewModel> _rulesViewModels = new();
-    private bool _isAnalysisComplete;
     private LoadingIndicator? _loadingIndicator;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
@@ -91,20 +90,9 @@ public partial class Index : ComponentBase
 
         try
         {
-            _loadingIndicator?.ToggleLoading(true);
-            _isAnalysisComplete = false;
-            var architecturalModel = Mapper.Map<AnalysisArchitecturalModel>(_selectedArchitectureViewModel);
-            var ruleList = _rulesViewModels.Where(rule => rule.IsChecked)
-                .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
-                .ToList();
-
-            var violations = await AnalysisService.GetAnalysisAsync(_folderPath, architecturalModel, ruleList);
-
-            await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
-            _resultMessage = "The analysis is ready!";
-            _resultMessageCss = "success";
-            _loadingIndicator?.ToggleLoading(false);
-            _isAnalysisComplete = true;
+            var architecturalModel = Mapper.Map<ArchitecturalModel>(_selectedArchitectureViewModel);
+            var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
+            await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             await Reset();
         }
         catch (Exception)
@@ -231,11 +219,6 @@ public partial class Index : ComponentBase
         
         _unmappedNamespaceComponents.RemoveAll(namespaceComponent => _selectedArchitectureViewModel?.Components
             .SelectMany(component => component.NamespaceComponents).Contains(namespaceComponent) ?? false);
-    }
-
-    private void ShowAnalysisResults()
-    {
-        NavigationManager.NavigateTo("/results");
     }
 
     public void Dispose()

@@ -68,7 +68,7 @@ public class Result
 
 public class Result<T> : Result
 {
-    public T? Val { get; set; }
+    public T? Value { get; set; }
 
     public Result(bool success, string error) : base(success, error)
     {
@@ -80,11 +80,11 @@ public class Result<T> : Result
 
     public Result(T? value, bool success, string error) : base(success, error)
     {
-        Val = value;
+        Value = value;
     }
 
     public Result(T? value, bool success) : base(success)
     {
-        Val = value;
+        Value = value;
     }
 }

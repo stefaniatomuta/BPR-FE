@@ -3,13 +3,13 @@
 namespace BPR.Mediator.Services; 
 
 public class CodebaseService : ICodebaseService {
-    private string? folderPath;
+    private string? _folderPath;
 
     public string LoadCodebaseInTemp(ArchiveFile file)
     {
         var uploadedRootFolderName = file.Entries.First().FileName;
-        folderPath = ExtractArchive(file);
-        return $"{folderPath}/{uploadedRootFolderName}";
+        _folderPath = ExtractArchive(file);
+        return $"{_folderPath}/{uploadedRootFolderName}";
     }
     
     private static string ExtractArchive(ArchiveFile file)
@@ -24,9 +24,9 @@ public class CodebaseService : ICodebaseService {
     {
         GC.SuppressFinalize(this);
 
-        if (Directory.Exists(folderPath))
+        if (Directory.Exists(_folderPath))
         {
-            Directory.Delete(folderPath, true);
+            Directory.Delete(_folderPath, true);
         }
     }
 }
