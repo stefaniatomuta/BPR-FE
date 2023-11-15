@@ -106,7 +106,6 @@ public partial class Index : ComponentBase
             await ProtectedLocalStore.SetAsync("violations", Mapper.Map<List<ViolationModel>>(violations));
             _resultMessage = "The analysis is ready!";
             _resultMessageCss = "success";
-            _isAnalysisComplete = true;
             await Reset();
         }
         catch (Exception)
@@ -124,6 +123,7 @@ public partial class Index : ComponentBase
         _rulesViewModels.ForEach(rule => rule.IsChecked = false);
         _isStartAnalysisButtonDisabled = false;
         _loadingIndicator?.ToggleLoading(false);
+        _isAnalysisComplete = true;
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
