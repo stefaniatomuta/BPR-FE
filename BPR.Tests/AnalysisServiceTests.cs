@@ -53,8 +53,8 @@ public class AnalysisServiceTests
     public void GetDependencyAnalysisOnComponent_WithUsingStatementButNoDependencies_ReturnsViolation()
     {
         //Arrange
-        var usingList = GenerateDummyUsingDirectives();
-        var component = GenerateDummyComponentWithNoDependencies();
+        var usingList = TestData.GenerateDummyUsingDirectives();
+        var component = TestData.GenerateDummyComponentWithNoDependencies();
 
         //Act
         var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
@@ -67,8 +67,8 @@ public class AnalysisServiceTests
     public void GetDependencyAnalysisOnComponent_WithUsingStatementInDependencies_ReturnsNoViolation()
     {
         //Arrange
-        var usingList = GenerateDummyUsingDirectives();
-        var component = GenerateDummyComponent();
+        var usingList = TestData.GenerateDummyUsingDirectives();
+        var component = TestData.GenerateDummyComponent();
 
         //Act
         var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
@@ -82,8 +82,8 @@ public class AnalysisServiceTests
     public void GetDependencyAnalysisOnComponent_WithUsingStatementNotInDependencies_ReturnsViolation()
     {
         //Arrange
-        var usingList = GenerateDummyUsingDirectivesForNestedDependencies();
-        var component = GenerateDummyComponent();
+        var usingList = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
+        var component = TestData.GenerateDummyComponent();
 
         //Act
         var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
@@ -98,8 +98,8 @@ public class AnalysisServiceTests
     public void GetDependencyAnalysisOnComponent_WithNestedDependencyAndClosedArchitecture_ReturnsViolations()
     {
         // Arrange
-        var usingDirectives = GenerateDummyUsingDirectivesForNestedDependencies();
-        var component = GenerateDummyComponent();
+        var usingDirectives = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
+        var component = TestData.GenerateDummyComponent();
 
         // Act
         var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, false);
@@ -112,8 +112,8 @@ public class AnalysisServiceTests
     public void GetDependencyAnalysisOnComponent_WithNestedDependencyAndOpenArchitecture_ReturnsNoViolations()
     {
         // Arrange
-        var usingDirectives = GenerateDummyUsingDirectivesForNestedDependencies();
-        var component = GenerateDummyComponent();
+        var usingDirectives = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
+        var component = TestData.GenerateDummyComponent();
 
         // Act
         var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, true);
@@ -126,110 +126,13 @@ public class AnalysisServiceTests
     public void GetDependencyAnalysisOnComponent_WithSelfReferencingUsingStatement_ReturnsNoViolations()
     {
         // Arrange
-        var usingDirectives = GenerateDummySelfReferencingUsingDirectives();
-        var component = GenerateDummyComponent();
+        var usingDirectives = TestData.GenerateDummySelfReferencingUsingDirectives();
+        var component = TestData.GenerateDummyComponent();
 
         // Act
         var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, false);
 
         // Assert
         Assert.That(result, Is.Empty);
-    }
-
-    private static List<UsingDirective> GenerateDummyUsingDirectives()
-    {
-        return new List<UsingDirective>
-        {
-            new()
-            {
-                Using = "using BPR.Mediator",
-                ComponentName = "BPRBlazor"
-            }
-        };
-    }
-
-    private static List<UsingDirective> GenerateDummyUsingDirectivesForNestedDependencies()
-    {
-        return new List<UsingDirective>
-        {
-            new()
-            {
-                Using = "using BPR.Persistence",
-                ComponentName = "BPRBlazor"
-            }
-        };
-    }
-
-    private static List<UsingDirective> GenerateDummySelfReferencingUsingDirectives()
-    {
-        return new List<UsingDirective>
-        {
-            new()
-            {
-                Using = "using BPRBlazor",
-                ComponentName = "BPRBlazor"
-            }
-        };
-    }
-
-    private static AnalysisArchitecturalComponent GenerateDummyComponent()
-    {
-        return new AnalysisArchitecturalComponent
-        {
-            Name = "1",
-            NamespaceComponents = new()
-            {
-                new()
-                {
-                    Name = "BPRBlazor"
-                }
-            },
-            Dependencies = new()
-            {
-                new()
-                {
-                    Name = "2",
-                    NamespaceComponents = new()
-                    {
-                        new()
-                        {
-                            Name = "BPR.Mediator"
-                        }
-                    },
-                    Dependencies = new()
-                    {
-                        new()
-                        {
-                            Name = "3",
-                            NamespaceComponents = new()
-                            {
-                                new()
-                                {
-                                    Name = "BPR.Persistence"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        };
-    }
-
-    private static AnalysisArchitecturalComponent GenerateDummyComponentWithNoDependencies()
-    {
-        return new AnalysisArchitecturalComponent
-        {
-            Name = "1",
-            NamespaceComponents = new()
-            {
-                new()
-                {
-                    Name = "BPRBlazor"
-                }
-            },
-            Dependencies = new()
-            {
-            }
-        };
     }
 }
