@@ -1,7 +1,6 @@
-using BPR.Analysis.Enums;
-using BPR.Analysis.Mappers;
-using BPR.Mediator.Models;
-using BPR.Persistence.Utils;
+using BPR.Mediator.Utils;
+using BPR.Model.Architectures;
+using BPR.Model.Enums;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -35,8 +34,7 @@ public partial class Index : ComponentBase
                 _unmappedNamespaceComponents.AddRange(component.NamespaceComponents);
             }
         }
-
-        _selectedArchitectureViewModel = newValue.ToViewModel();
+        _selectedArchitectureViewModel = Mapper.Map<ArchitecturalModelViewModel>(newValue);
         AutoMapNamespaceComponents();
     }
 
@@ -55,7 +53,7 @@ public partial class Index : ComponentBase
 
     private bool IsDependencyRuleChecked()
     {
-        var dependencyRule = _rulesViewModels.FirstOrDefault(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name) == AnalysisRule.Dependency);
+        var dependencyRule = _rulesViewModels.FirstOrDefault(rule => rule.ViolationType == ViolationType.ForbiddenDependency);
         if (dependencyRule == null) return false;
         return dependencyRule.IsChecked;
     }

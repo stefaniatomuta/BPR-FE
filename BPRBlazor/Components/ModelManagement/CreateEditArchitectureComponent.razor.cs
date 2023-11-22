@@ -1,3 +1,4 @@
+using BPR.Model.Architectures;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -40,10 +41,10 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     {
         _dependencyComponent = null;
         ModelViewModel.Components.Remove(component);
-
-        foreach (var dependentComponent in ModelViewModel.GetDependentComponents(component))
+        
+        foreach (var dependentComponent in ModelViewModel.Components)
         {
-            RemoveDependency(dependentComponent, component);
+            dependentComponent.Dependencies.RemoveAll(dependency => dependency.Id == component.Id);
         }
     }
 
@@ -52,7 +53,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         try
         {
             _resultMessages = new();
-            var result = await DependencyService.AddOrEditModelAsync(ModelViewModel.ToBackendModel());
+            var result = await DependencyService.AddOrEditModelAsync(Mapper.Map<ArchitecturalModel>(ModelViewModel));
             if (result.Success)
             {
                NavigationManager.NavigateTo(NavigationManager.Uri, true);
@@ -80,7 +81,10 @@ public partial class CreateEditArchitectureComponent : ComponentBase
                 _dependencyComponent = null;
                 return;
             }
-            _dependencyComponent.Dependencies.Add(dependencyComponent);
+            _dependencyComponent.Dependencies.Add(new DependencyViewModel()
+            {
+                Id = dependencyComponent.Id
+            });
             _dependencyComponent = null;
         }
         else
@@ -91,15 +95,15 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     
     private static void RemoveDependency(ArchitecturalComponentViewModel component, ArchitecturalComponentViewModel dependency)
     {
-        component.Dependencies.Remove(dependency);
+        component.Dependencies.RemoveAll(dep => dep.Id == dependency.Id);
     }
 
-    private static void ToggleOpenness(ArchitecturalComponentViewModel dependency)
+    private static void ToggleOpenness(DependencyViewModel dependency)
     {
         dependency.IsOpen = !dependency.IsOpen;
     }
 
-    private static string ComponentDependencyTypeClass(ArchitecturalComponentViewModel dependency) => dependency.IsOpen ? "btn-success" : "btn-danger";
+    private static string ComponentDependencyTypeClass(DependencyViewModel dependency) => dependency.IsOpen ? "btn-success" : "btn-danger";
 
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
@@ -125,7 +129,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         };
         
         var offset = await JS.InvokeAsync<PositionViewModel>("getElementOffset", new object[]{_draggingComponent.Id});
-        _draggingComponent.PositionViewModel = new PositionViewModel()
+        _draggingComponent.Position = new PositionViewModel()
         {
             X = offset.X + difference.X,
             Y = offset.Y + difference.Y,
@@ -141,8 +145,8 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         
         return new PositionViewModel()
         {
-            X = component.PositionViewModel.X + _componentSize.Width / 2,
-            Y = component.PositionViewModel.Y + _componentSize.Height / 2
+            X = component.Position.X + _componentSize.Width / 2,
+            Y = component.Position.Y + _componentSize.Height / 2
         };
     }
     

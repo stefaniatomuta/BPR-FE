@@ -1,4 +1,4 @@
-﻿using BPR.Mediator.Models;
+﻿using BPR.Model.Architectures;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 

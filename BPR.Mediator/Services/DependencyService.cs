@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using BPR.Mediator.Models;
+﻿using BPR.Mediator.Interfaces;
+using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
-using BPR.Persistence.Models;
-using BPR.Persistence.Repositories;
-using BPR.Persistence.Utils;
+using BPR.Model.Architectures;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Mediator.Services;
@@ -13,21 +11,18 @@ public class DependencyService : IDependencyService
     private readonly IDependencyRepository _dependencyRepository;
     private readonly IValidatorService _validatorService;
     private readonly ILogger<DependencyService> _logger;
-    private readonly IMapper _mapper;
 
-    public DependencyService(IDependencyRepository dependencyRepository, IMapper mapper, IValidatorService validatorService, ILogger<DependencyService> logger)
+    public DependencyService(IDependencyRepository dependencyRepository, IValidatorService validatorService,
+        ILogger<DependencyService> logger)
     {
         _dependencyRepository = dependencyRepository;
         _validatorService = validatorService;
         _logger = logger;
-        _mapper = mapper;
     }
 
     public async Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
     {
-        var dbModels = await _dependencyRepository.GetArchitecturalModelsAsync();
-        var list = _mapper.Map<IList<ArchitecturalModelCollection>, List<ArchitecturalModel>>(dbModels);
-        return list;
+        return await _dependencyRepository.GetArchitecturalModelsAsync();
     }
 
     public async Task<Result> AddOrEditModelAsync(ArchitecturalModel model)
@@ -37,12 +32,16 @@ public class DependencyService : IDependencyService
         {
             if (model.Id == default)
             {
-                var addResult = await _dependencyRepository.AddModelAsync(
-                    _mapper.Map<ArchitecturalModel, ArchitecturalModelCollection>(model));
-                return addResult.Success ? Result.Ok(addResult) : Result.Fail<ArchitecturalModelCollection>(addResult.Errors, _logger);
+                var addResult = await _dependencyRepository.AddModelAsync(model);
+                return addResult.Success
+                    ? Result.Ok(addResult)
+                    : Result.Fail<ArchitecturalModel>(addResult.Errors, _logger);
             }
-            var editResult = await _dependencyRepository.EditModelAsync(_mapper.Map<ArchitecturalModel, ArchitecturalModelCollection>(model));
-            return editResult.Success ? Result.Ok(editResult) : Result.Fail<ArchitecturalModelCollection>(editResult.Errors, _logger);
+
+            var editResult = await _dependencyRepository.EditModelAsync(model);
+            return editResult.Success
+                ? Result.Ok(editResult)
+                : Result.Fail<ArchitecturalModel>(editResult.Errors, _logger);
         }
 
         return result;

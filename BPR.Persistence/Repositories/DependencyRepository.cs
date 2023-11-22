@@ -1,6 +1,9 @@
-﻿using BPR.Persistence.Config;
-using BPR.Persistence.Models;
-using BPR.Persistence.Utils;
+﻿using AutoMapper;
+using BPR.Mediator.Interfaces;
+using BPR.Mediator.Utils;
+using BPR.Model.Architectures;
+using BPR.Persistence.Collections;
+using BPR.Persistence.Config;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -11,28 +14,33 @@ public class DependencyRepository : IDependencyRepository
 {
     private readonly IMongoCollection<ArchitecturalModelCollection> _dependenciesRuleCollection;
     private readonly ILogger<DependencyRepository> _logger;
+    private readonly IMapper _mapper;
 
-    public DependencyRepository(IOptions<DatabaseConfig> databaseSettings, ILogger<DependencyRepository> logger)
+    public DependencyRepository(IOptions<DatabaseConfig> databaseSettings, ILogger<DependencyRepository> logger, IMapper mapper)
     {
         _logger = logger;
+        _mapper = mapper;
+        
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
-
         _dependenciesRuleCollection =
             mongoDatabase.GetCollection<ArchitecturalModelCollection>(databaseSettings.Value.DependenciesRuleCollectionName);
+        
     }
 
-    public async Task<IList<ArchitecturalModelCollection>> GetArchitecturalModelsAsync()
+    public async Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
     {
-        return await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
+        var collections = await (await _dependenciesRuleCollection.FindAsync(_ => true)).ToListAsync();
+        return _mapper.Map<IList<ArchitecturalModel>>(collections);
     }
 
-    public async Task<Result> AddModelAsync(ArchitecturalModelCollection modelCollection)
+    public async Task<Result> AddModelAsync(ArchitecturalModel model)
     {
         try
         {
-            var result = await GetArchitecturalModelCollectionByName(modelCollection);
+            var result = await GetArchitecturalModelCollectionByName(model.Name);
             if (result != null) return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists", _logger);
+            var modelCollection = _mapper.Map<ArchitecturalModelCollection>(model);
             await _dependenciesRuleCollection.InsertOneAsync(modelCollection);
             _logger.LogInformation("Architectural modelCollection added" + modelCollection);
             return Result.Ok(modelCollection);
@@ -43,11 +51,11 @@ public class DependencyRepository : IDependencyRepository
         }
     }
     
-    public async Task<Result> EditModelAsync(ArchitecturalModelCollection model)
+    public async Task<Result> EditModelAsync(ArchitecturalModel model)
     {
         try
         {
-            var result = await GetArchitecturalModelCollectionByName(model);
+            var result = await GetArchitecturalModelCollectionByName(model.Name);
             if (result != null && result.Id != model.Id)
             {
                 return Result.Fail<ArchitecturalModelCollection>("Model with the same name already exists", _logger);
@@ -69,15 +77,16 @@ public class DependencyRepository : IDependencyRepository
         }
     }
 
-    public async Task<ArchitecturalModelCollection?> DeleteModelAsync(Guid id)
+    public async Task<ArchitecturalModel?> DeleteModelAsync(Guid id)
     {
         var filter = Builders<ArchitecturalModelCollection>.Filter.Eq(model => model.Id, id);
         var result = await _dependenciesRuleCollection.FindOneAndDeleteAsync(filter);
-        return result;
+        
+        return _mapper.Map<ArchitecturalModel?>(result);;
     }
 
-    private async Task<ArchitecturalModelCollection?> GetArchitecturalModelCollectionByName(ArchitecturalModelCollection model)
+    private async Task<ArchitecturalModelCollection?> GetArchitecturalModelCollectionByName(string name)
     {
-        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(model.Name))).FirstOrDefaultAsync();
+        return await (await _dependenciesRuleCollection.FindAsync(x => x.Name.Equals(name))).FirstOrDefaultAsync();
     }
 }

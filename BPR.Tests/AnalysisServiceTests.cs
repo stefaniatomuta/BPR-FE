@@ -1,6 +1,6 @@
-﻿using BPR.Analysis.Enums;
-using BPR.Analysis.Models;
+﻿using BPR.Analysis.Models;
 using BPR.Analysis.Services;
+using BPR.Model.Enums;
 
 namespace BPR.Tests;
 
@@ -11,8 +11,10 @@ public class AnalysisServiceTests
     public void GetNamespaceAnalysis_WithCorrectNamespace_ReturnsNoViolation()
     {
         //Arrange
-        var list = new List<NamespaceDirective>() {
-            new () {
+        var list = new List<NamespaceDirective>()
+        {
+            new()
+            {
                 Namespace = "namespace AnalysisTest.Tests",
                 File = "AnalysisTestsBySombrero.cs",
                 FilePath = "BPR/AnalysisTest/Tests/AnalysisTestsBySombrero.cs"
@@ -31,8 +33,10 @@ public class AnalysisServiceTests
     public void GetNamespaceAnalysis_WithIncorrectNamespace_ReturnsViolation()
     {
         //Arrange
-        var list = new List<NamespaceDirective>() {
-            new () {
+        var list = new List<NamespaceDirective>()
+        {
+            new()
+            {
                 Namespace = "namespace AnalysisTest.Testy",
                 File = "AnalysisTestsBySombrero.cs",
                 FilePath = "BPR/AnalysisTest/Tests/AnalysisTestsBySombrero.cs"
@@ -54,10 +58,11 @@ public class AnalysisServiceTests
     {
         //Arrange
         var usingList = TestData.GenerateDummyUsingDirectives();
+        var model = TestData.GenerateDummyModel();
         var component = TestData.GenerateDummyComponentWithNoDependencies();
-
+        
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, model, component);
 
         //Assert
         Assert.That(result, Is.Not.Empty);
@@ -68,10 +73,11 @@ public class AnalysisServiceTests
     {
         //Arrange
         var usingList = TestData.GenerateDummyUsingDirectives();
+        var model = TestData.GenerateDummyModel();
         var component = TestData.GenerateDummyComponent();
-
+        
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, model, component);
 
         //Assert
         Assert.That(result, Is.Empty);
@@ -83,10 +89,11 @@ public class AnalysisServiceTests
     {
         //Arrange
         var usingList = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
-        var component = TestData.GenerateDummyComponent();
+        var model = TestData.GenerateDummyModel();
+        var component = model.Components.First(comp => comp.Id == 1);
 
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, model, component);
 
         //Assert
         Assert.That(result, Is.Not.Empty);
@@ -99,10 +106,11 @@ public class AnalysisServiceTests
     {
         // Arrange
         var usingDirectives = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
-        var component = TestData.GenerateDummyComponent();
+        var model = TestData.GenerateDummyModel();
+        var component = model.Components.First(comp => comp.Id == 1);
 
         // Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, model, component);
 
         // Assert
         Assert.That(result, Is.Not.Empty);
@@ -114,9 +122,10 @@ public class AnalysisServiceTests
         // Arrange
         var usingDirectives = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
         var component = TestData.GenerateDummyComponent(true);
+        var model = TestData.GenerateDummyModel(true);
 
         // Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, model, component);
 
         // Assert
         Assert.That(result, Is.Empty);
@@ -127,10 +136,11 @@ public class AnalysisServiceTests
     {
         // Arrange
         var usingDirectives = TestData.GenerateDummySelfReferencingUsingDirectives();
-        var component = TestData.GenerateDummyComponent();
+        var model = TestData.GenerateDummyModel();
+        var component = model.Components.First(comp => comp.Id == 1);
 
         // Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, model, component);
 
         // Assert
         Assert.That(result, Is.Empty);

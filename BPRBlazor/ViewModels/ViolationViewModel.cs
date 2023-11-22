@@ -1,4 +1,4 @@
-﻿using BPR.Mediator.Enums;
+﻿using BPR.Model.Enums;
 
 namespace BPRBlazor.ViewModels;
 

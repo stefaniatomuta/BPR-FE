@@ -1,5 +1,5 @@
-using BPR.Mediator.Models;
-using BPR.Persistence.Utils;
+using BPR.Mediator.Utils;
+using BPR.Model.Architectures;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -20,9 +20,10 @@ public class ValidatorService : IValidatorService
     {
         var result = await _architecturalModelValidator.ValidateAsync(model);
         if (result.IsValid) return new Result(true);
-        var errorMessages = result.Errors.Select(x=> x.ErrorMessage).ToList();
+        var errorMessages = result.Errors.Select(x => x.ErrorMessage).ToList();
         return new Result(false, errorMessages);
     }
+
     public async Task<Result> ValidateRuleAsync(Rule rule)
     {
         var result = await _ruleValidator.ValidateAsync(rule);
@@ -34,9 +35,10 @@ public class ValidatorService : IValidatorService
         if (result != null)
         {
             if (result.IsValid) return new Result(true);
-            var errorMessages = result.Errors.Select(x=> x.ErrorMessage).ToList();
+            var errorMessages = result.Errors.Select(x => x.ErrorMessage).ToList();
             return new Result(false, errorMessages);
         }
+
         return new Result(false, "Something went wrong");
     }
 }

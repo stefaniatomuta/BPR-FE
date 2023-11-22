@@ -1,13 +1,16 @@
 ﻿@using BPR.Mediator.Services
 @using System.Globalization
-@using BPR.Mediator.Enums
-@using BPR.Persistence.Models
+@using BPR.Mediator.Interfaces
+@using BPR.Model.Enums
 @inject NavigationManager NavigationManager
 @inject IResultService ResultService
 
 <div class="result-row col-3">
     <p>Started: @Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</p>
-    <p>Ended: @(Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture))</p>
+    @if (Result.ResultStatus != ResultStatus.Processing)
+    {
+        <p>Ended: @(Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture))</p>
+    }
     <p>Status: @Result.ResultStatus.ToString()</p>
     @if (Result.ResultStatus == ResultStatus.Finished)
     {

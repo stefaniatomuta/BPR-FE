@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using BPR.Mediator.Models;
+using BPR.Model.Architectures;
+using BPR.Model.Results;
 using BPRBlazor.ViewModels;
 
 namespace BPRBlazor.Mappers; 
@@ -10,7 +11,9 @@ public class MapperProfile : Profile {
         CreateMap<ArchitecturalModel, ArchitecturalModelViewModel>().ReverseMap();
         CreateMap<NamespaceViewModel, NamespaceModel>().ReverseMap();
         CreateMap<RuleViewModel, Rule>().ReverseMap();
-        CreateMap<ViolationModel, ViolationViewModel>().ReverseMap();
-        CreateMap<ResultModel, ResultViewModel>().ReverseMap();
+        CreateMap<Violation, ViolationViewModel>().ReverseMap();
+        CreateMap<AnalysisResult, ResultViewModel>().ReverseMap();
+        CreateMap<Position, PositionViewModel>().ReverseMap();
+        CreateMap<DependencyViewModel, ArchitecturalDependency>().ReverseMap();
     }
 }

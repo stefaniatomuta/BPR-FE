@@ -1,5 +1,5 @@
-﻿using BPR.Mediator.Models;
-using BPR.Mediator.Validators;
+﻿using BPR.Mediator.Validators;
+using BPR.Model.Architectures;
 using FluentValidation;
 using FluentValidation.TestHelper;
 
@@ -22,7 +22,7 @@ public class ValidatorTests
     public void Architectural_Model_Should_Have_Error_When_Name_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel { Name = "", Components = new List<ArchitecturalComponent>() };
+        var model = new ArchitecturalModel {Name = "", Components = new List<ArchitecturalComponent>()};
 
         // Act
         var result = _architecturalModelValidator.TestValidate(model);
@@ -36,7 +36,7 @@ public class ValidatorTests
     public void Architectural_Model_Should_Have_Error_When_Components_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel { Name = "ModelName", Components = new List<ArchitecturalComponent>() };
+        var model = new ArchitecturalModel {Name = "ModelName", Components = new List<ArchitecturalComponent>()};
 
         // Act
         var result = _architecturalModelValidator.TestValidate(model);
@@ -55,9 +55,9 @@ public class ValidatorTests
             Name = "ModelName",
             Components = new List<ArchitecturalComponent>
             {
-                new() { Name = "Component1" },
-                new() { Name = "Component2" },
-                new() { Name = "Component1" }
+                new() {Name = "Component1"},
+                new() {Name = "Component2"},
+                new() {Name = "Component1"}
             }
         };
 
@@ -78,8 +78,8 @@ public class ValidatorTests
             Name = "ModelName",
             Components = new List<ArchitecturalComponent>
             {
-                new() { Name = "Component1" },
-                new() { Name = "Component2" }
+                new() {Name = "Component1"},
+                new() {Name = "Component2"}
             }
         };
 

@@ -1,10 +1,11 @@
 using BPR.Analysis.Services;
-using BPR.Mediator.Mappers;
-using BPR.Mediator.Models;
+using BPR.Mediator.Interfaces;
 using BPR.Mediator.Services;
 using BPR.Mediator.Validators;
+using BPR.Model.Architectures;
 using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
+using BPR.Persistence.Utils;
 using BPRBlazor.Mappers;
 using BPRBlazor.Services;
 using FluentValidation;
