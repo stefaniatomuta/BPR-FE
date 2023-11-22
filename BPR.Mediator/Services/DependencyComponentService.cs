@@ -1,9 +1,11 @@
-﻿namespace BPR.Mediator.Services; 
+﻿using BPR.Mediator.Interfaces;
+
+namespace BPR.Mediator.Services;
 
 public class DependencyComponentService : IDependencyComponentService
 {
-    private static readonly string[] IgnoredFolders = new[] { "bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests" };
-    private static readonly string[] RequiredFileExtensions = new[] { ".cs", ".cshtml" };
+    private static readonly string[] IgnoredFolders = new[] {"bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests"};
+    private static readonly string[] RequiredFileExtensions = new[] {".cs", ".cshtml"};
 
     public IList<string> GetFolderNamesForProjects(string folderPath)
     {
@@ -15,12 +17,12 @@ public class DependencyComponentService : IDependencyComponentService
             .ToList();
     }
 
-    private readonly static Func<string, bool> IsNotIgnoredFolder = (folderPath) => 
+    private readonly static Func<string, bool> IsNotIgnoredFolder = (folderPath) =>
         !IgnoredFolders.Any(folderPath.EndsWith);
 
     private readonly static Func<string, bool> DoesContainCSharpFiles = (folderPath) =>
         Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories)
-                 .Any(file => RequiredFileExtensions.Any(file.EndsWith));
+            .Any(file => RequiredFileExtensions.Any(file.EndsWith));
 
     private static string RemoveFolderPath(string folderPath, string pathToClean)
     {

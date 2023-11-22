@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using BPR.Mediator.Models;
+using BPR.Mediator.Interfaces;
+using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
-using BPR.Persistence.Models;
-using BPR.Persistence.Repositories;
-using BPR.Persistence.Utils;
+using BPR.Model.Architectures;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Mediator.Services;
@@ -12,14 +11,12 @@ public class RuleService : IRuleService
 {
     private readonly IRuleRepository _ruleRepository;
     private readonly IValidatorService _validatorService;
-    private readonly IMapper _mapper;
     private readonly ILogger<RuleService> _logger;
-    
-    public RuleService(IRuleRepository ruleRepository, IValidatorService validatorService, IMapper mapper, ILogger<RuleService> logger)
+
+    public RuleService(IRuleRepository ruleRepository, IValidatorService validatorService, ILogger<RuleService> logger)
     {
         _ruleRepository = ruleRepository;
         _validatorService = validatorService;
-        _mapper = mapper;
         _logger = logger;
     }
 
@@ -30,20 +27,15 @@ public class RuleService : IRuleService
         var result = await _validatorService.ValidateRuleAsync(rule);
         if (result.Success)
         {
-            var addResult = await _ruleRepository.AddRuleAsync(_mapper.Map<Rule, RuleCollection>(rule));
-            return addResult.Success ? Result.Ok(addResult) : Result.Fail<RuleCollection>(addResult.Errors, _logger);
+            var addResult = await _ruleRepository.AddRuleAsync(rule);
+            return addResult.Success ? Result.Ok(addResult) : Result.Fail<Rule>(addResult.Errors, _logger);
         }
+
         return result;
     }
 
     public async Task<IList<Rule>> GetRulesAsync()
     {
-        var rules = await _ruleRepository.GetRulesAsync();
-        var documents = new List<Rule>();
-        foreach (var doc in rules)
-        {
-            documents.Add(_mapper.Map<RuleCollection, Rule>(doc));
-        }
-        return documents;
+        return await _ruleRepository.GetRulesAsync();
     }
 }

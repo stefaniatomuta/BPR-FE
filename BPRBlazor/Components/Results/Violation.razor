@@ -1,7 +1,7 @@
-﻿@using BPR.Mediator.Mappers
+﻿@using BPR.Model.Enums
 <div class="violation">
     <p class="violation-name">
-        <strong>#@ViolationTypeMapper.GetViolationTypeName(Model.Type)</strong>
+        <strong>#@(Enum.GetName(typeof(ViolationType), Model.Type) ?? string.Empty)</strong>
     </p>
     <p class="violation-description">@Model.Description</p>
     <p>Severity: 

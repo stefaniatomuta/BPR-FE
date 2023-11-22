@@ -1,4 +1,4 @@
-﻿using BPR.Mediator.Models;
+﻿using BPR.Model.Results;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -17,7 +17,7 @@ public partial class ResultDetails : ComponentBase
         if (firstRender)
         {
             var resultModel = await ResultService.GetResultAsync(Id);
-            _result = Mapper.Map<ResultModel, ResultViewModel>(resultModel);
+            _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
             _filteredViolations = new List<ViolationViewModel>(_result.Violations);
             StateHasChanged();
         }

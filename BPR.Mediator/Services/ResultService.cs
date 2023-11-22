@@ -1,12 +1,9 @@
 using AutoMapper;
-using BPR.Analysis.Mappers;
-using BPR.Analysis.Models;
-using BPR.Analysis.Services;
-using BPR.Mediator.Models;
-using BPR.Mediator.Validators;
-using BPR.Persistence.Models;
-using BPR.Persistence.Repositories;
-using BPR.Persistence.Utils;
+using BPR.Mediator.Interfaces;
+using BPR.Mediator.Utils;
+using BPR.Model.Architectures;
+using BPR.Model.Enums;
+using BPR.Model.Results;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Mediator.Services;
@@ -15,51 +12,48 @@ public class ResultService : IResultService
 {
     private readonly IResultRepository _resultRepository;
     private readonly IAnalysisService _analysisService;
-    private readonly IMapper _mapper;
     private readonly ILogger<ResultService> _logger;
-    
-    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, IValidatorService validatorService, IMapper mapper, ILogger<ResultService> logger)
+
+    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, IMapper mapper,
+        ILogger<ResultService> logger)
     {
         _analysisService = analysisService;
         _resultRepository = resultRepository;
-        _mapper = mapper;
         _logger = logger;
     }
-    
-    public async Task<IList<ResultModel>> GetAllResultsAsync()
+
+    public async Task<IList<AnalysisResult>> GetAllResultsAsync()
     {
         var result = (await _resultRepository.GetAllResultsAsync()).Value;
 
         if (result == null || !result.Any())
         {
-            return new List<ResultModel>();
+            return new List<AnalysisResult>();
         }
-        return result
-            .Select(res => _mapper.Map<ResultModel>(res))
-            .OrderByDescending(res => res.ResultStart)
-            .ToList();
+
+        return result.OrderByDescending(res => res.ResultStart).ToList();
     }
 
-    public async Task<ResultModel> GetResultAsync(Guid id)
+    public async Task<AnalysisResult> GetResultAsync(Guid id)
     {
         var result = (await _resultRepository.GetResultAsync(id)).Value;
         if (result != null)
         {
-            return _mapper.Map<ResultModel>(result);
+            return result;
         }
 
-        return new ResultModel();
+        return new AnalysisResult();
     }
 
 
     public async Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
     {
-        var resultModel = new ResultModel()
+        var resultModel = new AnalysisResult()
         {
             ResultStart = DateTime.UtcNow,
-            ResultStatus = (int)ResultStatus.Processing
+            ResultStatus = (int) ResultStatus.Processing
         };
-        var added = await _resultRepository.AddResultAsync(_mapper.Map<ResultCollection>(resultModel));
+        var added = await _resultRepository.AddResultAsync(resultModel);
 
         if (!added.Success)
         {
@@ -72,14 +66,14 @@ public class ResultService : IResultService
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             resultModel.ResultEnd = DateTime.UtcNow;
             resultModel.ResultStatus = ResultStatus.Finished;
-            var addResult = await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
-            return addResult.Success ? Result.Ok(addResult) : Result.Fail<RuleCollection>(addResult.Errors, _logger);
+            var addResult = await _resultRepository.UpdateResultAsync(resultModel);
+            return addResult.Success ? Result.Ok(addResult) : Result.Fail<Rule>(addResult.Errors, _logger);
         }
         catch (Exception e)
         {
             resultModel.ResultStatus = ResultStatus.Failed;
             resultModel.ResultEnd = DateTime.UtcNow;
-            await _resultRepository.UpdateResultAsync(_mapper.Map<ResultCollection>(resultModel));
+            await _resultRepository.UpdateResultAsync(resultModel);
             _logger.LogError(e.Message);
             throw;
         }
@@ -93,14 +87,13 @@ public class ResultService : IResultService
             : Result.Fail($"No result found with id: '{id}'", _logger);
     }
 
-    private async Task<List<ViolationModel>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model,
+        List<Rule> rules)
     {
         var ruleList = rules
-            .Select(rule => AnalysisRuleMapper.GetAnalysisRuleEnum(rule.Name))
+            .Select(rule => rule.ViolationType)
             .ToList();
-        var architecturalModel = _mapper.Map<AnalysisArchitecturalModel>(model);
-   
-        var violations = await _analysisService.GetAnalysisAsync(folderPath, architecturalModel, ruleList);
-        return _mapper.Map<List<ViolationModel>>(violations);
+
+        return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
     }
 }

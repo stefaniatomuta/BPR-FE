@@ -7,4 +7,10 @@
     <ItemGroup>
         <InternalsVisibleTo Include="BPR.Tests" />
     </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\BPR.Mediator\BPR.Mediator.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\BPR.Mediator\BPR.Mediator.csproj" />
+    </ItemGroup>
 </Project>

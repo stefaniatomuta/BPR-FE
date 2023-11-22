@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using BPR.Persistence.Models;
-using BPR.Persistence.Repositories;
-using BPR.Persistence.Utils;
-using BPR.Mediator.Models;
+using BPR.Mediator.Interfaces;
 using BPR.Mediator.Services;
+using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
+using BPR.Model.Architectures;
 using Microsoft.Extensions.Logging;
 using NSubstitute.ReturnsExtensions;
 
@@ -16,7 +15,6 @@ internal class DependencyServiceTests
     private IDependencyService uut;
     private IDependencyRepository repositoryStub;
     private IValidatorService validatorStub;
-    private IMapper _mapper;
     private ILogger<DependencyService> _logger;
 
     [OneTimeSetUp]
@@ -24,13 +22,8 @@ internal class DependencyServiceTests
     {
         repositoryStub = Substitute.For<IDependencyRepository>();
         validatorStub = Substitute.For<IValidatorService>();
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ArchitecturalModel, ArchitecturalModelCollection>().ReverseMap();
-        });
-        _mapper = new Mapper(mapperConfig);
         _logger = Substitute.For<ILogger<DependencyService>>();
-        uut = new DependencyService(repositoryStub, _mapper, validatorStub, _logger);
+        uut = new DependencyService(repositoryStub, validatorStub, _logger);
     }
 
     [Test]
@@ -38,7 +31,7 @@ internal class DependencyServiceTests
     {
         // Arrange
         var okResult = Result.Ok(_logger, "");
-        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModelCollection>()).Returns(okResult);
+        repositoryStub.AddModelAsync(Arg.Any<ArchitecturalModel>()).Returns(okResult);
         validatorStub.ValidateArchitecturalModelAsync(Arg.Any<ArchitecturalModel>()).Returns(okResult);
 
         // Act
@@ -65,7 +58,7 @@ internal class DependencyServiceTests
     public async Task DeleteArchitectureModelAsync_WhenModelExists_ReturnsOkResult()
     {
         // Arrange
-        repositoryStub.DeleteModelAsync(Arg.Any<Guid>()).Returns(new ArchitecturalModelCollection());
+        repositoryStub.DeleteModelAsync(Arg.Any<Guid>()).Returns(new ArchitecturalModel());
         var modelId = new Guid();
 
         // Act

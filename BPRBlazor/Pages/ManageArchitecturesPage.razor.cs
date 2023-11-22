@@ -1,4 +1,4 @@
-using BPR.Mediator.Models;
+using BPR.Model.Architectures;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 
@@ -10,7 +10,7 @@ public partial class ManageArchitecturesPage : ComponentBase
     
     private void HandleModelChange(ArchitecturalModel model)
     {
-        _selectedModel = model.ToViewModel();
+        _selectedModel = Mapper.Map<ArchitecturalModelViewModel>(model);
     }
     
     private void CreateNewArchitecture()

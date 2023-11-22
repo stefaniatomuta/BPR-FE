@@ -1,38 +1,9 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-using BPR.Analysis.Models;
+﻿using BPR.Mediator.Interfaces;
 
 namespace BPR.Analysis.Services;
 
 public class CodeExtractionService : ICodeExtractionService
 {
-    public async Task<List<UsingDirective>> GetUsingDirectivesAsync(string folderPath)
-    {
-        List<UsingDirective> matches = new();
-        var files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
-
-        foreach (var file in files)
-        {
-            if (file.EndsWith(".cs") || file.EndsWith(".cshtml"))
-            {
-                var content = await File.ReadAllLinesAsync(file,Encoding.UTF8);
-                var result = content.Where(s => Regex.Match(s, AnalysisRegex.UsingRegex).Success);
-
-                foreach (var match in result)
-                {
-                    matches.Add(new UsingDirective()
-                    {
-                        Using = match,
-                        File = Path.GetFileName(file),
-                        FilePath = file
-                    });
-                }
-            }
-        }
-
-        return matches;
-    }
-
     public List<string> GetProjectNames(string folderPath)
     {
         List<string> projectNames = new();
@@ -42,7 +13,7 @@ public class CodeExtractionService : ICodeExtractionService
         foreach (var dir in projDirectories)
         {
             files.AddRange(Directory.GetFiles(dir)
-                 .Where(file => file.EndsWith("csproj")));
+                .Where(file => file.EndsWith("csproj")));
         }
 
         foreach (var file in files)
@@ -51,32 +22,5 @@ public class CodeExtractionService : ICodeExtractionService
         }
 
         return projectNames;
-    }
-
-    public async Task<List<NamespaceDirective>> GetNamespaceDirectivesAsync(string folderPath)
-    {
-        List<NamespaceDirective> matches = new();
-        var files = Directory.GetFiles(folderPath,"*",SearchOption.AllDirectories);
-
-        foreach (var file in files)
-        {
-            if (file.EndsWith(".cs") || file.EndsWith(".cshtml"))
-            {
-                var content = await File.ReadAllLinesAsync(file,Encoding.UTF8);
-                var result = content.Where(s => Regex.Match(s, AnalysisRegex.NamespaceRegex).Success);
-
-                foreach (var match in result)
-                {
-                    matches.Add(new NamespaceDirective()
-                    {
-                        Namespace = match,
-                        File = Path.GetFileName(file),
-                        FilePath = file
-                    });
-                }
-            }
-        }
-
-        return matches;
     }
 }

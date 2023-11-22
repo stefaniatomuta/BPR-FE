@@ -1,8 +1,10 @@
-﻿using SevenZipExtractor;
+﻿using BPR.Mediator.Interfaces;
+using SevenZipExtractor;
 
-namespace BPR.Mediator.Services; 
+namespace BPR.Mediator.Services;
 
-public class CodebaseService : ICodebaseService {
+public class CodebaseService : ICodebaseService
+{
     private string? _folderPath;
 
     public string LoadCodebaseInTemp(ArchiveFile file)
@@ -11,7 +13,7 @@ public class CodebaseService : ICodebaseService {
         _folderPath = ExtractArchive(file);
         return $"{_folderPath}/{uploadedRootFolderName}";
     }
-    
+
     private static string ExtractArchive(ArchiveFile file)
     {
         var guid = Guid.NewGuid();

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using BPR.Persistence.Models;
-using BPR.Persistence.Repositories;
-using BPR.Persistence.Utils;
-using BPR.Mediator.Models;
+using BPR.Mediator.Interfaces;
 using BPR.Mediator.Services;
+using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
+using BPR.Model.Architectures;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Tests;
@@ -15,32 +14,23 @@ public class RuleServiceTests
     private IRuleService uut;
     private IRuleRepository _repositoryStub;
     private IValidatorService _validatorService;
-    private ILogger<RuleService> _logger;
-    private IMapper _mapper;
+    private readonly ILogger<RuleService> _logger = default!;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         _repositoryStub = Substitute.For<IRuleRepository>();
         _validatorService = Substitute.For<IValidatorService>();
-        _logger = Substitute.For<ILogger<RuleService>>();
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Rule, RuleCollection>();
-            cfg.CreateMap<RuleCollection, Rule>();
-
-        }); 
-        _mapper = new Mapper(mapperConfig);
-        uut = new RuleService(_repositoryStub, _validatorService,_mapper, _logger);
+        uut = new RuleService(_repositoryStub, _validatorService, _logger);
     }
 
     [Test]
     public async Task GetRules_WhenRulesExist_ReturnsList()
     {
         // Arrange
-        var list = new List<RuleCollection>()
+        var list = new List<Rule>()
         {
-            new ()
+            new()
             {
                 Name = "Dependency",
                 Id = new Guid(),
@@ -54,6 +44,7 @@ public class RuleServiceTests
         // Assert
         Assert.That(result, Has.Count.EqualTo(list.Count));
     }
+
     [Test]
     public async Task AddRules_WhenRuleWithSameNameAlreadyExists_ReturnsFalse()
     {
@@ -63,16 +54,16 @@ public class RuleServiceTests
             Id = Guid.NewGuid(),
             Name = "Dependency"
         };
-        
+
         _validatorService.ValidateRuleAsync(rule).Returns(new Result(true));
-        _repositoryStub.AddRuleAsync(Arg.Any<RuleCollection>()).Returns(new Result(false));
+        _repositoryStub.AddRuleAsync(Arg.Any<Rule>()).Returns(new Result(false));
 
         // Act
         var result = await uut.AddRuleAsync(rule);
-        
+
         // Assert
         await _validatorService.Received(1).ValidateRuleAsync(Arg.Is(rule));
-        await _repositoryStub.Received(1).AddRuleAsync(Arg.Any<RuleCollection>());
+        await _repositoryStub.Received(1).AddRuleAsync(Arg.Any<Rule>());
         Assert.That(result.Success, Is.False);
     }
 }

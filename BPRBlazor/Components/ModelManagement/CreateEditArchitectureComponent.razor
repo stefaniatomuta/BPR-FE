@@ -1,9 +1,11 @@
 @using BPRBlazor.Components.Common;
-
+@using BPR.Mediator.Services
+@using BPR.Mediator.Interfaces
+@using AutoMapper
 @inject IJSRuntime JS
 @inject IDependencyService DependencyService
 @inject NavigationManager NavigationManager
-@using BPR.Mediator.Services
+@inject IMapper Mapper
 
 <SvgArrowHead/>
 <EditForm Model="ModelViewModel" OnValidSubmit="CreateOrEditArchitectureModel">
@@ -16,7 +18,7 @@
         @foreach (var component in ModelViewModel.Components)
         {
             var startPosition = GetMiddlePositionForComponent(component);
-            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.PositionViewModel.X)px; top: @(component.PositionViewModel.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
+            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
                 <div class="component-header mb-2">
                     <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
                 </div>
@@ -32,9 +34,12 @@
                     <ValidationMessage For="(() => component.Name)"/>
                 </div>
             </div>
-            @foreach (var dependency in component.Dependencies)
+            @foreach (var dependentComponent in ModelViewModel.Components
+                .Where(comp => component.Dependencies
+                    .Select(dependency => dependency.Id)
+                    .Contains(comp.Id)))
             {
-                var endPosition = GetMiddlePositionForComponent(dependency);
+                var endPosition = GetMiddlePositionForComponent(dependentComponent);
                 <svg>
                     <polyline
                         points="@(startPosition.X),@(startPosition.Y) @((startPosition.X + endPosition.X) / 2),@((startPosition.Y + endPosition.Y) / 2) @(endPosition.X),@(endPosition.Y)"
@@ -47,7 +52,7 @@
                 <div 
                     class="delete-dependency"
                     style="left: @((startPosition.X + endPosition.X) / 2 - 25)px; top: @((startPosition.Y + endPosition.Y) / 2 - 25)px">
-                    <a class="btn btn-danger oi oi-trash" @onclick="(() => RemoveDependency(component, dependency))">
+                    <a class="btn btn-danger oi oi-trash" @onclick="(() => RemoveDependency(component, dependentComponent))">
                     </a>
                 </div>
             }
