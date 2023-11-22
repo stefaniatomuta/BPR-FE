@@ -1,4 +1,5 @@
 ﻿using BPR.Analysis.Models;
+using BPR.Model.Architectures;
 
 namespace BPR.Tests;
 
@@ -40,43 +41,87 @@ internal class TestData
         };
     }
 
-    internal static AnalysisArchitecturalComponent GenerateDummyComponent(bool isTransitiveDependencyLayerOpen = false)
+    internal static ArchitecturalComponent GenerateDummyComponent(bool isTransitiveDependencyLayerOpen = false)
     {
-        return new AnalysisArchitecturalComponent
+        return new ArchitecturalComponent()
         {
-            Name = "1",
-            NamespaceComponents = new()
+            Id = 1,
+            NamespaceComponents = new List<NamespaceModel>()
             {
                 new()
                 {
                     Name = "BPRBlazor"
                 }
             },
-            Dependencies = new()
+            Dependencies = new List<ArchitecturalDependency>()
             {
                 new()
                 {
+                    Id = 2,
+                },
+                new()
+                {
+                    Id = 3,
+                    IsOpen = isTransitiveDependencyLayerOpen
+                }
+            }
+        };
+    }
+
+    internal static ArchitecturalModel GenerateDummyModel(bool isTransitiveDependencyLayerOpen = false)
+    {
+        return new ArchitecturalModel()
+        {
+            Components = new List<ArchitecturalComponent>()
+            {
+                new()
+                {
+                    Name = "1",
+                    Id = 1,
+                    NamespaceComponents = new List<NamespaceModel>()
+                    {
+                        new()
+                        {
+                            Name = "BPRBlazor"
+                        }
+                    },
+                    Dependencies = new List<ArchitecturalDependency>()
+                    {
+                        new()
+                        {
+                            Id = 2,
+                        }
+                    }
+                },
+                new()
+                {
                     Name = "2",
-                    NamespaceComponents = new()
+                    Id = 2,
+                    NamespaceComponents = new List<NamespaceModel>()
                     {
                         new()
                         {
                             Name = "BPR.Mediator"
                         }
                     },
-                    Dependencies = new()
+                    Dependencies = new List<ArchitecturalDependency>()
                     {
                         new()
                         {
-                            Name = "3",
-                            NamespaceComponents = new()
-                            {
-                                new()
-                                {
-                                    Name = "BPR.Persistence"
-                                }
-                            },
+                            Id = 3,
                             IsOpen = isTransitiveDependencyLayerOpen
+                        }
+                    }
+                },
+                new()
+                {
+                    Name = "3",
+                    Id = 3,
+                    NamespaceComponents = new List<NamespaceModel>()
+                    {
+                        new()
+                        {
+                            Name = "BPR.Persistence"
                         }
                     }
                 }
@@ -84,21 +129,19 @@ internal class TestData
         };
     }
 
-    internal static AnalysisArchitecturalComponent GenerateDummyComponentWithNoDependencies()
+    internal static ArchitecturalComponent GenerateDummyComponentWithNoDependencies()
     {
-        return new AnalysisArchitecturalComponent
+        return new ArchitecturalComponent
         {
             Name = "1",
-            NamespaceComponents = new()
+            NamespaceComponents = new List<NamespaceModel>()
             {
                 new()
                 {
                     Name = "BPRBlazor"
                 }
             },
-            Dependencies = new()
-            {
-            }
+            Dependencies = new List<ArchitecturalDependency>()
         };
     }
 }

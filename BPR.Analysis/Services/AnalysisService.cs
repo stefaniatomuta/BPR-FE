@@ -44,8 +44,8 @@ public class AnalysisService : IAnalysisService
 
         foreach (var component in model.Components)
         {
-            var dependentComponents = GetDependentComponents(model, component);
-            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, model, projectNames, dependentComponents));
+            var dependencyComponents = GetDependencyComponents(model, component);
+            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, model, projectNames, dependencyComponents));
         }
 
         return violations;
@@ -75,16 +75,16 @@ public class AnalysisService : IAnalysisService
         ArchitecturalComponent component)
     {
         List<Violation> violations = new();
-        var dependentComponents = GetDependentComponents(model, component);
+        var dependencyComponents = GetDependencyComponents(model, component);
         foreach (var directive in usingDirectives)
         {
-            if (!dependentComponents
+            if (!dependencyComponents
                 .SelectMany(dep => dep.NamespaceComponents)
-                .Any(ns => directive.Using.Contains(ns.Name)) // a using statement in X to Y but X does not have Y as dependency
+                .Any(ns => directive.Using.Contains(ns.Name) // a using statement in X to Y but X does not have Y as dependency
                 || component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName)
                 && !component.Dependencies.Any()) // a using statement in X to Y but component has no dependencies, i.e X cannot have dependency to Y
                 && !directive.Using.Contains(directive.ComponentName) // ignore away self-dependencies, i.e. a using statement in X to X
-                && (!HasTransitiveDependencyToClosedLayer(directive, component, component.Dependencies))) // check for transitive dependencies to "Closed" layers
+                && (!HasTransitiveDependencyToClosedLayer(directive, model, component, GetDependencyComponents(model, component)))) // check for transitive dependencies to "Closed" layers
             {
                 violations.Add(new Violation()
                 {
@@ -101,14 +101,19 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private static bool HasTransitiveDependencyToClosedLayer(UsingDirective directive, AnalysisArchitecturalComponent component, List<AnalysisArchitecturalComponent> dependencies)
+    private static bool HasTransitiveDependencyToClosedLayer(
+        UsingDirective directive, 
+        ArchitecturalModel model,
+        ArchitecturalComponent component,
+        IList<ArchitecturalComponent> dependencyComponents)
     {
-        foreach (var nameSpace in dependencies.SelectMany(dep => dep.NamespaceComponents))
+        foreach (var nameSpace in dependencyComponents.SelectMany(dep => dep.NamespaceComponents))
         {
             if (directive.Using.Contains(nameSpace.Name) && component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName))
             {
-                var dependency = dependencies.First(dep => dep.NamespaceComponents.Any(nc => directive.Using.Contains(nc.Name)));
-                if (!dependency.IsOpen)
+                var dependencyComp = dependencyComponents.First(dep => dep.NamespaceComponents.Any(nc => directive.Using.Contains(nc.Name)));
+                var dependency = component.Dependencies.FirstOrDefault(dep => dependencyComp.Id == dep.Id);
+                if (dependency == null || !dependency.IsOpen)
                 {
                     return false;
                 }
@@ -117,9 +122,9 @@ public class AnalysisService : IAnalysisService
             }
         }
 
-        foreach (var innerDependencies in dependencies.Select(dep => dep.Dependencies))
+        foreach (var innerDependencies in dependencyComponents)
         {
-            return HasTransitiveDependencyToClosedLayer(directive, component, innerDependencies);
+            return HasTransitiveDependencyToClosedLayer(directive, model, component, GetDependencyComponents(model, innerDependencies));
         }
 
         return false;
@@ -225,7 +230,7 @@ public class AnalysisService : IAnalysisService
         return matches;
     }
 
-    private static IList<ArchitecturalComponent> GetDependentComponents(ArchitecturalModel model, ArchitecturalComponent component)
+    private static IList<ArchitecturalComponent> GetDependencyComponents(ArchitecturalModel model, ArchitecturalComponent component)
     {
         return model.Components
             .Where(comp => component.Dependencies

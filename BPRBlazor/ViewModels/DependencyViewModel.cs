@@ -3,5 +3,5 @@
 public class DependencyViewModel
 {
     public int Id { get; set; }
-    public bool Open { get; set; }
+    public bool IsOpen { get; set; }
 }
