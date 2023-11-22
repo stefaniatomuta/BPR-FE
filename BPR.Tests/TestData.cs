@@ -40,7 +40,7 @@ internal class TestData
         };
     }
 
-    internal static AnalysisArchitecturalComponent GenerateDummyComponent()
+    internal static AnalysisArchitecturalComponent GenerateDummyComponent(bool isTransitiveDependencyLayerOpen = false)
     {
         return new AnalysisArchitecturalComponent
         {
@@ -75,7 +75,8 @@ internal class TestData
                                 {
                                     Name = "BPR.Persistence"
                                 }
-                            }
+                            },
+                            IsOpen = isTransitiveDependencyLayerOpen
                         }
                     }
                 }

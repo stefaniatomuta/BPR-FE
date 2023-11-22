@@ -57,7 +57,7 @@ public class AnalysisServiceTests
         var component = TestData.GenerateDummyComponentWithNoDependencies();
 
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
 
         //Assert
         Assert.That(result, Is.Not.Empty);
@@ -71,7 +71,7 @@ public class AnalysisServiceTests
         var component = TestData.GenerateDummyComponent();
 
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
 
         //Assert
         Assert.That(result, Is.Empty);
@@ -86,7 +86,7 @@ public class AnalysisServiceTests
         var component = TestData.GenerateDummyComponent();
 
         //Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component, false);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingList, component);
 
         //Assert
         Assert.That(result, Is.Not.Empty);
@@ -102,7 +102,7 @@ public class AnalysisServiceTests
         var component = TestData.GenerateDummyComponent();
 
         // Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, false);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component);
 
         // Assert
         Assert.That(result, Is.Not.Empty);
@@ -113,10 +113,10 @@ public class AnalysisServiceTests
     {
         // Arrange
         var usingDirectives = TestData.GenerateDummyUsingDirectivesForNestedDependencies();
-        var component = TestData.GenerateDummyComponent();
+        var component = TestData.GenerateDummyComponent(true);
 
         // Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, true);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component);
 
         // Assert
         Assert.That(result, Is.Empty);
@@ -130,7 +130,7 @@ public class AnalysisServiceTests
         var component = TestData.GenerateDummyComponent();
 
         // Act
-        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component, false);
+        var result = AnalysisService.GetDependencyAnalysisOnComponent(usingDirectives, component);
 
         // Assert
         Assert.That(result, Is.Empty);

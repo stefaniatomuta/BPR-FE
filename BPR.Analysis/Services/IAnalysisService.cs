@@ -12,5 +12,5 @@ public interface IAnalysisService {
     /// <param name="model">Architectural model </param>\
     /// <param name="rules">List of rules as enums </param>\
     /// <returns>A list of all violations and their severity</returns>
-    Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules, bool isOpenArchitecture);
+    Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules);
 }

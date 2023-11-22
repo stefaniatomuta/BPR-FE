@@ -34,9 +34,6 @@
         <h3>Select an architecture model</h3>
         <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" />
     </div>
-    <div class="mb-5">
-        <SelectComponent @bind-Value=@_isOpenArchitecture Label="Open architecture" Id="@nameof(_isOpenArchitecture)" Description="Allow transitive dependencies. If checked, 'A' in scenario A->B->C can use a class directly from 'C' and this will not be considered a violation" />
-    </div>
 
     <div class="row">
         <h3>Map namespaces according to the selected architectural model</h3>

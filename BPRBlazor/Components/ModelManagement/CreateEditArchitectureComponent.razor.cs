@@ -94,6 +94,13 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         component.Dependencies.Remove(dependency);
     }
 
+    private static void ToggleOpenness(ArchitecturalComponentViewModel dependency)
+    {
+        dependency.IsOpen = !dependency.IsOpen;
+    }
+
+    private static string ComponentDependencyTypeClass(ArchitecturalComponentViewModel dependency) => dependency.IsOpen ? "btn-success" : "btn-danger";
+
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
         _dragStartCoordinates = new PositionViewModel()

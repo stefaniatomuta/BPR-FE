@@ -7,6 +7,6 @@ public interface IResultService
 {
     Task<IList<ResultModel>> GetAllResultsAsync();
     Task<ResultModel> GetResultAsync(Guid id);
-    Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, bool isOpenArchitecture);
+    Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules);
     Task<Result> DeleteResultAsync(Guid id);
 }

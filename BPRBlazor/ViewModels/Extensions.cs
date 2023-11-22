@@ -25,7 +25,8 @@ public static class Extensions
             Name = component.Name,
             Dependencies = component.Dependencies.Select(dependency => new ArchitecturalComponent()
             {
-                Id = dependency.Id
+                Id = dependency.Id,
+                IsOpen = dependency.IsOpen
             }).ToList(),
             Position = new Position
             {
@@ -41,13 +42,17 @@ public static class Extensions
             .Select(c => c.ToViewModel())
             .OrderBy(c => c.Name)
             .ToList();
-        
+
         foreach (var component in components)
         {
-            component.Dependencies.AddRange(components
-                    .Where(dependency => model.Components
-                        .First(modelComponent => modelComponent.Id == component.Id).Dependencies
-                            .Select(d => d.Id).Contains(dependency.Id)));
+            var modelComponent = model.Components.First(c => c.Id == component.Id);
+            var dependencies = components.Where(dependency => modelComponent.Dependencies
+                    .Select(d => d.Id)
+                    .Contains(dependency.Id))
+                .ToList();
+
+            dependencies.ForEach(dep => dep.IsOpen = modelComponent.Dependencies.First(d => d.Id == dep.Id).IsOpen);
+            component.Dependencies.AddRange(dependencies);
         }
 
         return new ArchitecturalModelViewModel

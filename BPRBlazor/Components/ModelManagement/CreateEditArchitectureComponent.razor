@@ -16,6 +16,7 @@
         @foreach (var component in ModelViewModel.Components)
         {
             var startPosition = GetMiddlePositionForComponent(component);
+            Console.WriteLine(startPosition.X);
             <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.PositionViewModel.X)px; top: @(component.PositionViewModel.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
                 <div class="component-header mb-2">
                     <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
@@ -26,9 +27,7 @@
                     </button>
                 </div>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <button type="button" class="btn btn-danger" @onclick="(() => RemoveArchitecturalComponent(component))">
-                        Remove
-                    </button>
+                    <a class="btn btn-danger oi oi-trash w-100" @onclick="(() => RemoveArchitecturalComponent(component))"></a>
                     <ValidationMessage For="(() => component.Name)"/>
                 </div>
             </div>
@@ -44,11 +43,11 @@
                         marker-mid="url(#arrowhead)">
                     </polyline>
                 </svg>
-                <div 
-                    class="delete-dependency"
-                    style="left: @((startPosition.X + endPosition.X) / 2 - 25)px; top: @((startPosition.Y + endPosition.Y) / 2 - 25)px">
-                    <a class="btn btn-danger oi oi-trash" @onclick="(() => RemoveDependency(component, dependency))">
-                    </a>
+                <div class="d-flex gap-1 delete-dependency"
+                    style="left: @((startPosition.X + endPosition.X) / 2 - 25)px; top: @((startPosition.Y + endPosition.Y) / 2 - 25)px"
+                >
+                    <a class="btn btn-danger oi oi-trash" @onclick="(() => RemoveDependency(component, dependency))"></a>
+                    <a class="btn @ComponentDependencyTypeClass(dependency) oi oi-arrow-circle-right w-100" @onclick="(() => ToggleOpenness(dependency))"></a>
                 </div>
             }
         }

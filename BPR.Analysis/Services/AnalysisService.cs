@@ -13,13 +13,13 @@ public class AnalysisService : IAnalysisService
         _codeExtractionService = codeExtractionService;
     }
 
-    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules, bool isOpenArchitecture)
+    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, List<AnalysisRule> rules)
     {
         List<Violation> violations = new();
 
         if (rules.Contains(AnalysisRule.Dependency))
         {
-            violations.AddRange(await GetDependencyAnalysisAsync(folderPath, model, isOpenArchitecture));
+            violations.AddRange(await GetDependencyAnalysisAsync(folderPath, model));
         }
         
         if (rules.Contains(AnalysisRule.Namespace))
@@ -30,20 +30,20 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private async Task<List<Violation>> GetDependencyAnalysisAsync(string folderPath, AnalysisArchitecturalModel model, bool isOpenArchitecture)
+    private async Task<List<Violation>> GetDependencyAnalysisAsync(string folderPath, AnalysisArchitecturalModel model)
     {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
-        List<Violation> violations = await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, model.Components, isOpenArchitecture);
+        List<Violation> violations = await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, model.Components);
 
         foreach (var component in model.Components)
         {
-            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, component.Dependencies, isOpenArchitecture));
+            violations.AddRange(await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, projectNames, component.Dependencies));
         }
 
         return violations;
     }
 
-    private async Task<List<Violation>> GetDependencyAnalysisOnNamespaceComponentsAsync(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components, bool isOpenArchitecture)
+    private async Task<List<Violation>> GetDependencyAnalysisOnNamespaceComponentsAsync(string folderPath, List<string> projectNames, List<AnalysisArchitecturalComponent> components)
     {
         List<Violation> violations = new();
 
@@ -51,13 +51,13 @@ public class AnalysisService : IAnalysisService
         {
             var usings = await GetUsingsPerComponentAsync(folderPath, component.NamespaceComponents);
             var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj => u.Using.Contains(proj))).ToList();
-            violations.AddRange(GetDependencyAnalysisOnComponent(usingsWithProjectNames, component, isOpenArchitecture));
+            violations.AddRange(GetDependencyAnalysisOnComponent(usingsWithProjectNames, component));
         }
 
         return violations;
     }
 
-    internal static List<Violation> GetDependencyAnalysisOnComponent(IList<UsingDirective> usingDirectives, AnalysisArchitecturalComponent component, bool isOpenArchitecture)
+    internal static List<Violation> GetDependencyAnalysisOnComponent(IList<UsingDirective> usingDirectives, AnalysisArchitecturalComponent component)
     {
         List<Violation> violations = new();
 
@@ -69,7 +69,7 @@ public class AnalysisService : IAnalysisService
                 || component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName)
                 && !component.Dependencies.Any()) // a using statement in X to Y but component has no dependencies, i.e X cannot have dependency to Y
                 && !directive.Using.Contains(directive.ComponentName) // ignore away self-dependencies, i.e. a using statement in X to X
-                && (!isOpenArchitecture || !IsUsingRecursiveDependency(directive, component, component.Dependencies))) // check for recursive dependencies if model is considered "Open"
+                && (!HasTransitiveDependencyToClosedLayer(directive, component, component.Dependencies))) // check for transitive dependencies to "Closed" layers
             {
                 violations.Add(new Violation()
                 {
@@ -77,7 +77,7 @@ public class AnalysisService : IAnalysisService
                     Description = $"'{directive.Using}' cannot be in '{directive.FilePath}'. Component '{directive.ComponentName}' in '{component.Name}' cannot have this dependency",
                     Severity = ViolationSeverity.Major,
                     Code = directive.Using,
-                    File = directive.File,
+                    File = directive.File
                 });
             }
         }
@@ -85,19 +85,25 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private static bool IsUsingRecursiveDependency(UsingDirective directive, AnalysisArchitecturalComponent component, List<AnalysisArchitecturalComponent> dependencies)
+    private static bool HasTransitiveDependencyToClosedLayer(UsingDirective directive, AnalysisArchitecturalComponent component, List<AnalysisArchitecturalComponent> dependencies)
     {
         foreach (var nameSpace in dependencies.SelectMany(dep => dep.NamespaceComponents))
         {
             if (directive.Using.Contains(nameSpace.Name) && component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName))
             {
+                var dependency = dependencies.First(dep => dep.NamespaceComponents.Any(nc => directive.Using.Contains(nc.Name)));
+                if (!dependency.IsOpen)
+                {
+                    return false;
+                }
+
                 return true;
             }
         }
 
         foreach (var innerDependencies in dependencies.Select(dep => dep.Dependencies))
         {
-            return IsUsingRecursiveDependency(directive, component, innerDependencies);
+            return HasTransitiveDependencyToClosedLayer(directive, component, innerDependencies);
         }
 
         return false;

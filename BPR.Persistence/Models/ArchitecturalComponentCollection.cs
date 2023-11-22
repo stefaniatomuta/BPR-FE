@@ -9,4 +9,5 @@ public class ArchitecturalComponentCollection
     public string Name { get; set; } = default!;
     public IList<ArchitecturalComponentCollection> Dependencies { get; set; } = new List<ArchitecturalComponentCollection>();
     public Position Position { get; set; } = default!;
+    public bool IsOpen { get; set; }
 }

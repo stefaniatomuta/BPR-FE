@@ -1,6 +1,5 @@
 using BPR.Analysis.Enums;
 using BPR.Analysis.Mappers;
-using BPR.Analysis.Models;
 using BPR.Mediator.Models;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
@@ -23,7 +22,6 @@ public partial class Index : ComponentBase
     private NamespaceViewModel? _selectedNamespaceViewModelComponent;
     private readonly List<RuleViewModel> _rulesViewModels = new();
     private LoadingIndicator? _loadingIndicator;
-    private bool _isOpenArchitecture = true;
     private bool _isStartAnalysisButtonDisabled;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
@@ -96,7 +94,7 @@ public partial class Index : ComponentBase
             var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
             _loadingIndicator?.ToggleLoading(true);
             _isStartAnalysisButtonDisabled = true;
-            await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList, _isOpenArchitecture);
+            await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             await Reset();
         }
         catch (Exception)
