@@ -7,6 +7,7 @@
 @inject IResultService ResultService
 @inject IMapper Mapper
 @inject IJSRuntime JS
+@inject NavigationManager NavigationManager
 @implements IDisposable
 
 @page "/"
@@ -33,7 +34,7 @@
 {
     <div class="mb-5">
         <h3>Select an architecture model</h3>
-        <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" />
+        <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" SelectedOption="@_selectedArchitectureViewModel?.Id" />
     </div>
 
     <div class="row">
@@ -75,5 +76,9 @@
     </div>
 }
 
-<button class="btn btn-primary mb-5" @onclick="StartAnalysisAsync">Start Analysis</button>
-<p class="@_resultMessageCss">@_resultMessage</p>
+<button class="btn btn-primary" @onclick="StartAnalysisAsync" disabled="@_isStartAnalysisButtonDisabled">Start Analysis</button>
+<p class="@_resultMessageCss my-2">@_resultMessage</p>
+@if (lastAnalysisResult is not null)
+{
+    <button class="btn btn-outline-success" @onclick="NavigateToAnalysisResults">View Analysis Results</button>
+}

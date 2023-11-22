@@ -62,9 +62,7 @@ public class AnalysisService : IAnalysisService
         foreach (var component in components)
         {
             var usings = await GetUsingsPerComponentAsync(folderPath, component.NamespaceComponents);
-            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj =>
-                u.Using.Contains(proj) && !component.NamespaceComponents.Any(ns => proj.Contains(ns.Name))));
-            
+            var usingsWithProjectNames = usings.Where(u => projectNames.Any(proj => u.Using.Contains(proj))).ToList();
             violations.AddRange(GetDependencyAnalysisOnComponent(usingsWithProjectNames, model, component));
         }
 
@@ -72,7 +70,7 @@ public class AnalysisService : IAnalysisService
     }
 
     internal static List<Violation> GetDependencyAnalysisOnComponent(
-        IEnumerable<UsingDirective> usingDirectives,
+        IList<UsingDirective> usingDirectives,
         ArchitecturalModel model,
         ArchitecturalComponent component)
     {
@@ -80,9 +78,13 @@ public class AnalysisService : IAnalysisService
         var dependentComponents = GetDependentComponents(model, component);
         foreach (var directive in usingDirectives)
         {
-            if (dependentComponents
+            if (!dependentComponents
                 .SelectMany(dep => dep.NamespaceComponents)
-                .Any(ns => !directive.Using.Contains(ns.Name)))
+                .Any(ns => directive.Using.Contains(ns.Name)) // a using statement in X to Y but X does not have Y as dependency
+                || component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName)
+                && !component.Dependencies.Any()) // a using statement in X to Y but component has no dependencies, i.e X cannot have dependency to Y
+                && !directive.Using.Contains(directive.ComponentName) // ignore away self-dependencies, i.e. a using statement in X to X
+                && (!HasTransitiveDependencyToClosedLayer(directive, component, component.Dependencies))) // check for transitive dependencies to "Closed" layers
             {
                 violations.Add(new Violation()
                 {
@@ -91,7 +93,7 @@ public class AnalysisService : IAnalysisService
                         $"'{directive.Using}' cannot be in '{directive.FilePath}'. Component '{directive.ComponentName}' in '{component.Name}' cannot have this dependency",
                     Severity = ViolationSeverity.Major,
                     Code = directive.Using,
-                    File = directive.File,
+                    File = directive.File
                 });
             }
         }
@@ -99,8 +101,31 @@ public class AnalysisService : IAnalysisService
         return violations;
     }
 
-    private async Task<IEnumerable<UsingDirective>> GetUsingsPerComponentAsync(string folderPath,
-        IList<NamespaceModel> namespaces)
+    private static bool HasTransitiveDependencyToClosedLayer(UsingDirective directive, AnalysisArchitecturalComponent component, List<AnalysisArchitecturalComponent> dependencies)
+    {
+        foreach (var nameSpace in dependencies.SelectMany(dep => dep.NamespaceComponents))
+        {
+            if (directive.Using.Contains(nameSpace.Name) && component.NamespaceComponents.Any(nc => nc.Name == directive.ComponentName))
+            {
+                var dependency = dependencies.First(dep => dep.NamespaceComponents.Any(nc => directive.Using.Contains(nc.Name)));
+                if (!dependency.IsOpen)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        foreach (var innerDependencies in dependencies.Select(dep => dep.Dependencies))
+        {
+            return HasTransitiveDependencyToClosedLayer(directive, component, innerDependencies);
+        }
+
+        return false;
+    }
+
+    private async Task<IList<UsingDirective>> GetUsingsPerComponentAsync(string folderPath, IList<NamespaceModel> namespaces)
     {
         List<UsingDirective> usings = new();
 
@@ -112,8 +137,7 @@ public class AnalysisService : IAnalysisService
             usings.AddRange(result);
         }
 
-        return usings
-            .Distinct();
+        return usings.Distinct().ToList();
     }
 
     private async Task<List<Violation>> GetNamespaceAnalysisAsync(string folderPath)

@@ -9,6 +9,9 @@ public partial class SelectArchitectureComponent : ComponentBase
     [Parameter]
     public EventCallback<ArchitecturalModel> ArchitectureModelChanged { get; set; }
 
+    [Parameter]
+    public Guid? SelectedOption { get; set; }
+
     private IList<ArchitecturalModel> _architectureOptions = new List<ArchitecturalModel>();
 
     protected override async Task OnInitializedAsync()
@@ -16,6 +19,21 @@ public partial class SelectArchitectureComponent : ComponentBase
         _architectureOptions = (await GetArchitecturalModels())
             .OrderBy(option => option.Name)
             .ToList();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var selectedOption = _architectureOptions.FirstOrDefault(option => option.Id == SelectedOption);
+            if (selectedOption == null)
+            {
+                return;
+            }
+
+            var optionIndex = _architectureOptions.IndexOf(selectedOption);
+            await JS.InvokeVoidAsync("setSelectedElement", new object[] { "selectArchitecture", optionIndex + 1 });
+        }
     }
 
     private Task<IList<ArchitecturalModel>> GetArchitecturalModels()
