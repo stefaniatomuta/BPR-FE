@@ -37,6 +37,11 @@ function removeSelectedElement(elementId) {
     element.selectedIndex = 0;
 }
 
+function setSelectedElement(elementId, modelIndex) {
+    const element = document.getElementById(elementId);
+    element.selectedIndex = modelIndex;
+}
+
 function handleConfirmation(message) {
     return confirm(message)
 }

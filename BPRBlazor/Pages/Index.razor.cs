@@ -1,7 +1,7 @@
 using BPR.Analysis.Enums;
 using BPR.Analysis.Mappers;
-using BPR.Analysis.Models;
 using BPR.Mediator.Models;
+using BPR.Persistence.Utils;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -23,6 +23,8 @@ public partial class Index : ComponentBase
     private NamespaceViewModel? _selectedNamespaceViewModelComponent;
     private readonly List<RuleViewModel> _rulesViewModels = new();
     private LoadingIndicator? _loadingIndicator;
+    private bool _isStartAnalysisButtonDisabled;
+    private Result? lastAnalysisResult;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
@@ -33,6 +35,7 @@ public partial class Index : ComponentBase
                 _unmappedNamespaceComponents.AddRange(component.NamespaceComponents);
             }
         }
+
         _selectedArchitectureViewModel = newValue.ToViewModel();
         AutoMapNamespaceComponents();
     }
@@ -83,7 +86,13 @@ public partial class Index : ComponentBase
 
             if (_unmappedNamespaceComponents.Any())
             {
-                _resultMessage = "Please make sure all namespaces are mapped to a component";
+                _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
+                return;
+            }
+
+            if (_selectedArchitectureViewModel.Components.Any(component => component.NamespaceComponents.Count == 0))
+            {
+                _resultMessage = "Please make sure all architectural components contain at least one namespace";
                 return;
             }
         }
@@ -92,7 +101,20 @@ public partial class Index : ComponentBase
         {
             var architecturalModel = Mapper.Map<ArchitecturalModel>(_selectedArchitectureViewModel);
             var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
-            await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
+            _loadingIndicator?.ToggleLoading(true);
+            _isStartAnalysisButtonDisabled = true;
+            lastAnalysisResult = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
+            
+            if (lastAnalysisResult.Success)
+            {
+                _resultMessage = "Analysis has successfully finished";
+                _resultMessageCss = "success";
+            }
+            else
+            {
+                _resultMessage = "Analysis failed...";
+            }
+
             await Reset();
         }
         catch (Exception)
@@ -102,12 +124,19 @@ public partial class Index : ComponentBase
         }
     }
 
+    private void NavigateToAnalysisResults()
+    {
+        NavigationManager.NavigateTo($"/results");
+    }
+
     private async Task Reset()
     {
         _uploadedFile = null;
         _unmappedNamespaceComponents = new();
         _selectedArchitectureViewModel = null;
         _rulesViewModels.ForEach(rule => rule.IsChecked = false);
+        _isStartAnalysisButtonDisabled = false;
+        _loadingIndicator?.ToggleLoading(false);
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 

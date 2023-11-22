@@ -14,4 +14,6 @@ public class ArchitecturalComponentViewModel
     public List<ArchitecturalComponentViewModel> Dependencies { get; set; } = new();
 
     public List<NamespaceViewModel> NamespaceComponents { get; set; } = new();
+
+    public bool IsOpen { get; set; }
 }

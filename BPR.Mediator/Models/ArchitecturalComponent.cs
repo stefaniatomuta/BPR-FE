@@ -9,4 +9,5 @@ public class ArchitecturalComponent
     public IList<ArchitecturalComponent> Dependencies { get; set; } = new List<ArchitecturalComponent>();
     public IList<NamespaceModel> NamespaceComponents { get; set; } = new List<NamespaceModel>();
     public Position Position { get; set; } = default!;
+    public bool IsOpen { get; set; }
 }
