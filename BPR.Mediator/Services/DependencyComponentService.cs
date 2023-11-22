@@ -1,11 +1,16 @@
-﻿using BPR.Mediator.Interfaces;
+﻿using BPR.Analysis.Models;
+using BPR.Mediator.Interfaces;
 
 namespace BPR.Mediator.Services;
 
 public class DependencyComponentService : IDependencyComponentService
 {
     private static readonly string[] IgnoredFolders = new[] {"bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests"};
-    private static readonly string[] RequiredFileExtensions = new[] {".cs", ".cshtml"};
+    private static readonly string[] RequiredFileExtensions = new[]
+    {
+        Enum.GetName(typeof(FileExtensions),FileExtensions.cs) ?? string.Empty, 
+        Enum.GetName(typeof(FileExtensions),FileExtensions.cshtml) ?? string.Empty
+    };
 
     public IList<string> GetFolderNamesForProjects(string folderPath)
     {

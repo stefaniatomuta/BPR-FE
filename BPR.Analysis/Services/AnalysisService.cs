@@ -21,7 +21,7 @@ public class AnalysisService : IAnalysisService
     public async Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitecturalModel model,
         List<ViolationType> violationTypes)
     {
-        List<Violation> violations = new();
+        var violations = new List<Violation>();
 
         if (violationTypes.Contains(ViolationType.ForbiddenDependency))
         {
@@ -39,7 +39,7 @@ public class AnalysisService : IAnalysisService
     private async Task<List<Violation>> GetDependencyAnalysisAsync(string folderPath, ArchitecturalModel model)
     {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
-        List<Violation> violations =
+        var violations =
             await GetDependencyAnalysisOnNamespaceComponentsAsync(folderPath, model, projectNames, model.Components);
 
         foreach (var component in model.Components)
@@ -57,7 +57,7 @@ public class AnalysisService : IAnalysisService
         IList<string> projectNames, 
         IList<ArchitecturalComponent> components)
     {
-        List<Violation> violations = new();
+        var violations = new List<Violation>();
 
         foreach (var component in components)
         {
@@ -74,7 +74,7 @@ public class AnalysisService : IAnalysisService
         ArchitecturalModel model,
         ArchitecturalComponent component)
     {
-        List<Violation> violations = new();
+        var violations = new List<Violation>();
         var dependencyComponents = GetDependencyComponents(model, component);
         foreach (var directive in usingDirectives)
         {
@@ -184,7 +184,8 @@ public class AnalysisService : IAnalysisService
         var files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
         foreach (var file in files)
         {
-            if (file.EndsWith(".cs") || file.EndsWith(".cshtml"))
+            if (file.EndsWith(Enum.GetName(typeof(FileExtensions),FileExtensions.cs)!) || 
+                file.EndsWith(Enum.GetName(typeof(FileExtensions),FileExtensions.cshtml)!))
             {
                 var content = await File.ReadAllLinesAsync(file, Encoding.UTF8);
                 var result = content.Where(s => Regex.Match(s, AnalysisRegex.NamespaceRegex).Success);
@@ -200,7 +201,6 @@ public class AnalysisService : IAnalysisService
                 }
             }
         }
-
         return matches;
     }
 
@@ -211,7 +211,8 @@ public class AnalysisService : IAnalysisService
 
         foreach (var file in files)
         {
-            if (file.EndsWith(".cs") || file.EndsWith(".cshtml"))
+            if (file.EndsWith(Enum.GetName(typeof(FileExtensions),FileExtensions.cshtml)!) || 
+                file.EndsWith(Enum.GetName(typeof(FileExtensions),FileExtensions.cs)!))
             {
                 var content = await File.ReadAllLinesAsync(file, Encoding.UTF8);
                 var result = content.Where(s => Regex.Match(s, AnalysisRegex.UsingRegex).Success);
