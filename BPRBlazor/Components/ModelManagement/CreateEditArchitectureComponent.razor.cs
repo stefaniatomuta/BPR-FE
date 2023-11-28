@@ -9,6 +9,8 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 {
     [Parameter] 
     public ArchitecturalModelViewModel ModelViewModel { get; set; } = new();
+    [Parameter]
+    public bool isEditable { get;set; }
     private List<(string Message, string Class)> _resultMessages = new();
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();
