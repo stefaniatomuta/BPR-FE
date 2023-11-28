@@ -9,30 +9,28 @@
 
 <SvgArrowHead/>
 <EditForm Model="ModelViewModel" OnValidSubmit="CreateOrEditArchitectureModel">
-    <ObjectGraphDataAnnotationsValidator />
-    <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
-    <ValidationMessage For="(() => ModelViewModel.Name)" />
-    
-    @if (isEditable)
+    @if (IsEditable)
     {
+        <ObjectGraphDataAnnotationsValidator />
+        <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
+        <ValidationMessage For="(() => ModelViewModel.Name)" />
         <button type="button" class="btn btn-secondary mb-2" @onclick="AddArchitecturalComponent">Add component</button>
-
     }
-    
-    <div class="draggable-boundary mb-2" ondragover="return false;" @ondrop="OnDropComponent">
-        @foreach (var component in ModelViewModel.Components)
+
+    <div class="draggable-boundary mb-2" ondragover="return false;" style="height: @(IsEditable ? "" : GetBottomPositionForComponents(ModelViewModel.Components).Y)px;" @ondrop="OnDropComponent">
+        @foreach (var component in ModelViewModel.Components!)
         {
-            <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
+            <div key="@component.Id" id="@component.Id" class="component" draggable="@IsEditable.ToString()" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
                 <div class="component-header mb-2">
-                    <InputText class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
+                    <InputText disabled="@(!IsEditable)" class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
                 </div>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <button type="button" class="btn @(component == _dependencyComponent ? "btn-success" : "btn-primary")" @onclick="(() => AddDependency(component))">
+                    <button type="button" class="btn @(component == _dependencyComponent ? "btn-success" : "btn-primary")" @onclick="(() => { if (IsEditable) AddDependency(component);})">
                         Dependency
                     </button>
                 </div>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <a class="btn btn-danger oi oi-trash w-100" @onclick="(() => RemoveArchitecturalComponent(component))"></a>
+                    <a class="btn btn-danger oi oi-trash w-100" @onclick="(() => { if (IsEditable) RemoveArchitecturalComponent(component);})"></a>
                     <ValidationMessage For="(() => component.Name)"/>
                 </div>
             </div>
@@ -65,7 +63,7 @@
                         </polyline>
                     }
                 </svg>
-                @if (isEditable)
+                @if (IsEditable)
                 {
                     <div class="d-flex gap-1 delete-dependency"
                          style="left: @((startPosition.X + endPosition.X) / 2 - 25)px; top: @((startPosition.Y + endPosition.Y) / 2 - 25)px">
@@ -81,13 +79,13 @@
     {
         <span class="@message.Class d-block">@message.Message</span>
     }
-    @if (isEditable)
+    @if (IsEditable)
     {
         <button type="submit" class="btn btn-primary mb-2">Save model</button>
     }
 </EditForm>
 
-@if (isEditable && ModelViewModel.Id != default)    
+@if (IsEditable && ModelViewModel.Id != default)    
 {
     <button class="btn btn-danger" @onclick="DeleteSelectedModel">Delete selected model</button>
 }

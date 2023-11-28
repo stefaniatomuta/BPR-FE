@@ -10,7 +10,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     [Parameter] 
     public ArchitecturalModelViewModel ModelViewModel { get; set; } = new();
     [Parameter]
-    public bool isEditable { get;set; }
+    public bool IsEditable { get;set; }
     private List<(string Message, string Class)> _resultMessages = new();
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();
@@ -150,6 +150,18 @@ public partial class CreateEditArchitectureComponent : ComponentBase
             X = component.Position.X + _componentSize.Width / 2,
             Y = component.Position.Y + _componentSize.Height / 2
         };
+    }
+    
+    private PositionViewModel GetBottomPositionForComponents(List<ArchitecturalComponentViewModel>? components)
+    {
+        if (components == null || components.Count == 0)
+        {
+            return new PositionViewModel();
+        }
+        var bottomComponent = components.MaxBy(c => c.Position.Y);
+
+        return bottomComponent != null ? new PositionViewModel { X = bottomComponent.Position.X, Y = bottomComponent.Position.Y + 200 }
+            : new PositionViewModel();
     }
     
     private async Task DeleteSelectedModel()
