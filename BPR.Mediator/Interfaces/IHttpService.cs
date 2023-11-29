@@ -1,4 +1,4 @@
-﻿namespace BPRBlazor.Services;
+﻿namespace BPR.Mediator.Interfaces;
 
 public interface IHttpService
 {

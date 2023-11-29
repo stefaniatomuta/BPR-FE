@@ -1,8 +1,8 @@
-using AutoMapper;
 using BPR.Mediator.Interfaces;
 using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
+using BPR.Model.Requests;
 using BPR.Model.Results;
 using Microsoft.Extensions.Logging;
 
@@ -13,13 +13,14 @@ public class ResultService : IResultService
     private readonly IResultRepository _resultRepository;
     private readonly IAnalysisService _analysisService;
     private readonly ILogger<ResultService> _logger;
+    private readonly IHttpService _httpService;
 
-    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, IMapper mapper,
-        ILogger<ResultService> logger)
+    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, ILogger<ResultService> logger, IHttpService httpService)
     {
         _analysisService = analysisService;
         _resultRepository = resultRepository;
         _logger = logger;
+        _httpService = httpService;
     }
 
     public async Task<IList<AnalysisResult>> GetAllResultsAsync()
@@ -51,7 +52,7 @@ public class ResultService : IResultService
         var resultModel = new AnalysisResult()
         {
             ResultStart = DateTime.UtcNow,
-            ResultStatus = (int) ResultStatus.Processing
+            ResultStatus = ResultStatus.Processing
         };
         var added = await _resultRepository.AddResultAsync(resultModel);
 
@@ -62,7 +63,10 @@ public class ResultService : IResultService
 
         try
         {
-            resultModel.Id = added.Value?.Id ?? default;
+            // TODO - Do something with the results
+            var externalAnalysisResults = await HandleExternalAnalysis(folderPath, rules);
+
+            resultModel.Id = added.Value?.Id ?? new Guid();
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             resultModel.ResultEnd = DateTime.UtcNow;
             resultModel.ResultStatus = ResultStatus.Finished;
@@ -95,5 +99,20 @@ public class ResultService : IResultService
             .ToList();
 
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
+    }
+
+    private async Task<MLAnalysisResponseModel?> HandleExternalAnalysis(string folderPath, List<Rule> rules)
+    {
+        const string url = "http://localhost:8000";
+        const string endpoint = "upload_code";
+        var externalRules = rules.ToExternalAnalysisRules();
+
+        if (!externalRules.Any())
+        {
+            return null;
+        }
+
+        var request = new MLAnalysisRequestModel(folderPath, externalRules);
+        return await _httpService.PostAsync<MLAnalysisRequestModel, MLAnalysisResponseModel>($"{url}/{endpoint}", request);
     }
 }
