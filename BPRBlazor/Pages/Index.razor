@@ -1,6 +1,7 @@
 ﻿@using BPRBlazor.Components.Common
 @using AutoMapper
 @using BPR.Mediator.Interfaces
+@using BPRBlazor.Components.ModelManagement
 @inject IDependencyComponentService DependencyComponentService
 @inject ICodebaseService CodebaseService
 @inject IResultService ResultService
@@ -34,6 +35,10 @@
     <div class="mb-5">
         <h3>Select an architecture model</h3>
         <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" SelectedOption="@_selectedArchitectureViewModel?.Id" />
+         @if (_selectedArchitectureViewModel is not null)
+         {
+             <CreateEditArchitectureComponent ModelViewModel="@(_selectedArchitectureViewModel)" IsEditable="false"/>
+         }
     </div>
 
     <div class="row">
