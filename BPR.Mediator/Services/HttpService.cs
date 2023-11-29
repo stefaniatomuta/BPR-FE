@@ -9,9 +9,9 @@ public class HttpService : IHttpService
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public HttpService(JsonSerializerOptions jsonSerializerOptions)
+    public HttpService(IHttpClientFactory httpClientFactory, JsonSerializerOptions jsonSerializerOptions)
     {
-        _httpClient = new HttpClient();
+        _httpClient = httpClientFactory.CreateClient();
         _jsonSerializerOptions = jsonSerializerOptions;
     }
 

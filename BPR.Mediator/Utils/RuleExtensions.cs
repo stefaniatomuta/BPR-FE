@@ -1,10 +1,9 @@
-﻿using BPR.Mediator.Services;
-using BPR.Model.Architectures;
+﻿using BPR.Model.Architectures;
 using BPR.Model.Enums;
 
 namespace BPR.Mediator.Utils;
 
-public static class Extensions
+public static class RuleExtensions
 {
     public static List<string> ToExternalAnalysisRules(this List<Rule> rules)
     {
