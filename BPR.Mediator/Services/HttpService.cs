@@ -1,15 +1,17 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
+using BPR.Mediator.Interfaces;
 
-namespace BPRBlazor.Services;
+namespace BPR.Mediator.Services;
 
 public class HttpService : IHttpService
 {
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public HttpService(IHttpClientFactory clientFactory, JsonSerializerOptions jsonSerializerOptions)
+    public HttpService(IHttpClientFactory httpClientFactory, JsonSerializerOptions jsonSerializerOptions)
     {
-        _httpClient = clientFactory.CreateClient();
+        _httpClient = httpClientFactory.CreateClient();
         _jsonSerializerOptions = jsonSerializerOptions;
     }
 
@@ -18,7 +20,7 @@ public class HttpService : IHttpService
         var content = JsonSerializer.Serialize(body, _jsonSerializerOptions);
         var request = new HttpRequestMessage(HttpMethod.Post, endpoint)
         {
-            Content = new StringContent(content)
+            Content = new StringContent(content, Encoding.UTF8, "application/json")
         };
 
         var response = await _httpClient.SendAsync(request);

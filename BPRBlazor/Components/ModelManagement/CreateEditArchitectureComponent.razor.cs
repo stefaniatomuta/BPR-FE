@@ -28,31 +28,35 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     
     private void AddArchitecturalComponent()
     {
-        if (IsEditable)
+        if (!IsEditable)
         {
-            _dependencyComponent = null;
-            _resultMessages = new List<(string Message, string Class)>();
-
-            var component = new ArchitecturalComponentViewModel()
-            {
-                Id = ModelViewModel.Components.Any() ? ModelViewModel.Components.Max(c => c.Id) + 1 : 0
-            };
-
-            ModelViewModel.Components.Add(component);
+            return;
         }
+
+        _dependencyComponent = null;
+        _resultMessages = new List<(string Message, string Class)>();
+
+        var component = new ArchitecturalComponentViewModel()
+        {
+            Id = ModelViewModel.Components.Any() ? ModelViewModel.Components.Max(c => c.Id) + 1 : 0
+        };
+
+        ModelViewModel.Components.Add(component);
     }
 
     private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
     {
-        if (IsEditable)
+        if (!IsEditable)
         {
-            _dependencyComponent = null;
-            ModelViewModel.Components.Remove(component);
-        
-            foreach (var dependentComponent in ModelViewModel.Components)
-            {
-                dependentComponent.Dependencies.RemoveAll(dependency => dependency.Id == component.Id);
-            }
+            return;
+        }
+
+        _dependencyComponent = null;
+        ModelViewModel.Components.Remove(component);
+
+        foreach (var dependentComponent in ModelViewModel.Components)
+        {
+            dependentComponent.Dependencies.RemoveAll(dependency => dependency.Id == component.Id);
         }
     }
 
@@ -82,6 +86,11 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
     private void AddDependency(ArchitecturalComponentViewModel dependencyComponent)
     {
+        if (!IsEditable)
+        {
+            return;
+        }
+
         if (_dependencyComponent != null)
         {
             if (_dependencyComponent == dependencyComponent)

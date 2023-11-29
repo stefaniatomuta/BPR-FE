@@ -5,9 +5,13 @@ namespace BPR.Model.Enums;
 public enum ViolationType
 {
     [Description("Unknown violation type")] 
-    Unknown = 0,
+    Unknown,
     [Description("Forbidden dependency")] 
-    ForbiddenDependency = 1,
+    ForbiddenDependency,
     [Description("Mismatched namespace")] 
-    MismatchedNamespace = 2
+    MismatchedNamespace,
+    ConditionalStatements,
+    SolutionMetrics,
+    ExternalCalls,
+    CodeSimilarity
 }

@@ -1,4 +1,4 @@
-﻿using BPR.Analysis.Models;
+﻿using BPR.Model.Requests;
 
 namespace BPR.Tests;
 

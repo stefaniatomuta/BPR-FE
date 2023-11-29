@@ -7,7 +7,6 @@ using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
 using BPRBlazor.Mappers;
-using BPRBlazor.Services;
 using FluentValidation;
 
 namespace BPRBlazor;

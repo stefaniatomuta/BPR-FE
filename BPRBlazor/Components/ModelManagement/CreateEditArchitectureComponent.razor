@@ -13,25 +13,23 @@
     {
         <ObjectGraphDataAnnotationsValidator />
         <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
-        <ValidationMessage For="(() => ModelViewModel.Name)" />
+        <ValidationMessage For="() => ModelViewModel.Name" />
         <button type="button" class="btn btn-secondary mb-2" @onclick="AddArchitecturalComponent">Add component</button>
     }
 
     <div class="draggable-boundary mb-2" ondragover="return false;" style="height: @(IsEditable ? "" : GetBottomPositionForComponents(ModelViewModel.Components).Y)px;" @ondrop="OnDropComponent">
         @foreach (var component in ModelViewModel.Components!)
         {
-            <div key="@component.Id" id="@component.Id" class="component" draggable="@IsEditable.ToString()" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="((e) => OnDragComponentStart(e, component))">
+            <div key="@component.Id" id="@component.Id" class="component" draggable="@IsEditable.ToString()" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="(e) => OnDragComponentStart(e, component)">
                 <div class="component-header mb-2">
                     <InputText disabled="@(!IsEditable)" class="form-control" placeholder="Name..." @bind-Value="component.Name"/>
                 </div>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <button type="button" class="btn @(component == _dependencyComponent ? "btn-success" : "btn-primary")" @onclick="() => AddDependency(component)">
-                        Dependency
-                    </button>
+                    <a class="btn @(component == _dependencyComponent ? "btn-success" : "btn-primary") w-100" @onclick="() => AddDependency(component)">Dependency</a>
                 </div>
                 <div class="d-flex flex-column p-2 gap-1">
-                    <a class="btn btn-danger oi oi-trash w-100" @onclick="(() => RemoveArchitecturalComponent(component))"></a>
-                    <ValidationMessage For="(() => component.Name)"/>
+                    <a class="btn btn-danger oi oi-trash w-100" @onclick="() => RemoveArchitecturalComponent(component)"></a>
+                    <ValidationMessage For="() => component.Name"/>
                 </div>
             </div>
             @foreach (var dependencyComponent in ModelViewModel.Components
@@ -49,8 +47,7 @@
                                   stroke="#000000"
                                   stroke-width="3"
                                   fill="none"
-                                  marker-mid="url(#arrowhead)"
-                                  stroke-dasharray="5">
+                                  marker-mid="url(#arrowhead)">
                         </polyline>
                     }
                     else
@@ -59,7 +56,8 @@
                                   stroke="#000000"
                                   stroke-width="3"
                                   fill="none"
-                                  marker-mid="url(#arrowhead)">
+                                  marker-mid="url(#arrowhead)"
+                                  stroke-dasharray="5">
                         </polyline>
                     }
                 </svg>
@@ -67,14 +65,14 @@
                 {
                     <div class="d-flex gap-1 delete-dependency"
                          style="left: @((startPosition.X + endPosition.X) / 2 - 25)px; top: @((startPosition.Y + endPosition.Y) / 2 - 25)px">
-                        <a class="btn btn-danger oi oi-trash" @onclick="(() => RemoveDependency(component, dependencyComponent))"></a>
-                        <a class="btn @ComponentDependencyTypeClass(dependency) oi oi-arrow-circle-right w-100" @onclick="(() => ToggleOpenness(dependency))"></a>
+                        <a class="btn btn-danger oi oi-trash" @onclick="() => RemoveDependency(component, dependencyComponent)"></a>
+                        <a class="btn @ComponentDependencyTypeClass(dependency) oi oi-arrow-circle-right w-100" @onclick="() => ToggleOpenness(dependency)"></a>
                     </div>
                 }
             }
         }
     </div>
-    <ValidationMessage For="(() => ModelViewModel.Components)" />
+    <ValidationMessage For="() => ModelViewModel.Components" />
     @foreach (var message in _resultMessages)
     {
         <span class="@message.Class d-block">@message.Message</span>

@@ -1,5 +1,5 @@
-﻿using BPR.Analysis.Models;
-using BPR.Mediator.Interfaces;
+﻿using BPR.Mediator.Interfaces;
+using BPR.Model.Results;
 
 namespace BPR.Analysis.Services;
 
