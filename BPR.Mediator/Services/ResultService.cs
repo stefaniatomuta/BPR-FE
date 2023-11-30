@@ -14,13 +14,15 @@ public class ResultService : IResultService
     private readonly IAnalysisService _analysisService;
     private readonly ILogger<ResultService> _logger;
     private readonly IHttpService _httpService;
+    private readonly ISender _messagingService;
 
-    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, ILogger<ResultService> logger, IHttpService httpService)
+    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, ILogger<ResultService> logger, IHttpService httpService, ISender messagingService)
     {
         _analysisService = analysisService;
         _resultRepository = resultRepository;
         _logger = logger;
         _httpService = httpService;
+        _messagingService = messagingService;
     }
 
     public async Task<IList<AnalysisResult>> GetAllResultsAsync()
@@ -54,6 +56,7 @@ public class ResultService : IResultService
             ResultStart = DateTime.UtcNow,
             ResultStatus = ResultStatus.Processing
         };
+
         var added = await _resultRepository.AddResultAsync(resultModel);
 
         if (!added.Success)
@@ -63,15 +66,20 @@ public class ResultService : IResultService
 
         try
         {
-            // TODO - Do something with the results
-            var externalAnalysisResults = await HandleExternalAnalysis(folderPath, rules);
-
             resultModel.Id = added.Value?.Id ?? new Guid();
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
-            resultModel.ResultEnd = DateTime.UtcNow;
-            resultModel.ResultStatus = ResultStatus.Finished;
+
+            if (!await HandleExternalAnalysis(folderPath, rules))
+            {
+                resultModel.ResultStatus = ResultStatus.Finished;
+                resultModel.ResultEnd = DateTime.UtcNow;
+            }
+
             var addResult = await _resultRepository.UpdateResultAsync(resultModel);
-            return addResult.Success ? Result.Ok(addResult) : Result.Fail<Rule>(addResult.Errors, _logger);
+
+            return addResult.Success 
+                ? Result.Ok(addResult) 
+                : Result.Fail<Rule>(addResult.Errors, _logger);
         }
         catch (Exception e)
         {
@@ -101,18 +109,17 @@ public class ResultService : IResultService
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
     }
 
-    private async Task<MLAnalysisResponseModel?> HandleExternalAnalysis(string folderPath, List<Rule> rules)
+    private async Task<bool> HandleExternalAnalysis(string folderPath, List<Rule> rules)
     {
-        const string url = "http://localhost:8000";
-        const string endpoint = "upload_code";
         var externalRules = rules.ToExternalAnalysisRules();
 
         if (!externalRules.Any())
         {
-            return null;
+            return false;
         }
 
         var request = new MLAnalysisRequestModel(folderPath, externalRules);
-        return await _httpService.PostAsync<MLAnalysisRequestModel, MLAnalysisResponseModel>($"{url}/{endpoint}", request);
+        await _messagingService.SendAsync(request);
+        return true;
     }
 }

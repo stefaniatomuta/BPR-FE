@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@using BPR.Mediator.Services.Messaging
+@inject RabbitMqConsumer MessageConsumerService
+@implements IDisposable
 
 <PageTitle>Architecture Analyzer</PageTitle>
 
@@ -6,6 +9,8 @@
     <div class="sidebar">
         <NavMenu />
     </div>
+
+    <p>@response</p>
 
     <main>
         <article class="content px-4">

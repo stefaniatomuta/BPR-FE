@@ -1,5 +1,8 @@
-using System.Text.Json;
+using BPR.Mediator.Interfaces;
+using BPR.Mediator.Services.Messaging;
 using BPRBlazor;
+using BPRBlazor.Services;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,10 @@ builder.Services.AddSingleton(new JsonSerializerOptions
     PropertyNameCaseInsensitive = true,
     WriteIndented = true
 });
+
+builder.Services.AddScoped<ISender, RabbitMqSender>();
+builder.Services.AddSingleton<RabbitMqConsumer>();
+builder.Services.AddHostedService<RabbitMqBackgroundService>();
 
 var app = builder.Build();
 
