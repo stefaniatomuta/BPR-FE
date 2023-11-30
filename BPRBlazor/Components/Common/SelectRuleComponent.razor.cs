@@ -5,7 +5,7 @@ namespace BPRBlazor.Components.Common;
 
 public partial class SelectRuleComponent : ComponentBase
 {
-    [Parameter]
+    [Parameter, EditorRequired]
     public EventCallback<RuleViewModel> OnChange { get; set; }
 
     private List<RuleViewModel>? _rules;

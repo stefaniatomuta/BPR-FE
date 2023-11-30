@@ -4,7 +4,7 @@ namespace BPR.Model.Api;
 
 public class MLAnalysisRequestModel
 {
-    [JsonPropertyName("correlationId")]
+    [JsonPropertyName("correlation_id")]
     public Guid CorrelationId { get; init; }
 
     [JsonPropertyName("path")]

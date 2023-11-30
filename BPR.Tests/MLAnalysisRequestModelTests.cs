@@ -1,4 +1,4 @@
-﻿using BPR.Model.Requests;
+﻿using BPR.Model.Api;
 
 namespace BPR.Tests;
 
@@ -12,7 +12,7 @@ internal class MLAnalysisRequestModelTests
         var path = "C:\\This\\Is\\My\\Path";
 
         // Act
-        var model = new MLAnalysisRequestModel(path, new List<string>());
+        var model = new MLAnalysisRequestModel(path, new List<string>(), Guid.NewGuid());
 
         // Assert
         var expectedPath = path.Replace("\\", "/");

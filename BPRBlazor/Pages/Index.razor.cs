@@ -103,12 +103,7 @@ public partial class Index : ComponentBase
             _isStartAnalysisButtonDisabled = true;
             lastAnalysisResult = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             
-            if (lastAnalysisResult.Success)
-            {
-                _resultMessage = "Analysis has successfully finished";
-                _resultMessageCss = "success";
-            }
-            else
+            if (!lastAnalysisResult.Success)
             {
                 _resultMessage = "Analysis failed...";
             }

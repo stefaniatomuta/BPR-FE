@@ -36,15 +36,10 @@ public class ResultService : IResultService
         return result.OrderByDescending(res => res.ResultStart).ToList();
     }
 
-    public async Task<AnalysisResult> GetResultAsync(Guid id)
+    public async Task<AnalysisResult?> GetResultAsync(Guid id)
     {
         var result = (await _resultRepository.GetResultAsync(id)).Value;
-        if (result != null)
-        {
-            return result;
-        }
-
-        return new AnalysisResult();
+        return result;
     }
 
 
@@ -90,6 +85,24 @@ public class ResultService : IResultService
         }
     }
 
+    public async Task<Result> UpdateAndFinishResultAsync(Guid id, AnalysisResult result)
+    {
+        var model = await GetResultAsync(id);
+
+        if (model == null)
+        {
+            return Result.Fail($"No result found with id: '{id}'", _logger);
+        }
+
+        // TODO - Add data to model.
+
+        model.ResultEnd = DateTime.UtcNow;
+        model.ResultStatus = ResultStatus.Finished;
+        await _resultRepository.UpdateResultAsync(model);
+
+        return Result.Ok(model);
+    }
+
     public async Task<Result> DeleteResultAsync(Guid id)
     {
         var deletedModel = await _resultRepository.DeleteResultAsync(id);
@@ -98,8 +111,7 @@ public class ResultService : IResultService
             : Result.Fail($"No result found with id: '{id}'", _logger);
     }
 
-    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model,
-        List<Rule> rules)
+    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
     {
         var ruleList = rules
             .Select(rule => rule.ViolationType)

@@ -5,11 +5,11 @@ namespace BPRBlazor.Components.Results;
 
 public partial class ResultRow : ComponentBase
 {
-    [Parameter]
+    [Parameter, EditorRequired]
     public ResultViewModel Result { get; set; } = default!;
-    [Parameter]
-    public EventCallback<Guid> ResultDeleted { get; set; }
 
+    [Parameter, EditorRequired]
+    public EventCallback<Guid> ResultDeleted { get; set; }
 
     private void SeeDetails(Guid id)
     {

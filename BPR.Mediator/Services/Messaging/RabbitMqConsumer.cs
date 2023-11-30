@@ -13,8 +13,8 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
 
     public event Func<T, Task>? MessageReceivedEvent;
 
-    private const string queueName = "analysis_sender";
-    private const int delay = 10000;
+    private const string QueueName = "analysis_sender";
+    private const int Delay = 10000;
 
     public RabbitMqConsumer(ILogger<RabbitMqConsumer<T>> logger, JsonSerializerOptions serializerOptions) : base(logger)
     {
@@ -27,14 +27,14 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
         {
             using var connection = _connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
-            channel.QueueDeclare(queueName, false, false);
+            channel.QueueDeclare(QueueName, false, false, false);
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, args) =>
             {
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                _logger.LogDebug("Received message from queue: '{Queue}': '{Message}'", queueName, message);
+                _logger.LogDebug("Received message from queue: '{Queue}': '{Message}'", QueueName, message);
                 var response = JsonSerializer.Deserialize<T>(message, _serializerOptions);
 
                 if (response != null)
@@ -43,12 +43,12 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
                 }
             };
 
-            channel.BasicConsume(queueName, true, consumer);
-            _logger.LogInformation("Waiting for messages from queue: '{Queue}'...", queueName);
+            channel.BasicConsume(QueueName, true, consumer);
+            _logger.LogInformation("Waiting for messages from queue: '{Queue}'...", QueueName);
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(delay, cancellationToken);
+                await Task.Delay(Delay, cancellationToken);
             }
         }
         catch (Exception ex)

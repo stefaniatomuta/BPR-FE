@@ -10,7 +10,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
 {
     private readonly JsonSerializerOptions _serializerOptions;
 
-    private const string queueName = "analysis_consumer";
+    private const string QueueName = "analysis_consumer";
 
     public RabbitMqSender(ILogger<RabbitMqSender> logger, JsonSerializerOptions serializerOptions) : base(logger)
     {
@@ -23,13 +23,13 @@ public class RabbitMqSender : RabbitMqBase, ISender
         {
             using var connection = _connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
-            channel.QueueDeclare(queueName, false, false);
+            channel.QueueDeclare(QueueName, false, false, false);
 
             var message = JsonSerializer.Serialize(request, _serializerOptions);
             var body = Encoding.UTF8.GetBytes(message);
 
-            channel.BasicPublish(string.Empty, queueName, null, body);
-            _logger.LogDebug("Sent message to queue: '{Queue}'", queueName);
+            channel.BasicPublish(string.Empty, QueueName, null, body);
+            _logger.LogDebug("Sent message to queue: '{Queue}'", QueueName);
         }
         catch (Exception ex)
         {
