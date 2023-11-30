@@ -9,6 +9,7 @@ public partial class ResultDetails : ComponentBase
 {
     [Parameter] 
     public Guid Id { get; set; }
+
     private ResultViewModel? _result;
     private List<ViolationViewModel> _filteredViolations = new();
     
@@ -17,7 +18,7 @@ public partial class ResultDetails : ComponentBase
         if (firstRender)
         {
             var resultModel = await ResultService.GetResultAsync(Id);
-            _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
+            _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel!);
             _filteredViolations = new List<ViolationViewModel>(_result.Violations);
             StateHasChanged();
         }

@@ -63,37 +63,9 @@ public partial class Index : ComponentBase
     {
         _resultMessageCss = "error";
 
-        if (_uploadedFile is null)
+        if (!IsAnalysisModelValid())
         {
-            _resultMessage = "Please upload the source code";
             return;
-        }
-
-        if (_rulesViewModels.All(r => !r.IsChecked))
-        {
-            _resultMessage = "Please select one or more rules to analyse against";
-            return;
-        }
-
-        if (IsDependencyRuleChecked())
-        {
-            if (_selectedArchitectureViewModel is null)
-            {
-                _resultMessage = "Please select an architectural model";
-                return;
-            }
-
-            if (_unmappedNamespaceComponents.Any())
-            {
-                _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
-                return;
-            }
-
-            if (_selectedArchitectureViewModel.Components.Any(component => component.NamespaceComponents.Count == 0))
-            {
-                _resultMessage = "Please make sure all architectural components contain at least one namespace";
-                return;
-            }
         }
 
         try
@@ -114,7 +86,7 @@ public partial class Index : ComponentBase
                 else
                 {
                     _resultMessageCss = "success";
-                    _resultMessage = "Analysis started... You will be notified when it is finished";
+                    _resultMessage = "Analysis started... You will be notified when it is complete";
                 }
             }
             else
@@ -140,6 +112,44 @@ public partial class Index : ComponentBase
         _isStartAnalysisButtonDisabled = false;
         _loadingIndicator?.ToggleLoading(false);
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
+    }
+
+    private bool IsAnalysisModelValid()
+    {
+        if (_uploadedFile is null)
+        {
+            _resultMessage = "Please upload the source code";
+            return false;
+        }
+
+        if (_rulesViewModels.All(r => !r.IsChecked))
+        {
+            _resultMessage = "Please select one or more rules to analyse against";
+            return false;
+        }
+
+        if (IsDependencyRuleChecked())
+        {
+            if (_selectedArchitectureViewModel is null)
+            {
+                _resultMessage = "Please select an architectural model";
+                return false;
+            }
+
+            if (_unmappedNamespaceComponents.Any())
+            {
+                _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
+                return false;
+            }
+
+            if (_selectedArchitectureViewModel.Components.Any(component => component.NamespaceComponents.Count == 0))
+            {
+                _resultMessage = "Please make sure all architectural components contain at least one namespace";
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void HandleDragStart(NamespaceViewModel namespaceViewModelComponent)
