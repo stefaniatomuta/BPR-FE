@@ -1,5 +1,4 @@
 using BPRBlazor;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +9,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddValidators();
 builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
+
+builder.Services.ConfigureMudBlazor();
 
 var app = builder.Build();
 

@@ -1,11 +1,10 @@
-﻿using BPR.Model.Requests;
+﻿using BPR.Model.Api;
+using MudBlazor;
 
 namespace BPRBlazor.Shared;
 
 public partial class MainLayout
 {
-    private string response = string.Empty;
-
     protected override void OnInitialized()
     {
         MessageConsumerService.MessageReceivedEvent += OnMessageReceivedAsync;
@@ -16,8 +15,21 @@ public partial class MainLayout
         await InvokeAsync(() =>
         {
             // TODO - do something with the response. Save in DB and notify user?
-            this.response = response.ToString()!;
             StateHasChanged();
+        });
+    }
+
+    private void ShowSnackbar()
+    {
+        string message = "Analysis results completed! Click to view results";
+        Snackbar.Add(message, Severity.Success, config =>
+        {
+            config.HideIcon = true;
+            config.Onclick = (snackbar) =>
+            {
+                NavigationManager.NavigateTo("/results");
+                return Task.CompletedTask;
+            };
         });
     }
 

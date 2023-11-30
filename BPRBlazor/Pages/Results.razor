@@ -13,9 +13,9 @@
 @if (_results.Any())
 {
     <div class="d-flex flex-wrap">
-    @foreach (var result in _results)
-    {
-        <ResultRow Result="result" ResultDeleted="HandleResultDeleted"/>
-    }
+        @foreach (var result in _results)
+        {
+            <ResultRow Result="result" ResultDeleted="HandleResultDeleted"/>
+        }
     </div>
 }

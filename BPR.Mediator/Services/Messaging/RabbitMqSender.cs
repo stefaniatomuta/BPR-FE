@@ -19,16 +19,23 @@ public class RabbitMqSender : RabbitMqBase, ISender
 
     public Task SendAsync<T>(T request)
     {
-        using var connection = _connectionFactory.CreateConnection();
-        using var channel = connection.CreateModel();
-        channel.QueueDeclare(queueName, false, false, true);
+        try
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.QueueDeclare(queueName, false, false, true);
 
-        var message = JsonSerializer.Serialize(request, _serializerOptions);
-        var body = Encoding.UTF8.GetBytes(message);
+            var message = JsonSerializer.Serialize(request, _serializerOptions);
+            var body = Encoding.UTF8.GetBytes(message);
 
-        channel.BasicPublish(string.Empty, queueName, null, body);
-        _logger.LogDebug("Sent message to queue: '{Queue}'", queueName);
-
+            channel.BasicPublish(string.Empty, queueName, null, body);
+            _logger.LogDebug("Sent message to queue: '{Queue}'", queueName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("{ExceptionMessage}. Exception: {Exception}", ex.Message, ex);
+        }
+        
         return Task.CompletedTask;
     }
 }

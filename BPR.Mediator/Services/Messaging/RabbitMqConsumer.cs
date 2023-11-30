@@ -23,30 +23,37 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
 
     public async Task ConsumeAsync(CancellationToken cancellationToken)
     {
-        using var connection = _connectionFactory.CreateConnection();
-        using var channel = connection.CreateModel();
-        channel.QueueDeclare(queueName, false, false, true);
-
-        var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += (model, args) =>
+        try
         {
-            var body = args.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-            _logger.LogDebug("Received message from queue: '{Queue}': '{Message}'", queueName, message);
-            var response = JsonSerializer.Deserialize<T>(message, _serializerOptions);
+            using var connection = _connectionFactory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.QueueDeclare(queueName, false, false, true);
 
-            if (response != null)
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, args) =>
             {
-                MessageReceivedEvent?.Invoke(response);
+                var body = args.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                _logger.LogDebug("Received message from queue: '{Queue}': '{Message}'", queueName, message);
+                var response = JsonSerializer.Deserialize<T>(message, _serializerOptions);
+
+                if (response != null)
+                {
+                    MessageReceivedEvent?.Invoke(response);
+                }
+            };
+
+            channel.BasicConsume(queueName, true, consumer);
+            _logger.LogInformation("Waiting for messages from queue: '{Queue}'...", queueName);
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(delay, cancellationToken);
             }
-        };
-
-        channel.BasicConsume(queueName, true, consumer);
-        _logger.LogInformation("Waiting for messages from queue: '{Queue}'...", queueName);
-
-        while (!cancellationToken.IsCancellationRequested)
+        }
+        catch (Exception ex)
         {
-            await Task.Delay(delay, cancellationToken);
+            _logger.LogWarning("{ExceptionMessage}. Exception: {Exception}", ex.Message, ex);
         }
     }
 }

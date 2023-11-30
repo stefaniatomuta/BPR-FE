@@ -8,7 +8,7 @@ public abstract class RabbitMqBase
     protected readonly ConnectionFactory _connectionFactory;
     protected readonly ILogger _logger;
 
-    private const string endpoint = "amqp://guest:guest@localhost:5672/";
+    protected const string endpoint = "amqp://guest:guest@localhost:5672/";
 
     protected RabbitMqBase(ILogger logger)
     {

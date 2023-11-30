@@ -1,9 +1,9 @@
 using BPR.Mediator.Interfaces;
 using BPR.Mediator.Interfaces.Messaging;
 using BPR.Mediator.Utils;
+using BPR.Model.Api;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
-using BPR.Model.Requests;
 using BPR.Model.Results;
 using Microsoft.Extensions.Logging;
 
@@ -68,7 +68,7 @@ public class ResultService : IResultService
             resultModel.Id = added.Value?.Id ?? new Guid();
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
 
-            if (!await HandleExternalAnalysis(folderPath, rules))
+            if (!await HandleExternalAnalysis(folderPath, rules, resultModel.Id))
             {
                 resultModel.ResultStatus = ResultStatus.Finished;
                 resultModel.ResultEnd = DateTime.UtcNow;
@@ -108,7 +108,7 @@ public class ResultService : IResultService
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
     }
 
-    private async Task<bool> HandleExternalAnalysis(string folderPath, List<Rule> rules)
+    private async Task<bool> HandleExternalAnalysis(string folderPath, List<Rule> rules, Guid correlationId)
     {
         var externalRules = rules.ToExternalAnalysisRules();
 
@@ -117,7 +117,7 @@ public class ResultService : IResultService
             return false;
         }
 
-        var request = new MLAnalysisRequestModel(folderPath, externalRules);
+        var request = new MLAnalysisRequestModel(folderPath, externalRules, correlationId);
         await _messagingService.SendAsync(request);
         return true;
     }

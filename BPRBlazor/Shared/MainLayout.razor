@@ -1,20 +1,26 @@
 ﻿@inherits LayoutComponentBase
 @using BPR.Mediator.Interfaces.Messaging;
-@using BPR.Model.Requests;
+@using BPR.Model.Api;
+@using MudBlazor
 @inject IConsumer<MLAnalysisResponseModel> MessageConsumerService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 @implements IDisposable
 
 <PageTitle>Architecture Analyzer</PageTitle>
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
-    <p>@response</p>
-
     <main>
         <article class="content px-4">
+            <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Error" @onclick="ShowSnackbar">Show Snackbar</MudButton>
             @Body
         </article>
     </main>
