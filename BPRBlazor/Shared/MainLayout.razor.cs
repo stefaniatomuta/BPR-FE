@@ -10,16 +10,13 @@ public partial class MainLayout
         MessageConsumerService.MessageReceivedEvent += OnMessageReceivedAsync;
     }
 
-    private async Task OnMessageReceivedAsync(MLAnalysisResponseModel response)
+    private Task OnMessageReceivedAsync(MLAnalysisResponseModel response)
     {
-        await InvokeAsync(() =>
-        {
-            // TODO - do something with the response. Save in DB and notify user?
-            StateHasChanged();
-        });
+        ShowSnackbar(response.CorrelationId);
+        return Task.CompletedTask;
     }
 
-    private void ShowSnackbar()
+    private void ShowSnackbar(Guid resultId)
     {
         string message = "Analysis results completed! Click to view results";
         Snackbar.Add(message, Severity.Success, config =>
@@ -27,7 +24,7 @@ public partial class MainLayout
             config.HideIcon = true;
             config.Onclick = (snackbar) =>
             {
-                NavigationManager.NavigateTo("/results");
+                NavigationManager.NavigateTo($"/results/{resultId}");
                 return Task.CompletedTask;
             };
         });

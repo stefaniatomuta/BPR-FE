@@ -23,7 +23,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
         {
             using var connection = _connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
-            channel.QueueDeclare(queueName, false, false, true);
+            channel.QueueDeclare(queueName, false, false);
 
             var message = JsonSerializer.Serialize(request, _serializerOptions);
             var body = Encoding.UTF8.GetBytes(message);

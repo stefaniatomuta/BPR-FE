@@ -13,7 +13,7 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
 
     public event Func<T, Task>? MessageReceivedEvent;
 
-    private const string queueName = "analysis_consumer";
+    private const string queueName = "analysis_sender";
     private const int delay = 10000;
 
     public RabbitMqConsumer(ILogger<RabbitMqConsumer<T>> logger, JsonSerializerOptions serializerOptions) : base(logger)
@@ -27,7 +27,7 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
         {
             using var connection = _connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
-            channel.QueueDeclare(queueName, false, false, true);
+            channel.QueueDeclare(queueName, false, false);
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, args) =>
