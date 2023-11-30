@@ -25,7 +25,6 @@ public partial class Index : ComponentBase
     private readonly List<RuleViewModel> _rulesViewModels = new();
     private LoadingIndicator? _loadingIndicator;
     private bool _isStartAnalysisButtonDisabled;
-    private Result? lastAnalysisResult;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
@@ -103,18 +102,19 @@ public partial class Index : ComponentBase
             var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
             _loadingIndicator?.ToggleLoading(true);
             _isStartAnalysisButtonDisabled = true;
-            lastAnalysisResult = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
+            var result = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             
-            if (lastAnalysisResult.Success)
+            if (result.Success)
             {
-                _resultMessageCss = "success";
-                _resultMessage = "Analysis started...";
-
-                // TODO - Ain't no way this is necessary?!? But I'm too stupid...
-                var model = ((Result<AnalysisResult>)lastAnalysisResult)?.Value!;
-                if (model.ResultStatus == ResultStatus.Finished)
+                var analysis = result.Value!;
+                if (analysis.ResultStatus == ResultStatus.Finished)
                 {
-                    ToastService.ShowSnackbar(model.Id);
+                    ToastService.ShowSnackbar(analysis.Id);
+                }
+                else
+                {
+                    _resultMessageCss = "success";
+                    _resultMessage = "Analysis started... You will be notified when it is finished";
                 }
             }
             else
@@ -129,11 +129,6 @@ public partial class Index : ComponentBase
             _resultMessage = "An error occured...";
             throw;
         }
-    }
-
-    private void NavigateToAnalysisResults()
-    {
-        NavigationManager.NavigateTo($"/results");
     }
 
     private async Task Reset()

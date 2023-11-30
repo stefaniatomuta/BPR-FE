@@ -10,6 +10,6 @@ public interface IResultService
     Task<IList<AnalysisResult>> GetAllResultsAsync();
     Task<AnalysisResult?> GetResultAsync(Guid id);
     Task<Result> UpdateAndFinishResultAsync(Guid id, MLAnalysisResponseModel result);
-    Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules);
+    Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules);
     Task<Result> DeleteResultAsync(Guid id);
 }

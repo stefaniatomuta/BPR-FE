@@ -43,7 +43,7 @@ public class ResultService : IResultService
     }
 
 
-    public async Task<Result> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
     {
         var resultModel = new AnalysisResult()
         {
@@ -72,8 +72,8 @@ public class ResultService : IResultService
             var addResult = await _resultRepository.UpdateResultAsync(resultModel);
 
             return addResult.Success 
-                ? Result.Ok(addResult) 
-                : Result.Fail<Rule>(addResult.Errors, _logger);
+                ? Result.Ok(addResult).Value!
+                : Result.Fail<AnalysisResult>(addResult.Errors, _logger);
         }
         catch (Exception e)
         {

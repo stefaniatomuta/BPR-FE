@@ -16,7 +16,7 @@ public class ToastService
 
     public void ShowSnackbar(Guid resultId)
     {
-        string message = "Analysis results completed! Click to view results";
+        string message = "Analysis complete! Click to view results";
         _snackbar.Add(message, Severity.Success, config =>
         {
             config.HideIcon = true;
