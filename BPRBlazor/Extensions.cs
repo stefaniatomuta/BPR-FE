@@ -41,7 +41,6 @@ public static class Extensions
 
         services.AddScoped<ISender, RabbitMqSender>();
         services.AddSingleton<IConsumer<MLAnalysisResponseModel>, RabbitMqConsumer<MLAnalysisResponseModel>>();
-        services.AddHostedService<RabbitMqBackgroundService<MLAnalysisResponseModel>>();
 
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddAutoMapper(typeof(ServiceMappers).Assembly);
@@ -51,6 +50,12 @@ public static class Extensions
             PropertyNameCaseInsensitive = true,
             WriteIndented = true
         });
+    }
+
+    public static void AddBlazorServices(this IServiceCollection services)
+    {
+        services.AddScoped<ToastService>();
+        services.AddHostedService<RabbitMqBackgroundService<MLAnalysisResponseModel>>();
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)

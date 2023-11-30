@@ -1,5 +1,4 @@
 ﻿using BPR.Model.Api;
-using MudBlazor;
 
 namespace BPRBlazor.Shared;
 
@@ -10,24 +9,10 @@ public partial class MainLayout
         MessageConsumerService.MessageReceivedEvent += OnMessageReceivedAsync;
     }
 
-    private Task OnMessageReceivedAsync(MLAnalysisResponseModel response)
+    private async Task OnMessageReceivedAsync(MLAnalysisResponseModel response)
     {
-        ShowSnackbar(response.CorrelationId);
-        return Task.CompletedTask;
-    }
-
-    private void ShowSnackbar(Guid resultId)
-    {
-        string message = "Analysis results completed! Click to view results";
-        Snackbar.Add(message, Severity.Success, config =>
-        {
-            config.HideIcon = true;
-            config.Onclick = (snackbar) =>
-            {
-                NavigationManager.NavigateTo($"/results/{resultId}");
-                return Task.CompletedTask;
-            };
-        });
+        await ResultService.UpdateAndFinishResultAsync(response.CorrelationId, response);
+        ToastService.ShowSnackbar(response.CorrelationId);
     }
 
     public void Dispose()

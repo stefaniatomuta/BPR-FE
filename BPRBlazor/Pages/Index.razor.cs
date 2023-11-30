@@ -1,7 +1,9 @@
 using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
+using BPR.Model.Results;
 using BPRBlazor.Components.Common;
+using BPRBlazor.Services;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -103,7 +105,19 @@ public partial class Index : ComponentBase
             _isStartAnalysisButtonDisabled = true;
             lastAnalysisResult = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             
-            if (!lastAnalysisResult.Success)
+            if (lastAnalysisResult.Success)
+            {
+                _resultMessageCss = "success";
+                _resultMessage = "Analysis started...";
+
+                // TODO - Ain't no way this is necessary?!? But I'm too stupid...
+                var model = ((Result<AnalysisResult>)lastAnalysisResult)?.Value!;
+                if (model.ResultStatus == ResultStatus.Finished)
+                {
+                    ToastService.ShowSnackbar(model.Id);
+                }
+            }
+            else
             {
                 _resultMessage = "Analysis failed...";
             }

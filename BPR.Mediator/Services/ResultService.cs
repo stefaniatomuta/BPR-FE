@@ -85,7 +85,7 @@ public class ResultService : IResultService
         }
     }
 
-    public async Task<Result> UpdateAndFinishResultAsync(Guid id, AnalysisResult result)
+    public async Task<Result> UpdateAndFinishResultAsync(Guid id, MLAnalysisResponseModel result)
     {
         var model = await GetResultAsync(id);
 

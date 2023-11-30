@@ -10,6 +10,7 @@ builder.Services.AddValidators();
 builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
 
+builder.Services.AddBlazorServices();
 builder.Services.ConfigureMudBlazor();
 
 var app = builder.Build();
