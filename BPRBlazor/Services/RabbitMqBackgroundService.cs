@@ -13,6 +13,7 @@ public class RabbitMqBackgroundService<T> : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        await Task.Delay(5000);
         await _messagingService.ConsumeAsync(cancellationToken);
     }
 }

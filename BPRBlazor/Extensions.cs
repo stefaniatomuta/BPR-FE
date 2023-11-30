@@ -12,6 +12,7 @@ using BPR.Persistence.Utils;
 using BPRBlazor.Mappers;
 using BPRBlazor.Services;
 using FluentValidation;
+using System.Text.Json;
 
 namespace BPRBlazor;
 
@@ -44,6 +45,12 @@ public static class Extensions
 
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddAutoMapper(typeof(ServiceMappers).Assembly);
+
+        services.AddSingleton(new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            WriteIndented = true
+        });
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)

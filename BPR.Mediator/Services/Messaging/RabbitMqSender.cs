@@ -8,10 +8,13 @@ namespace BPR.Mediator.Services.Messaging;
 
 public class RabbitMqSender : RabbitMqBase, ISender
 {
+    private readonly JsonSerializerOptions _serializerOptions;
+
     private const string queueName = "analysis_consumer";
 
-    public RabbitMqSender(ILogger<RabbitMqSender> logger) : base(logger)
+    public RabbitMqSender(ILogger<RabbitMqSender> logger, JsonSerializerOptions serializerOptions) : base(logger)
     {
+        _serializerOptions = serializerOptions;
     }
 
     public Task SendAsync<T>(T request)
@@ -20,7 +23,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
         using var channel = connection.CreateModel();
         channel.QueueDeclare(queueName, false, false, true);
 
-        var message = JsonSerializer.Serialize(request);
+        var message = JsonSerializer.Serialize(request, _serializerOptions);
         var body = Encoding.UTF8.GetBytes(message);
 
         channel.BasicPublish(string.Empty, queueName, null, body);

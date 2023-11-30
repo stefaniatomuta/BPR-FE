@@ -11,13 +11,6 @@ builder.Services.AddValidators();
 builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
 
-// Database config
-builder.Services.AddSingleton(new JsonSerializerOptions
-{
-    PropertyNameCaseInsensitive = true,
-    WriteIndented = true
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
