@@ -1,5 +1,4 @@
-﻿using BPR.Mediator.Interfaces;
-using BPR.Model.Requests;
+﻿using BPR.Mediator.Interfaces.Messaging;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System.Text;
@@ -15,7 +14,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
     {
     }
 
-    public Task SendAsync(MLAnalysisRequestModel request)
+    public Task SendAsync<T>(T request)
     {
         using var connection = _connectionFactory.CreateConnection();
         using var channel = connection.CreateModel();

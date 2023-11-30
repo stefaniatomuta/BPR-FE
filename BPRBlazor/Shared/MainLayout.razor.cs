@@ -8,10 +8,10 @@ public partial class MainLayout
 
     protected override void OnInitialized()
     {
-        MessageConsumerService.MessageReceivedEvent += OnMessageReceived;
+        MessageConsumerService.MessageReceivedEvent += OnMessageReceivedAsync;
     }
 
-    private async Task OnMessageReceived(MLAnalysisResponseModel response)
+    private async Task OnMessageReceivedAsync(MLAnalysisResponseModel response)
     {
         await InvokeAsync(() =>
         {
@@ -24,6 +24,6 @@ public partial class MainLayout
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        MessageConsumerService.MessageReceivedEvent -= OnMessageReceived;
+        MessageConsumerService.MessageReceivedEvent -= OnMessageReceivedAsync;
     }
 }

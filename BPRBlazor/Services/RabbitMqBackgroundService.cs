@@ -1,13 +1,12 @@
-﻿using BPR.Mediator.Interfaces;
-using BPR.Mediator.Services.Messaging;
+﻿using BPR.Mediator.Interfaces.Messaging;
 
 namespace BPRBlazor.Services;
 
-public class RabbitMqBackgroundService : BackgroundService
+public class RabbitMqBackgroundService<T> : BackgroundService
 {
-    private readonly IConsumer _messagingService;
+    private readonly IConsumer<T> _messagingService;
 
-    public RabbitMqBackgroundService(RabbitMqConsumer messagingService)
+    public RabbitMqBackgroundService(IConsumer<T> messagingService)
     {
         _messagingService = messagingService;
     }

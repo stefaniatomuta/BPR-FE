@@ -1,12 +1,16 @@
 using BPR.Analysis.Services;
 using BPR.Mediator.Interfaces;
+using BPR.Mediator.Interfaces.Messaging;
 using BPR.Mediator.Services;
+using BPR.Mediator.Services.Messaging;
 using BPR.Mediator.Validators;
 using BPR.Model.Architectures;
+using BPR.Model.Requests;
 using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
 using BPR.Persistence.Utils;
 using BPRBlazor.Mappers;
+using BPRBlazor.Services;
 using FluentValidation;
 
 namespace BPRBlazor;
@@ -23,7 +27,6 @@ public static class Extensions
 
     public static void AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
         services.AddScoped<IResultService, ResultService>();
@@ -34,6 +37,11 @@ public static class Extensions
         services.AddScoped<IDependencyService, DependencyService>();
         services.AddScoped<IRuleRepository, RuleRepository>();
         services.AddScoped<IRuleService, RuleService>();
+
+        services.AddScoped<ISender, RabbitMqSender>();
+        services.AddSingleton<IConsumer<MLAnalysisResponseModel>, RabbitMqConsumer<MLAnalysisResponseModel>>();
+        services.AddHostedService<RabbitMqBackgroundService<MLAnalysisResponseModel>>();
+
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddAutoMapper(typeof(ServiceMappers).Assembly);
     }

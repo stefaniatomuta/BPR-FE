@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
-@using BPR.Mediator.Services.Messaging
-@inject RabbitMqConsumer MessageConsumerService
+@using BPR.Mediator.Interfaces.Messaging;
+@using BPR.Model.Requests;
+@inject IConsumer<MLAnalysisResponseModel> MessageConsumerService
 @implements IDisposable
 
 <PageTitle>Architecture Analyzer</PageTitle>

@@ -1,4 +1,5 @@
 using BPR.Mediator.Interfaces;
+using BPR.Mediator.Interfaces.Messaging;
 using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
@@ -13,15 +14,13 @@ public class ResultService : IResultService
     private readonly IResultRepository _resultRepository;
     private readonly IAnalysisService _analysisService;
     private readonly ILogger<ResultService> _logger;
-    private readonly IHttpService _httpService;
     private readonly ISender _messagingService;
 
-    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, ILogger<ResultService> logger, IHttpService httpService, ISender messagingService)
+    public ResultService(IResultRepository resultRepository, IAnalysisService analysisService, ILogger<ResultService> logger, ISender messagingService)
     {
         _analysisService = analysisService;
         _resultRepository = resultRepository;
         _logger = logger;
-        _httpService = httpService;
         _messagingService = messagingService;
     }
 

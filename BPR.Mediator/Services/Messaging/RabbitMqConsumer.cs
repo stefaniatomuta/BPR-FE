@@ -1,5 +1,4 @@
-﻿using BPR.Mediator.Interfaces;
-using BPR.Model.Requests;
+﻿using BPR.Mediator.Interfaces.Messaging;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -8,14 +7,14 @@ using System.Text.Json;
 
 namespace BPR.Mediator.Services.Messaging;
 
-public class RabbitMqConsumer : RabbitMqBase, IConsumer
+public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
 {
-    public event Func<MLAnalysisResponseModel, Task>? MessageReceivedEvent;
+    public event Func<T, Task>? MessageReceivedEvent;
 
     private const string queueName = "analysis_sender";
     private const int delay = 10000;
 
-    public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger) : base(logger)
+    public RabbitMqConsumer(ILogger<RabbitMqConsumer<T>> logger) : base(logger)
     {
     }
 
@@ -30,7 +29,7 @@ public class RabbitMqConsumer : RabbitMqBase, IConsumer
         {
             var body = args.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            var response = JsonSerializer.Deserialize<MLAnalysisResponseModel>(message);
+            var response = JsonSerializer.Deserialize<T>(message);
 
             _logger.LogDebug("Received message from queue: '{Queue}': '{Message}'", queueName, message);
 
