@@ -2,5 +2,5 @@
 
 public interface ISender
 {
-    Task SendAsync<T>(T request);
+    Task SendAsync(string folderPath, List<string> rules, Guid correlationId);
 }

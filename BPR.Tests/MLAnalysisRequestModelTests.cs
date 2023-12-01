@@ -1,4 +1,4 @@
-﻿using BPR.Model.Api;
+﻿using BPR.MachineLearningIntegration.Models;
 
 namespace BPR.Tests;
 

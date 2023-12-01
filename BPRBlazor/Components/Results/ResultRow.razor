@@ -7,8 +7,7 @@
 
 <div class="result-row col-3">
     <p>Started: @Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</p>
-    <p>Ended: @(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "Not finished...")</p>
-
+    <p>Ended: @(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "")</p>
     <p>Status: @Result.ResultStatus.ToString()</p>
     
     <div class="d-flex justify-content-between">

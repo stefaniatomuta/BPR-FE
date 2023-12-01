@@ -1,7 +1,6 @@
 using BPR.Mediator.Interfaces;
 using BPR.Mediator.Interfaces.Messaging;
 using BPR.Mediator.Utils;
-using BPR.Model.Api;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPR.Model.Results;
@@ -85,7 +84,7 @@ public class ResultService : IResultService
         }
     }
 
-    public async Task<Result> UpdateAndFinishResultAsync(Guid id, MLAnalysisResponseModel result)
+    public async Task<Result> UpdateAndFinishResultAsync(Guid id, ExtendedAnalysisResults result)
     {
         var model = await GetResultAsync(id);
 
@@ -129,8 +128,7 @@ public class ResultService : IResultService
             return false;
         }
 
-        var request = new MLAnalysisRequestModel(folderPath, externalRules, correlationId);
-        await _messagingService.SendAsync(request);
+        await _messagingService.SendAsync(folderPath, externalRules, correlationId);
         return true;
     }
 }

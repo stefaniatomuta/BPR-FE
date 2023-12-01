@@ -1,4 +1,4 @@
-﻿using BPR.Model.Api;
+﻿using BPR.Model.Results;
 
 namespace BPRBlazor.Shared;
 
@@ -9,7 +9,7 @@ public partial class MainLayout
         MessageConsumerService.MessageReceivedEvent += OnMessageReceivedAsync;
     }
 
-    private async Task OnMessageReceivedAsync(MLAnalysisResponseModel response)
+    private async Task OnMessageReceivedAsync(ExtendedAnalysisResults response)
     {
         await ResultService.UpdateAndFinishResultAsync(response.CorrelationId, response);
         ToastService.ShowSnackbar(response.CorrelationId);

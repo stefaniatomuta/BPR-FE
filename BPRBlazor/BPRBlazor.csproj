@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BPR.MachineLearningIntegration\BPR.MachineLearningIntegration.csproj" />
       <ProjectReference Include="..\BPR.Mediator\BPR.Mediator.csproj" />
       <ProjectReference Include="..\BPR.Analysis\BPR.Analysis.csproj" />
       <ProjectReference Include="..\BPR.Persistence\BPR.Persistence.csproj" />

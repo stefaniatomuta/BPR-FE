@@ -1,7 +1,5 @@
-using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
-using BPR.Model.Results;
 using BPRBlazor.Components.Common;
 using BPRBlazor.Services;
 using BPRBlazor.ViewModels;

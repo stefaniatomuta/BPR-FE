@@ -1,10 +1,10 @@
 using BPR.Analysis.Services;
+using BPR.MachineLearningIntegration.Mappers;
+using BPR.MachineLearningIntegration.RabbitMq;
 using BPR.Mediator.Interfaces;
 using BPR.Mediator.Interfaces.Messaging;
 using BPR.Mediator.Services;
-using BPR.Mediator.Services.Messaging;
 using BPR.Mediator.Validators;
-using BPR.Model.Api;
 using BPR.Model.Architectures;
 using BPR.Persistence.Config;
 using BPR.Persistence.Repositories;
@@ -40,8 +40,9 @@ public static class Extensions
         services.AddScoped<IRuleService, RuleService>();
 
         services.AddScoped<ISender, RabbitMqSender>();
-        services.AddSingleton<IConsumer<MLAnalysisResponseModel>, RabbitMqConsumer<MLAnalysisResponseModel>>();
+        services.AddSingleton<IConsumer, RabbitMqConsumer>();
 
+        services.AddAutoMapper(typeof(MachineLearningMapper).Assembly);
         services.AddAutoMapper(typeof(MapperProfile).Assembly);
         services.AddAutoMapper(typeof(ServiceMappers).Assembly);
 
@@ -55,7 +56,7 @@ public static class Extensions
     public static void AddBlazorServices(this IServiceCollection services)
     {
         services.AddScoped<ToastService>();
-        services.AddHostedService<RabbitMqBackgroundService<MLAnalysisResponseModel>>();
+        services.AddHostedService<RabbitMqBackgroundService>();
     }
 
     public static void AddDbConfiguration(this IServiceCollection services, IConfiguration configuration)

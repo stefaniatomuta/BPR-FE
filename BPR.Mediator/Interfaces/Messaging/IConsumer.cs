@@ -1,7 +1,9 @@
-﻿namespace BPR.Mediator.Interfaces.Messaging;
+﻿using BPR.Model.Results;
 
-public interface IConsumer<T>
+namespace BPR.Mediator.Interfaces.Messaging;
+
+public interface IConsumer
 {
-    event Func<T, Task>? MessageReceivedEvent;
+    event Func<ExtendedAnalysisResults, Task>? MessageReceivedEvent;
     Task ConsumeAsync(CancellationToken cancellationToken);
 }

@@ -2,18 +2,19 @@
 
 namespace BPRBlazor.Services;
 
-public class RabbitMqBackgroundService<T> : BackgroundService
+public class RabbitMqBackgroundService : BackgroundService
 {
-    private readonly IConsumer<T> _messagingService;
+    private readonly IConsumer _messagingService;
 
-    public RabbitMqBackgroundService(IConsumer<T> messagingService)
+    public RabbitMqBackgroundService(IConsumer messagingService)
     {
         _messagingService = messagingService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        await Task.Delay(5000);
+        // TODO - Yuck :-(
+        await Task.Delay(5000, cancellationToken);
         await _messagingService.ConsumeAsync(cancellationToken);
     }
 }

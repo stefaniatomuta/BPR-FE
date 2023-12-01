@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BPR.Model.Api;
+namespace BPR.MachineLearningIntegration.Models;
 
 public class MLAnalysisRequestModel
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace BPR.Mediator.Services.Messaging;
+namespace BPR.MachineLearningIntegration.RabbitMq;
 
 public abstract class RabbitMqBase
 {

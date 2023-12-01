@@ -1,10 +1,9 @@
 ﻿@inherits LayoutComponentBase
 @using BPR.Mediator.Interfaces.Messaging;
 @using BPR.Mediator.Interfaces;
-@using BPR.Model.Api;
 @using BPRBlazor.Services;
 @using MudBlazor
-@inject IConsumer<MLAnalysisResponseModel> MessageConsumerService
+@inject IConsumer MessageConsumerService
 @inject IResultService ResultService
 @inject ToastService ToastService
 @inject NavigationManager NavigationManager

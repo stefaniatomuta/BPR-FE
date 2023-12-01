@@ -1,23 +1,28 @@
-﻿using BPR.Mediator.Interfaces.Messaging;
+﻿using AutoMapper;
+using BPR.MachineLearningIntegration.Models;
+using BPR.Mediator.Interfaces.Messaging;
+using BPR.Model.Results;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
 
-namespace BPR.Mediator.Services.Messaging;
+namespace BPR.MachineLearningIntegration.RabbitMq;
 
-public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
+public class RabbitMqConsumer : RabbitMqBase, IConsumer
 {
+    private readonly IMapper _mapper;
     private readonly JsonSerializerOptions _serializerOptions;
 
-    public event Func<T, Task>? MessageReceivedEvent;
+    public event Func<ExtendedAnalysisResults, Task>? MessageReceivedEvent;
 
     private const string QueueName = "analysis_sender";
     private const int Delay = 10000;
 
-    public RabbitMqConsumer(ILogger<RabbitMqConsumer<T>> logger, JsonSerializerOptions serializerOptions) : base(logger)
+    public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IMapper mapper, JsonSerializerOptions serializerOptions) : base(logger)
     {
+        _mapper = mapper;
         _serializerOptions = serializerOptions;
     }
 
@@ -35,11 +40,12 @@ public class RabbitMqConsumer<T> : RabbitMqBase, IConsumer<T>
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 _logger.LogDebug("Received message from queue: '{Queue}': '{Message}'", QueueName, message);
-                var response = JsonSerializer.Deserialize<T>(message, _serializerOptions);
+                var response = JsonSerializer.Deserialize<MLAnalysisResponseModel>(message, _serializerOptions);
+                var result = _mapper.Map<ExtendedAnalysisResults>(response);
 
-                if (response != null)
+                if (result != null)
                 {
-                    MessageReceivedEvent?.Invoke(response);
+                    MessageReceivedEvent?.Invoke(result);
                 }
             };
 

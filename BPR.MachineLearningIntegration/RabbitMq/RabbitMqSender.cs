@@ -1,10 +1,11 @@
-﻿using BPR.Mediator.Interfaces.Messaging;
+﻿using BPR.MachineLearningIntegration.Models;
+using BPR.Mediator.Interfaces.Messaging;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 
-namespace BPR.Mediator.Services.Messaging;
+namespace BPR.MachineLearningIntegration.RabbitMq;
 
 public class RabbitMqSender : RabbitMqBase, ISender
 {
@@ -17,7 +18,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
         _serializerOptions = serializerOptions;
     }
 
-    public Task SendAsync<T>(T request)
+    public Task SendAsync(string folderPath, List<string> rules, Guid correlationId)
     {
         try
         {
@@ -25,6 +26,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
             using var channel = connection.CreateModel();
             channel.QueueDeclare(QueueName, false, false, false);
 
+            var request = new MLAnalysisRequestModel(folderPath, rules, correlationId);
             var message = JsonSerializer.Serialize(request, _serializerOptions);
             var body = Encoding.UTF8.GetBytes(message);
 
@@ -35,7 +37,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
         {
             _logger.LogWarning("{ExceptionMessage}. Exception: {Exception}", ex.Message, ex);
         }
-        
+
         return Task.CompletedTask;
     }
 }
