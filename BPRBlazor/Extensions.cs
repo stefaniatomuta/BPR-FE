@@ -1,4 +1,5 @@
 using BPR.Analysis.Services;
+using BPR.Analysis.Services.Analyses;
 using BPR.MachineLearningIntegration.Mappers;
 using BPR.MachineLearningIntegration.RabbitMq;
 using BPR.Mediator.Interfaces;
@@ -35,6 +36,7 @@ public static class Extensions
         services.AddScoped<IResultRepository, ResultRepository>();
         services.AddScoped<ICodeExtractionService, CodeExtractionService>();
         services.AddScoped<IAnalysisService, AnalysisService>();
+        services.AddScoped<DependencyAnalysis>();
         services.AddScoped<IDependencyService, DependencyService>();
         services.AddScoped<IRuleRepository, RuleRepository>();
         services.AddScoped<IRuleService, RuleService>();
