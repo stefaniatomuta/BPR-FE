@@ -1,5 +1,6 @@
 ﻿using BPR.Analysis.Models;
 using BPR.Analysis.Services;
+using BPR.Analysis.Services.Analyses;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPR.Model.Results;
@@ -25,7 +26,7 @@ public class AnalysisServiceTests
         var folderPath = "BPR";
 
         //Act
-        var result = AnalysisService.GetNamespaceAnalysis(list, folderPath);
+        var result = NamespaceAnalysis.GetNamespaceAnalysis(list, folderPath);
 
         //Assert
         Assert.That(result, Is.Empty);
@@ -47,7 +48,7 @@ public class AnalysisServiceTests
         var folderPath = "BPR";
 
         //Act
-        var result = AnalysisService.GetNamespaceAnalysis(list, folderPath);
+        var result = NamespaceAnalysis.GetNamespaceAnalysis(list, folderPath);
 
         //Assert
         Assert.That(result, Is.Not.Empty);
@@ -179,7 +180,7 @@ public class AnalysisServiceTests
             var componentUsings = usings.Where(u => !component.NamespaceComponents.Any(n => u.Using.Contains(n.Name)))
             .Where(u => component.NamespaceComponents.Any(n => n.Name == u.ComponentName))
             .ToList();
-            violations.AddRange(AnalysisService.GetDependencyAnalysisOnComponent(componentUsings, model, component));
+            violations.AddRange(DependencyAnalysis.GetDependencyAnalysisOnComponent(componentUsings, model, component));
         }
 
         return violations;
