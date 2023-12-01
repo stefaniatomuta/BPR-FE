@@ -5,10 +5,10 @@ namespace BPRBlazor.Components.Common;
 
 public partial class SelectViolationTypeComponent : ComponentBase
 {
-    [Parameter]
+    [Parameter, EditorRequired]
     public EventCallback<ViolationTypeViewModel> OnChange { get; set; }
 
-    [Parameter] 
+    [Parameter, EditorRequired] 
     public List<ViolationTypeViewModel>? Violations { get; set; }
 
     private async Task CheckboxChanged(ChangeEventArgs e, ViolationTypeViewModel item)

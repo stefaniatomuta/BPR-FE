@@ -7,15 +7,15 @@
 
 <div class="result-row col-3">
     <p>Started: @Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</p>
-    @if (Result.ResultStatus != ResultStatus.Processing)
-    {
-        <p>Ended: @(Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture))</p>
-    }
+    <p>Ended: @(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "")</p>
     <p>Status: @Result.ResultStatus.ToString()</p>
-    @if (Result.ResultStatus == ResultStatus.Finished)
-    {
-        <button class="btn btn-primary" @onclick="() => SeeDetails(Result.Id)">See details</button>
-    }
+    
+    <div class="d-flex justify-content-between">
+        @if (Result.ResultStatus == ResultStatus.Finished)
+        {
+            <button class="btn btn-primary" @onclick="() => SeeDetails(Result.Id)">See details</button>
+        }
 
-    <button class="btn btn-danger mx-3" @onclick="() => DeleteAsync(Result.Id)">Delete</button>
+        <button class="btn btn-danger" @onclick="() => DeleteAsync(Result.Id)">Delete</button>
+    </div>
 </div>

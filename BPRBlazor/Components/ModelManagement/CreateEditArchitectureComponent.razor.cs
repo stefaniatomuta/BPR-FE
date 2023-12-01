@@ -7,10 +7,12 @@ namespace BPRBlazor.Components.ModelManagement;
 
 public partial class CreateEditArchitectureComponent : ComponentBase
 {
-    [Parameter] 
+    [Parameter, EditorRequired] 
     public ArchitecturalModelViewModel ModelViewModel { get; set; } = new();
+
     [Parameter]
-    public bool IsEditable { get;set; }
+    public bool IsEditable { get; set; }
+
     private List<(string Message, string Class)> _resultMessages = new();
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();

@@ -10,12 +10,20 @@
 
 <h3>Results</h3>
 
-@if (_results.Any())
+@if (_results == null)
+{
+    <p>Loading...</p>
+}
+else if (!_results.Any())
+{
+    <p>No analyses found</p>
+}
+else
 {
     <div class="d-flex flex-wrap">
-    @foreach (var result in _results)
-    {
-        <ResultRow Result="result" ResultDeleted="HandleResultDeleted"/>
-    }
+        @foreach (var result in _results)
+        {
+            <ResultRow Result="result" ResultDeleted="HandleResultDeleted" />
+        }
     </div>
 }

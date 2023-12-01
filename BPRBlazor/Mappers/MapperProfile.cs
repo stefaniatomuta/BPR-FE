@@ -5,8 +5,10 @@ using BPRBlazor.ViewModels;
 
 namespace BPRBlazor.Mappers; 
 
-public class MapperProfile : Profile {
-    public MapperProfile() {
+public class MapperProfile : Profile
+{
+    public MapperProfile()
+    {
         CreateMap<ArchitecturalComponent, ArchitecturalComponentViewModel>().ReverseMap();
         CreateMap<ArchitecturalModel, ArchitecturalModelViewModel>().ReverseMap();
         CreateMap<NamespaceViewModel, NamespaceModel>().ReverseMap();

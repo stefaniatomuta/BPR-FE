@@ -1,4 +1,3 @@
-using System.Text.Json;
 using BPRBlazor;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,12 +10,8 @@ builder.Services.AddValidators();
 builder.Services.AddServices();
 builder.Services.AddDbConfiguration(builder.Configuration);
 
-// Database config
-builder.Services.AddSingleton(new JsonSerializerOptions
-{
-    PropertyNameCaseInsensitive = true,
-    WriteIndented = true
-});
+builder.Services.AddBlazorServices();
+builder.Services.ConfigureMudBlazor();
 
 var app = builder.Build();
 

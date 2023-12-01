@@ -12,13 +12,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2B752002-6279-4959-9A7F-76119E4F4A73}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-and-test.yaml = .github\workflows\build-and-test.yaml
+		docker-compose.yml = docker-compose.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Analysis", "BPR.Analysis\BPR.Analysis.csproj", "{976677D4-F21C-47EA-9B8A-FC311EB7AC42}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Persistence", "BPR.Persistence\BPR.Persistence.csproj", "{70304D45-885D-453E-96DA-6601EFFFEFD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPR.Model", "BPR.Model\BPR.Model.csproj", "{FCDD5DE8-F3F7-4872-8434-AD5817FADF17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Model", "BPR.Model\BPR.Model.csproj", "{FCDD5DE8-F3F7-4872-8434-AD5817FADF17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPR.MachineLearningIntegration", "BPR.MachineLearningIntegration\BPR.MachineLearningIntegration.csproj", "{DD88145C-C933-4681-91CE-F101D121C770}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +54,10 @@ Global
 		{FCDD5DE8-F3F7-4872-8434-AD5817FADF17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCDD5DE8-F3F7-4872-8434-AD5817FADF17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCDD5DE8-F3F7-4872-8434-AD5817FADF17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD88145C-C933-4681-91CE-F101D121C770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD88145C-C933-4681-91CE-F101D121C770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD88145C-C933-4681-91CE-F101D121C770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD88145C-C933-4681-91CE-F101D121C770}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

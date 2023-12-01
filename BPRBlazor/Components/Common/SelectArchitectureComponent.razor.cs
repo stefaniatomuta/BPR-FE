@@ -6,7 +6,7 @@ namespace BPRBlazor.Components.Common;
 
 public partial class SelectArchitectureComponent : ComponentBase
 {
-    [Parameter]
+    [Parameter, EditorRequired]
     public EventCallback<ArchitecturalModel> ArchitectureModelChanged { get; set; }
 
     [Parameter]

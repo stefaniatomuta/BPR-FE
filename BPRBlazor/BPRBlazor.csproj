@@ -11,9 +11,11 @@
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
+        <PackageReference Include="MudBlazor" Version="6.11.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BPR.MachineLearningIntegration\BPR.MachineLearningIntegration.csproj" />
       <ProjectReference Include="..\BPR.Mediator\BPR.Mediator.csproj" />
       <ProjectReference Include="..\BPR.Analysis\BPR.Analysis.csproj" />
       <ProjectReference Include="..\BPR.Persistence\BPR.Persistence.csproj" />

@@ -1,7 +1,7 @@
-using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPRBlazor.Components.Common;
+using BPRBlazor.Services;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -23,7 +23,6 @@ public partial class Index : ComponentBase
     private readonly List<RuleViewModel> _rulesViewModels = new();
     private LoadingIndicator? _loadingIndicator;
     private bool _isStartAnalysisButtonDisabled;
-    private Result? lastAnalysisResult;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
@@ -62,37 +61,9 @@ public partial class Index : ComponentBase
     {
         _resultMessageCss = "error";
 
-        if (_uploadedFile is null)
+        if (!IsAnalysisModelValid())
         {
-            _resultMessage = "Please upload the source code";
             return;
-        }
-
-        if (_rulesViewModels.All(r => !r.IsChecked))
-        {
-            _resultMessage = "Please select one or more rules to analyse against";
-            return;
-        }
-
-        if (IsDependencyRuleChecked())
-        {
-            if (_selectedArchitectureViewModel is null)
-            {
-                _resultMessage = "Please select an architectural model";
-                return;
-            }
-
-            if (_unmappedNamespaceComponents.Any())
-            {
-                _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
-                return;
-            }
-
-            if (_selectedArchitectureViewModel.Components.Any(component => component.NamespaceComponents.Count == 0))
-            {
-                _resultMessage = "Please make sure all architectural components contain at least one namespace";
-                return;
-            }
         }
 
         try
@@ -101,12 +72,20 @@ public partial class Index : ComponentBase
             var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
             _loadingIndicator?.ToggleLoading(true);
             _isStartAnalysisButtonDisabled = true;
-            lastAnalysisResult = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
+            var result = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
             
-            if (lastAnalysisResult.Success)
+            if (result.Success)
             {
-                _resultMessage = "Analysis has successfully finished";
-                _resultMessageCss = "success";
+                var analysis = result.Value!;
+                if (analysis.ResultStatus == ResultStatus.Finished)
+                {
+                    ToastService.ShowSnackbar(analysis.Id);
+                }
+                else
+                {
+                    _resultMessageCss = "success";
+                    _resultMessage = "Analysis started... You will be notified when it is complete";
+                }
             }
             else
             {
@@ -122,11 +101,6 @@ public partial class Index : ComponentBase
         }
     }
 
-    private void NavigateToAnalysisResults()
-    {
-        NavigationManager.NavigateTo($"/results");
-    }
-
     private async Task Reset()
     {
         _uploadedFile = null;
@@ -136,6 +110,44 @@ public partial class Index : ComponentBase
         _isStartAnalysisButtonDisabled = false;
         _loadingIndicator?.ToggleLoading(false);
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
+    }
+
+    private bool IsAnalysisModelValid()
+    {
+        if (_uploadedFile is null)
+        {
+            _resultMessage = "Please upload the source code";
+            return false;
+        }
+
+        if (_rulesViewModels.All(r => !r.IsChecked))
+        {
+            _resultMessage = "Please select one or more rules to analyse against";
+            return false;
+        }
+
+        if (IsDependencyRuleChecked())
+        {
+            if (_selectedArchitectureViewModel is null)
+            {
+                _resultMessage = "Please select an architectural model";
+                return false;
+            }
+
+            if (_unmappedNamespaceComponents.Any())
+            {
+                _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
+                return false;
+            }
+
+            if (_selectedArchitectureViewModel.Components.Any(component => component.NamespaceComponents.Count == 0))
+            {
+                _resultMessage = "Please make sure all architectural components contain at least one namespace";
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void HandleDragStart(NamespaceViewModel namespaceViewModelComponent)
