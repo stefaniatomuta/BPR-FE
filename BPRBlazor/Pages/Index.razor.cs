@@ -195,6 +195,7 @@ public partial class Index : ComponentBase
         }
 
         _loadingIndicator?.ToggleLoading(true);
+        _isStartAnalysisButtonDisabled = true;
 
         try
         {
@@ -211,6 +212,7 @@ public partial class Index : ComponentBase
         }
 
         _loadingIndicator?.ToggleLoading(false);
+        _isStartAnalysisButtonDisabled = false;
     }
 
     private async Task LoadCodebaseAsync(IBrowserFile file)
