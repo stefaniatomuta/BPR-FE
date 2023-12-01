@@ -9,7 +9,7 @@ namespace BPR.Analysis.Services.Analyses;
 
 internal class NamespaceAnalysis
 {
-    internal static async Task<List<Violation>> GetNamespaceAnalysisAsync(string folderPath)
+    internal static async Task<List<Violation>> AnalyseAsync(string folderPath)
     {
         var namespaces = await GetNamespaceDirectivesAsync(folderPath);
         return GetNamespaceAnalysis(namespaces, folderPath);

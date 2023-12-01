@@ -21,12 +21,12 @@ public class AnalysisService : IAnalysisService
 
         if (violationTypes.Contains(ViolationType.ForbiddenDependency))
         {
-            violations.AddRange(await _dependencyAnalysis.GetDependencyAnalysisAsync(folderPath, model));
+            violations.AddRange(await _dependencyAnalysis.AnalyseAsync(folderPath, model));
         }
 
         if (violationTypes.Contains(ViolationType.MismatchedNamespace))
         {
-            violations.AddRange(await NamespaceAnalysis.GetNamespaceAnalysisAsync(folderPath));
+            violations.AddRange(await NamespaceAnalysis.AnalyseAsync(folderPath));
         }
 
         return violations;
