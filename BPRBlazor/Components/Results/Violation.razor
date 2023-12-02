@@ -5,13 +5,25 @@
         <strong>#@(EnumExtensions.GetDescription(Model.Type))</strong>
     </p>
     <p class="violation-description">@Model.Description</p>
-    <p>Severity: 
-        <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
-    </p>
-    <div class="violation-code-wrapper">
-        @foreach (var line in Model.Code.Split("\n"))
-        {
-            <code>@line</code>
-        }
-    </div>
+    
+    @foreach (var extendedData in Model.ExtendedData)
+    {
+        <p>@extendedData.Key: @extendedData.Value</p>
+    }
+    @if (Model.Severity != null)
+    {
+        <p>Severity: 
+            <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
+        </p>
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.Code))
+    {
+        <div class="violation-code-wrapper">
+            @foreach (var line in Model.Code.Split("\n"))
+            {
+                <code>@line</code>
+            }
+        </div>
+    }
 </div>
