@@ -80,6 +80,7 @@ public partial class Index : ComponentBase
                 if (analysis.ResultStatus == ResultStatus.Finished)
                 {
                     ToastService.ShowSnackbar(analysis.Id);
+                    _resultMessage = string.Empty;
                 }
                 else
                 {
@@ -137,12 +138,6 @@ public partial class Index : ComponentBase
             if (_unmappedNamespaceComponents.Any())
             {
                 _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
-                return false;
-            }
-
-            if (_selectedArchitectureViewModel.Components.Any(component => component.NamespaceComponents.Count == 0))
-            {
-                _resultMessage = "Please make sure all architectural components contain at least one namespace";
                 return false;
             }
         }

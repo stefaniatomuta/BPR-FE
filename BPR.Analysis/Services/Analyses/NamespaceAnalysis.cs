@@ -4,6 +4,7 @@ using BPR.Model.Results;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Text;
+using BPR.Mediator.Utils;
 
 namespace BPR.Analysis.Services.Analyses;
 
@@ -21,8 +22,8 @@ internal class NamespaceAnalysis
         var files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
         foreach (var file in files)
         {
-            if (file.EndsWith(Enum.GetName(typeof(FileExtensions), FileExtensions.cs)!) ||
-                file.EndsWith(Enum.GetName(typeof(FileExtensions), FileExtensions.cshtml)!))
+            if (file.EndsWith(EnumExtensions.GetDescription(FileExtensions.cshtml)) ||
+                file.EndsWith(EnumExtensions.GetDescription(FileExtensions.cs)))
             {
                 var content = await File.ReadAllLinesAsync(file, Encoding.UTF8);
                 var result = content.Where(s => Regex.Match(s, AnalysisRegex.NamespaceRegex).Success);
