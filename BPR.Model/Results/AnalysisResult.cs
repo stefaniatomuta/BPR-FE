@@ -10,4 +10,5 @@ public class AnalysisResult
     public DateTime ResultEnd { get; set; }
     public ResultStatus ResultStatus { get; set; }
     public List<Violation> Violations { get; set; } = new();
+    public ExtendedAnalysisResults? ExtendedAnalysisResults { get; set; }
 }

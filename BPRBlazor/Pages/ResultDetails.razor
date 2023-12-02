@@ -22,7 +22,6 @@
 else 
 {
     <div class="result-pdf">
-        <h2 class="mb-3">Score: @($"{_result.Score:0.00}")%</h2>
         @if (_result.Violations.Count != _filteredViolations.Count)
         {
             <h3>Showing @_filteredViolations.Count of the @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h3>

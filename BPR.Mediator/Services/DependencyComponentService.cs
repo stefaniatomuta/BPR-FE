@@ -1,15 +1,16 @@
 ﻿using BPR.Mediator.Interfaces;
+using BPR.Mediator.Utils;
 using BPR.Model.Results;
 
 namespace BPR.Mediator.Services;
 
 public class DependencyComponentService : IDependencyComponentService
 {
-    private static readonly string[] IgnoredFolders = new[] {"bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests"};
-    private static readonly string[] RequiredFileExtensions = new[]
+    private static readonly string[] IgnoredFolders = {"bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests"};
+    private static readonly string[] RequiredFileExtensions =
     {
-        Enum.GetName(typeof(FileExtensions),FileExtensions.cs) ?? string.Empty, 
-        Enum.GetName(typeof(FileExtensions),FileExtensions.cshtml) ?? string.Empty
+        EnumExtensions.GetDescription(FileExtensions.cs), 
+        EnumExtensions.GetDescription(FileExtensions.cshtml)
     };
 
     public IList<string> GetFolderNamesForProjects(string folderPath)
@@ -22,10 +23,10 @@ public class DependencyComponentService : IDependencyComponentService
             .ToList();
     }
 
-    private readonly static Func<string, bool> IsNotIgnoredFolder = (folderPath) =>
+    private static readonly Func<string, bool> IsNotIgnoredFolder = (folderPath) =>
         !IgnoredFolders.Any(folderPath.EndsWith);
 
-    private readonly static Func<string, bool> DoesContainCSharpFiles = (folderPath) =>
+    private static readonly Func<string, bool> DoesContainCSharpFiles = (folderPath) =>
         Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories)
             .Any(file => RequiredFileExtensions.Any(file.EndsWith));
 

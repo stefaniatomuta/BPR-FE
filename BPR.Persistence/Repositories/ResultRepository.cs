@@ -73,7 +73,8 @@ public class ResultRepository : IResultRepository
                 .Set(old => old.Score, model.Score)
                 .Set(old => old.ResultEnd, model.ResultEnd)
                 .Set(old => old.Violations, model.Violations)
-                .Set(old => old.ResultStatus, model.ResultStatus);
+                .Set(old => old.ResultStatus, model.ResultStatus)
+                .Set(old => old.ExtendedAnalysisResults, model.ExtendedAnalysisResults);
             
             await _resultCollection.UpdateOneAsync(filter, update);
             return Result.Ok(model);
