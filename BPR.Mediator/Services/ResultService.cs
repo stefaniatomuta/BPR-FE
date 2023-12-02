@@ -93,8 +93,7 @@ public class ResultService : IResultService
             return Result.Fail($"No result found with id: '{id}'", _logger);
         }
 
-        // TODO - Add data to model.
-
+        model.ExtendedAnalysisResults = result;
         model.ResultEnd = DateTime.UtcNow;
         model.ResultStatus = ResultStatus.Finished;
         await _resultRepository.UpdateResultAsync(model);
