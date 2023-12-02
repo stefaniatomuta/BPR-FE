@@ -1,62 +1,47 @@
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.top-row {
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.4);
+nav {
+    background-color: #333333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .navbar-brand {
-    font-size: 1.1rem;
-}
-
-.oi {
-    width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
+    display: flex;
+    font-size: 1.5rem;
+    color: #ffffff;
+    padding: 1.5rem;
 }
 
 .nav-item {
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+    display: flex;
+    margin-right: 3rem;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
-
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
-
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
+.nav-item ::deep a {
+    margin: 2rem;
+    font-size: 1rem;
+    color: #eeeeee;
+}
 
 .nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
+    border-bottom: solid 4px #ffffff;
+    border-radius: 25px;
 }
 
 .nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
+    border-bottom: solid 4px #ffffff;
+    border-radius: 25px;
+    transition: 0.5s;
 }
 
-@media (min-width: 992px) {
-    .navbar-toggler {
+@media (max-width: 700px) {
+    .navbar-brand {
         display: none;
     }
 
-    .collapse {
-        /* Never collapse the sidebar for wide screens */
-        display: block;
+    .nav-item {
+        justify-content: space-around;
+        width: 100%;
+        margin: 0;
     }
 }
