@@ -22,9 +22,3 @@ public class ExtendedAnalysisResults
     public Dictionary<string, int>? ClassCouplings { get; init; }
     public Dictionary<string, Dictionary<string, double>>? CodeSimilarities { get; init; }
 }
-
-public class EndOfLifeFramework
-{
-    public string Version { get; init; } = string.Empty;
-    public bool Status { get; init; }
-}
