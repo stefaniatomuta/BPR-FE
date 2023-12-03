@@ -18,9 +18,11 @@ nav {
 }
 
 .nav-item ::deep a {
-    margin: 2rem;
+    margin: 1.5rem;
     font-size: 1rem;
     color: #eeeeee;
+    border-bottom: solid 4px transparent;
+    transition: 0s;
 }
 
 .nav-item ::deep a.active {
@@ -34,7 +36,7 @@ nav {
     transition: 0.5s;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 860px) {
     .navbar-brand {
         display: none;
     }
