@@ -1,6 +1,4 @@
-﻿using BPR.Model.Enums;
-
-namespace BPR.Model.Results;
+﻿namespace BPR.Model.Results;
 
 public class ExtendedAnalysisResults
 {

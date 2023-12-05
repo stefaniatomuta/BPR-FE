@@ -2,6 +2,7 @@
 @using BPRBlazor.Components.Common
 @using AutoMapper
 @using BPR.Mediator.Interfaces
+@using BPR.Model.Enums
 @inject IResultService ResultService
 @inject IJSRuntime JsRuntime
 @inject IMapper Mapper
@@ -33,12 +34,21 @@ else
     </div>
     <p>Filter violations based on type</p>
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
+
+    if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
+    {    
+        <div class="result-pdf">
+            <ExternalCallsDetails 
+                EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks" 
+                ExternalApisCalls="_result.ExtendedAnalysisResults?.ExternalApiCalls"/>
+        </div>
+    }
+    
     <div class="result-pdf">
-        @foreach (var violation in _filteredViolations)
-        {
+        <Virtualize Items="_filteredViolations" Context="violation">
             <div class="violation">
                 <Violation Model="violation" />
             </div>
-        }
+        </Virtualize>
     </div>
 }

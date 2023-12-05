@@ -1,4 +1,5 @@
-﻿using BPR.Model.Results;
+﻿using BPR.Model.Enums;
+using BPR.Model.Results;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -11,6 +12,7 @@ public partial class ResultDetails : ComponentBase
     public Guid Id { get; set; }
 
     private ResultViewModel? _result;
+    private List<ViolationTypeViewModel> _violationTypes = new();
     private List<ViolationViewModel> _filteredViolations = new();
     
     protected override async Task OnAfterRenderAsync(bool firstRender) 
@@ -22,6 +24,7 @@ public partial class ResultDetails : ComponentBase
             {
                 _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
                 _filteredViolations = new List<ViolationViewModel>(_result.Violations);
+                _violationTypes = GetCurrentViolationTypes();
                 StateHasChanged();
             }
         }
@@ -29,9 +32,16 @@ public partial class ResultDetails : ComponentBase
     
     private void HandleViolationType(ViolationTypeViewModel value)
     {
+        _violationTypes.Single(type => type.ViolationType == value.ViolationType).IsChecked = value.IsChecked;
+        if (value.ViolationType != ViolationType.ForbiddenDependency &&
+            value.ViolationType != ViolationType.MismatchedNamespace)
+        {
+            return;
+        }
         if (value.IsChecked && _result != null)
         {
-            _filteredViolations.AddRange(_result.Violations.Where(violation => violation.Type == value.ViolationType));
+            _filteredViolations.AddRange(
+                _result.Violations.Where(violation => violation.Type == value.ViolationType));
         }
         else
         {
@@ -40,15 +50,30 @@ public partial class ResultDetails : ComponentBase
     }
 
     private List<ViolationTypeViewModel> GetCurrentViolationTypes()
-    {
-        if (_result == null || !_result.Violations.Any())
+    { 
+        if (_result == null || (!_result.Violations.Any() && _result.ExtendedAnalysisResults == null))
         {
             return new List<ViolationTypeViewModel>();
         }
+        var violationTypes = new List<ViolationType>();
+        violationTypes.AddRange(_result.Violations.Select(violation => violation.Type));
         
-        return _result.Violations.Select(violation => violation.Type)
+        if (_result.ExtendedAnalysisResults?.ExternalApiCalls != null &&
+            _result.ExtendedAnalysisResults.ExternalApiCalls.Any())
+        {
+            violationTypes.Add(ViolationType.ExternalCalls);
+        }
+        
+        if (_result.ExtendedAnalysisResults?.EndOfLifeFrameworks != null &&
+            _result.ExtendedAnalysisResults.EndOfLifeFrameworks.Any())
+        {
+            violationTypes.Add(ViolationType.ExternalCalls);
+        }
+
+        return violationTypes
             .Distinct()
-            .Select(violation => new ViolationTypeViewModel(violation))
+            .Select(type => new ViolationTypeViewModel(type))
+            .OrderBy(viewModel => viewModel.Name)
             .ToList();
     }
     
