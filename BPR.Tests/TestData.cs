@@ -11,7 +11,7 @@ internal class TestData
         {
             new()
             {
-                Using = "using BPR.Mediator",
+                Using = "using BPR.Mediator;",
                 ComponentName = "BPRBlazor"
             }
         };
@@ -23,7 +23,7 @@ internal class TestData
         {
             new()
             {
-                Using = "using BPR.Persistence",
+                Using = "using BPR.Persistence;",
                 ComponentName = "BPRBlazor"
             }
         };
@@ -35,7 +35,7 @@ internal class TestData
         {
             new()
             {
-                Using = "using BPRBlazor",
+                Using = "using BPRBlazor;",
                 ComponentName = "BPRBlazor"
             }
         };
@@ -47,37 +47,37 @@ internal class TestData
         {
             new()
             {
-                Using = "using BPR.Model",
+                Using = "using BPR.Model;",
                 ComponentName = "BPR.Mediator"
             },
             new()
             {
-                Using = "using BPR.Model",
+                Using = "using BPR.Model;",
                 ComponentName = "BPRBlazor"
             },
             new()
             {
-                Using = "using BPR.Model",
+                Using = "using BPR.Model;",
                 ComponentName = "BPR.Persistence"
             },
             new()
             {
-                Using = "using BPR.Model",
+                Using = "using BPR.Model;",
                 ComponentName = "BPR.Analysis"
             },
             new()
             {
-                Using = "using BPR.Mediator",
+                Using = "using BPR.Mediator;",
                 ComponentName = "BPRBlazor"
             },
             new()
             {
-                Using = "using BPR.Mediator",
+                Using = "using BPR.Mediator;",
                 ComponentName = "BPR.Persistence"
             },
             new()
             {
-                Using = "using BPR.Mediator",
+                Using = "using BPR.Mediator;",
                 ComponentName = "BPR.Analysis"
             }
         };
@@ -377,69 +377,69 @@ internal class TestData
         {
             new()
             {
-                Using = "1Name",
+                Using = "1Name;",
                 ComponentName = "0Name"
             },
             new()
             {
-                Using = "8Name",
+                Using = "8Name;",
                 ComponentName = "7Name"
             },
             new()
             {
-                Using = "4Name",
+                Using = "4Name;",
                 ComponentName = "2Name"
             },
             new()
             {
-                Using = "6Name",
+                Using = "6Name;",
                 ComponentName = "2Name"
             },
             new()
             {
-                Using = "5Name",
+                Using = "5Name;",
                 ComponentName = "2Name"
             },
             new()
             {
-                Using = "9Name",
+                Using = "9Name;",
                 ComponentName = "8Name"
             },
             new()
             {
-                Using = "7Name",
+                Using = "7Name;",
                 ComponentName = "1Name"
             },
             new()
             {
-                Using = "9Name",
+                Using = "9Name;",
                 ComponentName = "7Name"
             },
 
             // Violations
             new()
             {
-                Using = "8Name",
+                Using = "8Name;",
                 ComponentName = "1Name"
             },
             new()
             {
-                Using = "0Name",
+                Using = "0Name;",
                 ComponentName = "1Name"
             },
             new()
             {
-                Using = "9Name",
+                Using = "9Name;",
                 ComponentName = "3Name"
             },
             new()
             {
-                Using = "4Name",
+                Using = "4Name;",
                 ComponentName = "5Name"
             },
             new()
             {
-                Using = "6Name",
+                Using = "6Name;",
                 ComponentName = "5Name"
             }
         };
