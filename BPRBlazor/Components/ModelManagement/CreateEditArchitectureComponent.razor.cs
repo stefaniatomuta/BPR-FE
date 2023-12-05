@@ -127,6 +127,11 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
     private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
     {
+        if (!IsEditable)
+        {
+            return;
+        }
+
         _dragStartCoordinates = new PositionViewModel()
         {
             X = (int)args.ClientX,

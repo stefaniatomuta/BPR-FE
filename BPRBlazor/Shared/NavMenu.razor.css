@@ -1,38 +1,41 @@
 nav {
     background-color: #333333;
+}
+
+.navbar-wrapper {
+    margin: 0 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 1rem;
 }
 
 .navbar-brand {
     display: flex;
     font-size: 1.5rem;
     color: #ffffff;
-    padding: 1.5rem;
 }
 
 .nav-item {
     display: flex;
-    margin-right: 3rem;
+    gap: 1.5rem;
 }
 
 .nav-item ::deep a {
-    margin: 1.5rem;
     font-size: 1rem;
     color: #eeeeee;
-    border-bottom: solid 4px transparent;
+    border-bottom: solid 2px transparent;
     transition: 0s;
 }
 
 .nav-item ::deep a.active {
-    border-bottom: solid 4px #ffffff;
-    border-radius: 25px;
+    border-bottom: solid 2px #ffffff;
+    border-radius: 15px;
 }
 
 .nav-item ::deep a:hover {
-    border-bottom: solid 4px #ffffff;
-    border-radius: 25px;
+    border-bottom: solid 2px #ffffff;
+    border-radius: 15px;
     transition: 0.5s;
 }
 

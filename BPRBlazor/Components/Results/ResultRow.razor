@@ -13,7 +13,7 @@
     <div class="d-flex justify-content-between">
         @if (Result.ResultStatus == ResultStatus.Finished)
         {
-            <button class="btn btn-primary" @onclick="() => SeeDetails(Result.Id)">See details</button>
+            <button class="btn btn-secondary" @onclick="() => SeeDetails(Result.Id)">See details</button>
         }
 
         <button class="btn btn-danger" @onclick="() => DeleteAsync(Result.Id)">Delete</button>
