@@ -11,7 +11,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var keyValue in ExternalApisCalls.OrderByDescending(keyValue => keyValue.Value))
+            @foreach (var keyValue in ExternalApisCalls)
             {
                 <tr>
                     <td>@keyValue.Key</td>
@@ -23,11 +23,10 @@
     </div>
 }
 
-@foreach (var endOfLifeFramework in EndOfLifeFrameworks)
+
+@foreach (var keyValue in EndOfLifeFrameworks.SelectMany(endOfLifeFramework => endOfLifeFramework))
 {
-    foreach (var keyValue in endOfLifeFramework)
-    {
-        <div class="table-container my-5">
+    <div class="table-container my-5">
         <table>
             <thead>
             <tr>
@@ -44,6 +43,5 @@
             </tr>
             </tbody>
         </table>
-        </div>
-    }
+    </div>
 }

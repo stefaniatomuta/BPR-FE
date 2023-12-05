@@ -1,8 +1,14 @@
 ﻿@using Radzen.Blazor
 
 <div>
-    <RadzenChart ColorScheme="ColorScheme.Divergent">
-        <RadzenBarSeries Data="@_data" CategoryProperty="Label" Title="@Title" LineType="LineType.Dashed" ValueProperty="Value">
+    <RadzenChart>
+        <RadzenBarSeries 
+            Fills=@(new [] {"#955cb8"}) 
+            Data="@_data" 
+            CategoryProperty="Label" 
+            Title="@Title" 
+            LineType="LineType.Dashed" 
+            ValueProperty="Value">
             <RadzenSeriesDataLabels Visible="@ShowDataLabels" />
         </RadzenBarSeries>
         <RadzenBarOptions Radius="5" />
