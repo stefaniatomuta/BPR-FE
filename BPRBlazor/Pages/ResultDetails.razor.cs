@@ -14,6 +14,9 @@ public partial class ResultDetails : ComponentBase
     private ResultViewModel? _result;
     private List<ViolationTypeViewModel> _violationTypes = new();
     private List<ViolationViewModel> _filteredViolations = new();
+
+    private Dictionary<string, double>? _conditionalFrequencies;
+    private Dictionary<string, int>? _solutionMetrics;
     
     protected override async Task OnAfterRenderAsync(bool firstRender) 
     {
@@ -25,11 +28,23 @@ public partial class ResultDetails : ComponentBase
                 _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
                 _filteredViolations = new List<ViolationViewModel>(_result.Violations);
                 _violationTypes = GetCurrentViolationTypes();
+                HandleExtendedAnalysisResults(_result.ExtendedAnalysisResults);
                 StateHasChanged();
             }
         }
-    } 
-    
+    }
+
+    private void HandleExtendedAnalysisResults(ExtendedAnalysisResults? results)
+    {
+        if (results == null)
+        {
+            return;
+        }
+
+        _conditionalFrequencies = ExtendedAnalysisHandler.HandleConditionalStatements(results);
+        _solutionMetrics = ExtendedAnalysisHandler.HandleSolutionMetrics(results);
+    }
+
     private void HandleViolationType(ViolationTypeViewModel value)
     {
         _violationTypes.Single(type => type.ViolationType == value.ViolationType).IsChecked = value.IsChecked;

@@ -1,0 +1,9 @@
+﻿@using Radzen.Blazor
+
+<RadzenChart ColorScheme="ColorScheme.Divergent">
+    <RadzenBarSeries Data="@_data" CategoryProperty="Label" Title="2020" LineType="LineType.Dashed" ValueProperty="Value">
+        <RadzenSeriesDataLabels Visible="@ShowDataLabels" />
+    </RadzenBarSeries>
+    <RadzenBarOptions Radius="5" />
+    <RadzenLegend Visible="@ShowLegend" Position="LegendPosition.Bottom" />
+</RadzenChart>

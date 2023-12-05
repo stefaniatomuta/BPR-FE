@@ -1,0 +1,8 @@
+﻿@using Radzen.Blazor
+
+<RadzenChart ColorScheme="ColorScheme.Divergent">
+    <RadzenPieSeries Data="@_data" Title="Revenue" CategoryProperty="Label" ValueProperty="Value">
+        <RadzenSeriesDataLabels Visible="@ShowDataLabels" />
+    </RadzenPieSeries>
+    <RadzenLegend Position="LegendPosition.Bottom" />
+</RadzenChart>
