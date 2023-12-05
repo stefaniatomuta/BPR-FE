@@ -23,6 +23,7 @@ public partial class Index : ComponentBase
     private readonly List<RuleViewModel> _rulesViewModels = new();
     private LoadingIndicator? _loadingIndicator;
     private bool _isStartAnalysisButtonDisabled;
+    private string _analysisTitle = string.Empty;
 
     private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
     {
@@ -72,7 +73,7 @@ public partial class Index : ComponentBase
             var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
             _loadingIndicator?.ToggleLoading(true);
             _isStartAnalysisButtonDisabled = true;
-            var result = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList);
+            var result = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList, _analysisTitle);
             
             if (result.Success)
             {
@@ -142,6 +143,12 @@ public partial class Index : ComponentBase
             }
         }
 
+        if (string.IsNullOrWhiteSpace(_analysisTitle))
+        {
+            _resultMessage = "Please give your analysis a title - for comparison against historical analyses";
+            return false;
+        }
+
         return true;
     }
 
@@ -181,6 +188,7 @@ public partial class Index : ComponentBase
     private async Task LoadCodeSource(InputFileChangeEventArgs eventArgs)
     {
         var fileExtension = Path.GetExtension(eventArgs.File.Name);
+        _resultMessage = string.Empty;
         _resultMessageCss = "error";
 
         if (_allowedFileTypes.All(e => e != fileExtension))

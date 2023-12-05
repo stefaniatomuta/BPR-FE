@@ -22,13 +22,14 @@
 else 
 {
     <div class="result-pdf">
+        <h3>@_result.Title</h3>
         @if (_result.Violations.Count != _filteredViolations.Count)
         {
-            <h3>Showing @_filteredViolations.Count of the @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h3>
+            <h5>Showing @_filteredViolations.Count of the @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
         }
         else
         {
-            <h3>Showing @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h3>
+            <h5>Showing @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
         }
     </div>
     <p>Filter violations based on type</p>

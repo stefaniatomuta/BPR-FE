@@ -11,8 +11,11 @@ public partial class MainLayout
 
     private async Task OnMessageReceivedAsync(ExtendedAnalysisResults response)
     {
-        await ResultService.UpdateAndFinishResultAsync(response.CorrelationId, response);
-        ToastService.ShowSnackbar(response.CorrelationId);
+        var result = await ResultService.UpdateAndFinishResultAsync(response.CorrelationId, response);
+        if (result.Success)
+        {
+            ToastService.ShowSnackbar(response.CorrelationId);
+        }
     }
 
     public void Dispose()
