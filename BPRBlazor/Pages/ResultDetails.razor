@@ -32,17 +32,17 @@ else
         {
             <h5>Showing @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
         }
+
+        @if (_conditionalFrequencies != null)
+        {
+            <PieChart Labels="_conditionalFrequencies.Keys.ToArray()" Data="_conditionalFrequencies.Values.ToArray()" />
+        }
+
+        @if (_solutionMetrics != null)
+        {
+            <BarChart Labels="_solutionMetrics.Keys.ToArray()" Data="_solutionMetrics.Values.ToArray()" />
+        }
     </div>
-
-    @if (_conditionalFrequencies != null)
-    {
-        <PieChart Labels="_conditionalFrequencies.Keys.ToArray()" Data="_conditionalFrequencies.Values.ToArray()" />
-    }
-
-    @if (_solutionMetrics != null)
-    {
-        <BarChart Labels="_solutionMetrics.Keys.ToArray()" Data="_solutionMetrics.Values.ToArray()" />
-    }
 
     <p>Filter violations based on type</p>
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
