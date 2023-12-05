@@ -146,3 +146,11 @@ h1:focus {
 * {
     page-break-inside: avoid !important;
 }
+
+.rz-legend-items {
+    padding: 0;
+    margin-bottom: -3rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 100%;
+}

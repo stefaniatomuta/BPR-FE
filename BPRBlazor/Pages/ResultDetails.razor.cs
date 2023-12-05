@@ -17,6 +17,7 @@ public partial class ResultDetails : ComponentBase
 
     private Dictionary<string, double>? _conditionalFrequencies;
     private Dictionary<string, int>? _solutionMetrics;
+    private Dictionary<string, double>? _codeLinesMetrics;
     private Dictionary<string, int>? _externalApiCalls;
     
     protected override async Task OnAfterRenderAsync(bool firstRender) 
@@ -44,6 +45,7 @@ public partial class ResultDetails : ComponentBase
 
         _conditionalFrequencies = ExtendedAnalysisHandler.HandleConditionalStatements(results);
         _solutionMetrics = ExtendedAnalysisHandler.HandleSolutionMetrics(results);
+        _codeLinesMetrics = ExtendedAnalysisHandler.HandleCodeLinesMetrics(results);
         _externalApiCalls = ExtendedAnalysisHandler.HandleExternalApiCalls(results);
     }
 
@@ -81,6 +83,11 @@ public partial class ResultDetails : ComponentBase
         }
 
         if (_solutionMetrics != null)
+        {
+            violationTypes.Add(ViolationType.SolutionMetrics);
+        }
+        
+        if (_codeLinesMetrics != null)
         {
             violationTypes.Add(ViolationType.SolutionMetrics);
         }

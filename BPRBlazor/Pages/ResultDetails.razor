@@ -46,6 +46,7 @@ else
 
     @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
     {  
+        <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()" />
         <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()" />
     }
     
