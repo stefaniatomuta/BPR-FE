@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Persistence", "BPR.Pers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.Model", "BPR.Model\BPR.Model.csproj", "{FCDD5DE8-F3F7-4872-8434-AD5817FADF17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPR.MachineLearningIntegration", "BPR.MachineLearningIntegration\BPR.MachineLearningIntegration.csproj", "{DD88145C-C933-4681-91CE-F101D121C770}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPR.MachineLearningIntegration", "BPR.MachineLearningIntegration\BPR.MachineLearningIntegration.csproj", "{DD88145C-C933-4681-91CE-F101D121C770}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,10 +2,12 @@
 @using BPRBlazor.Components.Common
 @using AutoMapper
 @using BPR.Mediator.Interfaces
+@using BPRBlazor.Components.Results.Charts
+@using BPRBlazor.Services;
 @inject IResultService ResultService
 @inject IJSRuntime JsRuntime
 @inject IMapper Mapper
-
+@inject ExtendedAnalysisResultsHandler ExtendedAnalysisHandler
 
 @page "/results/{id:guid}"
 
@@ -31,6 +33,17 @@ else
             <h5>Showing @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
         }
     </div>
+
+    @if (_conditionalFrequencies != null)
+    {
+        <PieChart Labels="_conditionalFrequencies.Keys.ToArray()" Data="_conditionalFrequencies.Values.ToArray()" />
+    }
+
+    @if (_solutionMetrics != null)
+    {
+        <BarChart Labels="_solutionMetrics.Keys.ToArray()" Data="_solutionMetrics.Values.ToArray()" />
+    }
+
     <p>Filter violations based on type</p>
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
     <div class="result-pdf">
