@@ -5,7 +5,7 @@
         <strong>#@(EnumExtensions.GetDescription(Model.Type))</strong>
     </p>
     <p class="violation-description">@Model.Description</p>
-    <p>Severity: 
+    <p class="d-flex gap-2">Severity: 
         <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
     </p>
     <div class="violation-code-wrapper">
