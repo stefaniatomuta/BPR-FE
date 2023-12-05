@@ -1,7 +1,6 @@
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPRBlazor.Components.Common;
-using BPRBlazor.Services;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -268,6 +267,5 @@ public partial class Index : ComponentBase
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        CodebaseService.Dispose();
     }
 }
