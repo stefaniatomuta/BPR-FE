@@ -102,7 +102,8 @@ public partial class CreateEditArchitectureComponent : ComponentBase
             }
             _dependencyComponent.Dependencies.Add(new DependencyViewModel()
             {
-                Id = dependencyComponent.Id
+                Id = dependencyComponent.Id,
+                IsOpen = true
             });
             _dependencyComponent = null;
         }
@@ -169,16 +170,17 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         };
     }
     
-    private PositionViewModel GetBottomPositionForComponents(List<ArchitecturalComponentViewModel>? components)
+    private int GetBottomPositionForComponents()
     {
-        if (components == null || components.Count == 0)
+        if (ModelViewModel.Components.Count == 0)
         {
-            return new PositionViewModel();
+            return 400;
         }
-        var bottomComponent = components.MaxBy(c => c.Position.Y);
+        var bottomComponent = ModelViewModel.Components.MaxBy(c => c.Position.Y);
 
-        return bottomComponent != null ? new PositionViewModel { X = bottomComponent.Position.X, Y = bottomComponent.Position.Y + 200 }
-            : new PositionViewModel();
+        return bottomComponent is {Position.Y: > 200}
+            ? bottomComponent.Position.Y + 200
+            : 400;
     }
     
     private async Task DeleteSelectedModel()

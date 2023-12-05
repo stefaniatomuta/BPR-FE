@@ -62,7 +62,9 @@ public class DependencyAnalysis
 
         foreach (var directive in usingDirectives)
         {
-            if (!dependencyComponents.SelectMany(dep => dep.NamespaceComponents).Any(ns => directive.Using.Contains(ns.Name)))
+            if (!dependencyComponents
+                .SelectMany(dep => dep.NamespaceComponents)
+                .Any(ns => directive.Using.Contains($"{ns.Name};") || directive.Using.Contains($"{ns.Name}.")))
             {
                 violations.Add(ViolationFactory.CreateDependencyViolation(directive, component.Name));
             }

@@ -1,7 +1,12 @@
 ﻿.center {
-    position: absolute;
+    position: fixed;
     left: 50vw;
     top: 50vh;
     transform: translate(-50%, -50%);
     z-index: 999;
+}
+
+.spinner-border {
+    width: 5rem;
+    height: 5rem;
 }

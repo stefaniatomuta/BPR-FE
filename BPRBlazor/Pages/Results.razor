@@ -1,8 +1,8 @@
-﻿@using BPR.Mediator.Services
-@using AutoMapper
+﻿@using AutoMapper
 @using BPR.Mediator.Interfaces
 @using BPRBlazor.Components.Results
 
+@inject IJSRuntime JS
 @inject IResultService ResultService
 @inject IMapper Mapper
 
@@ -10,20 +10,30 @@
 
 <h3>Results</h3>
 
-@if (_results == null)
-{
-    <p>Loading...</p>
-}
-else if (!_results.Any())
+@if (!_results.Any())
 {
     <p>No analyses found</p>
 }
 else
 {
-    <div class="d-flex flex-wrap">
-        @foreach (var result in _results)
-        {
-            <ResultRow Result="result" ResultDeleted="HandleResultDeleted" />
-        }
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Started</th>
+                <th>Ended</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var result in _results)
+            {
+                <ResultRow Result="result" ResultDeleted="HandleResultDeletedAsync"/>
+            }
+            </tbody>
+        </table>
     </div>
 }

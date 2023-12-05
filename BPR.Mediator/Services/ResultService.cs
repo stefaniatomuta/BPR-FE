@@ -42,9 +42,9 @@ public class ResultService : IResultService
     }
 
 
-    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, string analysisTitle)
     {
-        var resultModel = new AnalysisResult()
+        var resultModel = new AnalysisResult(analysisTitle)
         {
             ResultStart = DateTime.UtcNow,
             ResultStatus = ResultStatus.Processing

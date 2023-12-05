@@ -70,7 +70,6 @@ public class ResultRepository : IResultRepository
         {
             var filter = Builders<ResultCollection>.Filter.Eq(old => old.Id, model.Id);
             var update = Builders<ResultCollection>.Update
-                .Set(old => old.Score, model.Score)
                 .Set(old => old.ResultEnd, model.ResultEnd)
                 .Set(old => old.Violations, model.Violations)
                 .Set(old => old.ResultStatus, model.ResultStatus)

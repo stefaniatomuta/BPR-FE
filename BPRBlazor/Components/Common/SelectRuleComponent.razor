@@ -15,11 +15,14 @@ else
     @foreach (var item in _rules)
     {
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
-            <label class="form-check-label" for="@item.Name">@item.Name</label>
-            <div>
-                <i>@item.Description</i>
-            </div>
+            <input class="custom-checkbox" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
+            <label for="@item.Name">@item.Name</label>
+            @if (!string.IsNullOrWhiteSpace(item.Description))
+            {
+                <div>
+                    <i>@item.Description</i>
+                </div>
+            }
         </div>
     }
 }
