@@ -49,4 +49,21 @@ public class ExtendedAnalysisResultsHandler
             { "Lines of comments", results.TotalCommentLines.Value }
         };
     }
+    
+    public Dictionary<string, int>? HandleExternalApiCalls(ExtendedAnalysisResults results)
+    {
+        if ((results.ExternalApiCalls == null || !results.ExternalApiCalls.Any()) && results.TotalHttpClientCalls == null)
+        {
+            return null;
+        }
+
+        if (results.TotalHttpClientCalls == null)
+        {
+            return results.ExternalApiCalls;
+        }
+        
+        var dictionary = results.ExternalApiCalls ?? new Dictionary<string, int>();
+        dictionary.Add("Http Client", results.TotalHttpClientCalls.Value);
+        return dictionary;
+    }
 }

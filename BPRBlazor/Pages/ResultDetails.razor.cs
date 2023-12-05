@@ -17,6 +17,7 @@ public partial class ResultDetails : ComponentBase
 
     private Dictionary<string, double>? _conditionalFrequencies;
     private Dictionary<string, int>? _solutionMetrics;
+    private Dictionary<string, int>? _externalApiCalls;
     
     protected override async Task OnAfterRenderAsync(bool firstRender) 
     {
@@ -43,6 +44,7 @@ public partial class ResultDetails : ComponentBase
 
         _conditionalFrequencies = ExtendedAnalysisHandler.HandleConditionalStatements(results);
         _solutionMetrics = ExtendedAnalysisHandler.HandleSolutionMetrics(results);
+        _externalApiCalls = ExtendedAnalysisHandler.HandleExternalApiCalls(results);
     }
 
     private void HandleViolationType(ViolationTypeViewModel value)
