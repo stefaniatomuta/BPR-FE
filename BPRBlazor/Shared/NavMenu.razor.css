@@ -5,7 +5,7 @@ nav {
 .navbar-wrapper {
     margin: 0 1.5rem;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     padding: 1rem;
 }
@@ -22,7 +22,6 @@ nav {
 }
 
 .nav-item ::deep a {
-    font-size: 1rem;
     color: #eeeeee;
     border-bottom: solid 2px transparent;
     transition: 0s;

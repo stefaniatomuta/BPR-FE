@@ -10,7 +10,7 @@ public class ResultCollection
     [BsonId]
     [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
-    public double Score { get; set; }
+    public string Title { get; set; } = string.Empty;
     public DateTime ResultStart { get; set; }
     public DateTime ResultEnd { get; set; }
     public ResultStatus ResultStatus { get; set; }

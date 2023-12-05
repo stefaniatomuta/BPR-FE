@@ -85,5 +85,10 @@
     </div>
 }
 
-<button class="btn btn-secondary" @onclick="StartAnalysisAsync" disabled="@_isStartAnalysisButtonDisabled">Start Analysis</button>
-<p class="@_resultMessageCss my-2">@_resultMessage</p>
+<div class="mb-2">
+    <h3>Specify analysis title</h3>
+    <input type="text" class="form-control" @bind-value="_analysisTitle" />
+</div>
+
+<button class="btn btn-secondary mb-2" @onclick="StartAnalysisAsync" disabled="@_isStartAnalysisButtonDisabled">Start Analysis</button>
+<p class="@_resultMessageCss">@_resultMessage</p>

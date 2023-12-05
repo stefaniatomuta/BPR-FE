@@ -1,13 +1,5 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-html, body, p, option, i {
-    font-size: 18px;
-}
-
 .content {
     padding-top: 1.1rem;
 }
@@ -40,7 +32,6 @@ button {
 }
 
 label {
-    display: block;
     padding-left: 15px;
     font-size: 20px;
 }
@@ -48,7 +39,6 @@ label {
 select {
     font-size: 20px;
 }
-
 
 .custom-checkbox {
     accent-color: #955cb8;
@@ -89,8 +79,7 @@ select {
     color: red;
 }
 
-.error
-{
+.error {
     color: orangered;
 }
 
