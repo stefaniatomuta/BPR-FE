@@ -16,6 +16,9 @@ public partial class BarChart : ComponentBase
     [Parameter]
     public bool ShowDataLabels { get; set; } = true;
 
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
     private ChartData[] _data = Array.Empty<ChartData>();
 
     protected override void OnInitialized()
