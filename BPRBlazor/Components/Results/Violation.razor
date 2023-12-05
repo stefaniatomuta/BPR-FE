@@ -8,7 +8,7 @@
     <p class="violation-description">@Model.Description</p>
     @if (Model.Severity != null)
     {
-       <p>Severity: 
+       <p class="d-flex gap-2">Severity: 
            <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
        </p>
     }

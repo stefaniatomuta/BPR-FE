@@ -1,0 +1,49 @@
+﻿@using BPR.Mediator.Utils
+
+@if (ExternalApisCalls.Any())
+{
+    <div class="table-container my-5">
+        <table>
+            <thead>
+            <tr>
+                <th>External Api</th>
+                <th>Number of calls</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var keyValue in ExternalApisCalls.OrderByDescending(keyValue => keyValue.Value))
+            {
+                <tr>
+                    <td>@keyValue.Key</td>
+                    <td>@keyValue.Value</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+@foreach (var endOfLifeFramework in EndOfLifeFrameworks)
+{
+    foreach (var keyValue in endOfLifeFramework)
+    {
+        <div class="table-container my-5">
+        <table>
+            <thead>
+            <tr>
+                <th>@keyValue.Key</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>@keyValue.Value.Version</td>
+                <td style="background-color: @(keyValue.Value.Status ? "orangered" : "lightgreen")">
+                    @(keyValue.Value.Status ? "Unsupported" : "Supported")
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    }
+}
