@@ -6,10 +6,10 @@
 @inject IResultService ResultService
 
 <tr>
-    <td>Name Placeholder</td>
-    <td>Status: @Result.ResultStatus.ToString()</td>
-    <td>Started: @Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</td>
-    <td>Ended: @(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "")</td>
+    <td>@Result.Title</td>
+    <td>@Result.ResultStatus.ToString()</td>
+    <td>@Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</td>
+    <td>@(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "")</td>
 
     <td>
     @if (Result.ResultStatus == ResultStatus.Finished)

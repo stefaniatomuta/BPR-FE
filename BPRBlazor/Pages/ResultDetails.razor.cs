@@ -21,12 +21,6 @@ public partial class ResultDetails : ComponentBase
             if (resultModel != null)
             {
                 _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
-                if (resultModel.ExtendedAnalysisResults != null)
-                {
-                    _result.Violations.AddRange(resultModel.ExtendedAnalysisResults.MapToViolations()
-                        .Select(violation => Mapper.Map<ViolationViewModel>(violation)));
-                }
-
                 _filteredViolations = new List<ViolationViewModel>(_result.Violations);
                 StateHasChanged();
             }
