@@ -11,7 +11,7 @@ internal class ViolationFactory
         return new Violation
         {
             Type = ViolationType.ForbiddenDependency,
-            Description = $"'{directive.Using}' cannot be in '{directive.FilePath}'. Component '{directive.ComponentName}' in namespace '{componentName}' cannot have this dependency",
+            Description = $"'{directive.Using}' cannot be in '{directive.FilePath}'. Namespace '{directive.ComponentName}' in component '{componentName}' cannot have this dependency",
             Severity = ViolationSeverity.Major,
             Code = directive.Using,
             File = directive.File
