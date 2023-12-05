@@ -6,3 +6,7 @@
     white-space: nowrap;
     width: fit-content;
 }
+
+button {
+    min-height: 2.5rem;
+}

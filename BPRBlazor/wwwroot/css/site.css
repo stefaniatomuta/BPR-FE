@@ -13,13 +13,13 @@ table {
     position: relative;
 }
 
-thead, tbody {
-    background-color: #bbbbbb;
+thead {
+    background-color: #955cb8;
+    color: white;
 }
 
 td, th {
     padding: 1rem;
-    text-align: center;
     position: relative;
 }
 
@@ -63,12 +63,12 @@ button {
 }
 
 label {
-    padding-left: 15px;
-    font-size: 20px;
+    padding-left: 10px;
+    font-size: 1.1em;
 }
 
 select {
-    font-size: 20px;
+    font-size: 1.2em;
 }
 
 .custom-checkbox {

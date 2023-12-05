@@ -32,14 +32,14 @@
             <thead>
             <tr>
                 <th>@keyValue.Key</th>
-                <th>Status</th>
+                <th class="col-1 text-center">Status</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>@keyValue.Value.Version</td>
-                <td style="background-color: @(keyValue.Value.Status ? "orangered" : "lightgreen")">
-                    @(keyValue.Value.Status ? "Unsupported" : "Supported")
+                <td class="col-1 text-center">
+                    <a style="background-color: @(keyValue.Value.Status ? "orangered" : "lightgreen"); padding: 6px; border-radius: 6px;">@(keyValue.Value.Status ? "Unsupported" : "Supported")</a>
                 </td>
             </tr>
             </tbody>
