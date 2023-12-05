@@ -16,10 +16,24 @@
 }
 else
 {
-    <div class="d-flex flex-wrap">
-        @foreach (var result in _results)
-        {
-            <ResultRow Result="result" ResultDeleted="HandleResultDeletedAsync" />
-        }
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Started</th>
+                <th>Ended</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var result in _results)
+            {
+                <ResultRow Result="result" ResultDeleted="HandleResultDeletedAsync"/>
+            }
+            </tbody>
+        </table>
     </div>
 }
