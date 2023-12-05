@@ -27,8 +27,8 @@ public partial class ResultDetails : ComponentBase
             {
                 _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
                 _filteredViolations = new List<ViolationViewModel>(_result.Violations);
-                _violationTypes = GetCurrentViolationTypes();
                 HandleExtendedAnalysisResults(_result.ExtendedAnalysisResults);
+                _violationTypes = GetCurrentViolationTypes();
                 StateHasChanged();
             }
         }
@@ -72,6 +72,16 @@ public partial class ResultDetails : ComponentBase
         }
         var violationTypes = new List<ViolationType>();
         violationTypes.AddRange(_result.Violations.Select(violation => violation.Type));
+
+        if (_conditionalFrequencies != null)
+        {
+            violationTypes.Add(ViolationType.ConditionalStatements);
+        }
+
+        if (_solutionMetrics != null)
+        {
+            violationTypes.Add(ViolationType.SolutionMetrics);
+        }
         
         if (_result.ExtendedAnalysisResults?.ExternalApiCalls != null &&
             _result.ExtendedAnalysisResults.ExternalApiCalls.Any())

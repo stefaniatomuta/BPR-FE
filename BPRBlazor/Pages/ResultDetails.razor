@@ -38,24 +38,24 @@ else
     <p>Filter violations based on type</p>
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
 
-    @if (_conditionalFrequencies != null)
-    {
-        <PieChart Labels="_conditionalFrequencies.Keys.ToArray()" Data="_conditionalFrequencies.Values.ToArray()" />
+    <div class="result-pdf">
+    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ConditionalStatements)?.IsChecked ?? false)
+    { 
+        <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()" />
     }
 
-    @if (_solutionMetrics != null)
-    {
-        <BarChart Labels="_solutionMetrics.Keys.ToArray()" Data="_solutionMetrics.Values.ToArray()" />
+    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
+    {  
+        <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()" />
     }
     
-    if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
+    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
     {    
-        <div class="result-pdf">
             <ExternalCallsDetails 
                 EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks" 
                 ExternalApisCalls="_result.ExtendedAnalysisResults?.ExternalApiCalls"/>
-        </div>
     }
+    </div>
     
     <div class="result-pdf">
         <Virtualize Items="_filteredViolations" Context="violation">
