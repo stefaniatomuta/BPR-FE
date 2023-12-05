@@ -40,7 +40,9 @@
         <SelectArchitectureComponent ArchitectureModelChanged="HandleArchitectureModelOnChange" SelectedOption="@_selectedArchitectureViewModel?.Id" />
          @if (_selectedArchitectureViewModel is not null)
          {
-             <CreateEditArchitectureComponent ModelViewModel="@(_selectedArchitectureViewModel)" IsEditable="false"/>
+             <div class="mt-1">
+                <CreateEditArchitectureComponent ModelViewModel="@(_selectedArchitectureViewModel)" IsEditable="false"/>
+             </div>
          }
     </div>
 
@@ -83,5 +85,5 @@
     </div>
 }
 
-<button class="btn btn-primary" @onclick="StartAnalysisAsync" disabled="@_isStartAnalysisButtonDisabled">Start Analysis</button>
+<button class="btn btn-secondary" @onclick="StartAnalysisAsync" disabled="@_isStartAnalysisButtonDisabled">Start Analysis</button>
 <p class="@_resultMessageCss my-2">@_resultMessage</p>

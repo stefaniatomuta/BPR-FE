@@ -3,8 +3,8 @@
     @foreach (var item in Violations)
     {
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
-            <label class="form-check-label" for="@item.Name">@item.Name</label>
+            <input class="custom-checkbox" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
+            <label for="@item.Name">@item.Name</label>
         </div>
     }
 }

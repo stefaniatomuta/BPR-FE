@@ -1,24 +1,16 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
+﻿<nav>
+    <div class="navbar-wrapper">
         <a class="navbar-brand" href="">Architecture Analyzer</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
+        <div class="nav-item">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span aria-hidden="true"></span> Analysis
             </NavLink>
             <NavLink class="nav-link" href="manage-models" Match="NavLinkMatch.All">
-                <span class="oi oi-plus" aria-hidden="true"></span> Manage architecture models
+                <span aria-hidden="true"></span> Architectures
             </NavLink>
             <NavLink class="nav-link" href="results" Match="NavLinkMatch.All">
-                <span class="oi oi-list" aria-hidden="true"></span> Results
+                <span aria-hidden="true"></span> Results
             </NavLink>
         </div>
-    </nav>
-</div>
+    </div>
+</nav>
