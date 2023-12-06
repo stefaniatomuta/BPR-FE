@@ -24,9 +24,8 @@
                 {
                     <div class="p-2">
                         <InputText 
-                            oninput="
-                               if(this.value.length > 20) this.style.width = this.value.length + 'ch'
-                               else this.style.width = '100%'" 
+                            style=@(component.Name.Length > 20 ? $"width: {component.Name.Length}ch": "width:100%")
+                            oninput="if(this.value.length > 20) this.style.width = this.value.length + 'ch'; else this.style.width = '100%'" 
                             class="form-control text-center" 
                             placeholder="Name..." 
                             @bind-Value="component.Name"/>
