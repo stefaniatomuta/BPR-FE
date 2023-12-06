@@ -17,12 +17,18 @@ public partial class CreateEditArchitectureComponent : ComponentBase
     private ArchitecturalComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();
     private ArchitecturalComponentViewModel? _draggingComponent;
+    private SizeViewModel? _boundarySize;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        _boundarySize = await JS.InvokeAsync<SizeViewModel>("getElementSize", new object[]{"boundary"});
         foreach (var component in  ModelViewModel.Components.ToList())
         {
             component.Size = await JS.InvokeAsync<SizeViewModel>("getElementSize", new object[]{component.Id});
+            if (component.Position.X + component.Size.Width > _boundarySize.Width)
+            {
+                component.Position.X = _boundarySize.Width - component.Size.Width - 20;
+            }
         }
         StateHasChanged();
     }
@@ -148,11 +154,15 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         };
         
         var offset = await JS.InvokeAsync<PositionViewModel>("getElementOffset", new object[]{_draggingComponent.Id});
-        _draggingComponent.Position = new PositionViewModel()
+
+        if (offset.X + difference.X > 0 && offset.Y + difference.Y > 0)
         {
-            X = offset.X + difference.X,
-            Y = offset.Y + difference.Y,
-        };
+            _draggingComponent.Position = new PositionViewModel()
+            {
+                X = offset.X + difference.X,
+                Y = offset.Y + difference.Y,
+            };
+        }
     }
 
     private PositionViewModel GetMiddlePositionForComponent(ArchitecturalComponentViewModel component)
