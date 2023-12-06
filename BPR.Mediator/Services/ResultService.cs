@@ -61,6 +61,8 @@ public class ResultService : IResultService
         {
             resultModel.Id = added.Value?.Id ?? new Guid();
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
+            resultModel.ArchitecturalModel = model;
+            resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();
 
             if (!await HandleExternalAnalysis(folderPath, rules, resultModel.Id))
             {
