@@ -7,6 +7,7 @@ public class ArchitecturalComponentViewModel
     public int Id { get; set; }
 
     public PositionViewModel Position { get; set; } = new();
+    public SizeViewModel? Size { get; set; }
 
     [Required(ErrorMessage = "Please give the component a name")]
     public string Name { get; set; } = string.Empty;

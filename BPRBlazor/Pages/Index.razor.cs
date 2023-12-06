@@ -255,7 +255,11 @@ public partial class Index : ComponentBase
         foreach (var namespaceComponent in _unmappedNamespaceComponents)
         {
             var autoMappingComponent = _selectedArchitectureViewModel?.Components
-                .FirstOrDefault(component => namespaceComponent.Name.ToLower().Contains(component.Name.ToLower()));
+                .FirstOrDefault(component =>
+                    namespaceComponent.Name.ToLower().Equals(component.Name.ToLower()) ||
+                    namespaceComponent.Name.ToLower().StartsWith($"{component.Name.ToLower()}.") ||
+                    namespaceComponent.Name.ToLower().EndsWith($".{component.Name.ToLower()}") ||
+                    namespaceComponent.Name.ToLower().Contains($".{component.Name.ToLower()}."));
             
             if (autoMappingComponent != null)
             {
