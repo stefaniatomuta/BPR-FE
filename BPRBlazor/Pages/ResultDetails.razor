@@ -3,6 +3,7 @@
 @using AutoMapper
 @using BPR.Mediator.Interfaces
 @using BPRBlazor.Components.Results.Charts
+@using BPRBlazor.Components.ModelManagement
 @using BPRBlazor.Services;
 @using BPR.Model.Enums
 @inject IResultService ResultService
@@ -39,23 +40,29 @@ else
     <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
 
     <div class="result-pdf">
-    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ConditionalStatements)?.IsChecked ?? false)
-    { 
-        <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()" />
-    }
+        @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ForbiddenDependency)?.IsChecked ?? false) 
+            && _result.ArchitecturalModel != null)
+        {
+            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitecturalModel" IsEditable="false"/>
+        }
+        
+        @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ConditionalStatements)?.IsChecked ?? false)
+        {
+            <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
+        }
 
-    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
-    {  
-        <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()" />
-        <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()" />
-    }
-    
-    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
-    {    
-            <ExternalCallsDetails 
-                EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks" 
+        @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
+        {
+            <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
+            <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
+        }
+
+        @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
+        {
+            <ExternalCallsDetails
+                EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
                 ExternalApisCalls="_externalApiCalls"/>
-    }
+        }
     </div>
     
     <div class="result-pdf">

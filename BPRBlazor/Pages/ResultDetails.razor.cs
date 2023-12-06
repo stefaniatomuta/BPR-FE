@@ -69,42 +69,13 @@ public partial class ResultDetails : ComponentBase
     }
 
     private List<ViolationTypeViewModel> GetCurrentViolationTypes()
-    { 
-        if (_result == null || (!_result.Violations.Any() && _result.ExtendedAnalysisResults == null))
+    {
+        if (_result == null)
         {
             return new List<ViolationTypeViewModel>();
         }
-        var violationTypes = new List<ViolationType>();
-        violationTypes.AddRange(_result.Violations.Select(violation => violation.Type));
-
-        if (_conditionalFrequencies != null)
-        {
-            violationTypes.Add(ViolationType.ConditionalStatements);
-        }
-
-        if (_solutionMetrics != null)
-        {
-            violationTypes.Add(ViolationType.SolutionMetrics);
-        }
         
-        if (_codeLinesMetrics != null)
-        {
-            violationTypes.Add(ViolationType.SolutionMetrics);
-        }
-        
-        if (_result.ExtendedAnalysisResults?.ExternalApiCalls != null &&
-            _result.ExtendedAnalysisResults.ExternalApiCalls.Any())
-        {
-            violationTypes.Add(ViolationType.ExternalCalls);
-        }
-        
-        if (_result.ExtendedAnalysisResults?.EndOfLifeFrameworks != null &&
-            _result.ExtendedAnalysisResults.EndOfLifeFrameworks.Any())
-        {
-            violationTypes.Add(ViolationType.ExternalCalls);
-        }
-
-        return violationTypes
+        return _result.ViolationTypes
             .Distinct()
             .Select(type => new ViolationTypeViewModel(type))
             .OrderBy(viewModel => viewModel.Name)

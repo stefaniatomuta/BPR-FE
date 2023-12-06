@@ -55,18 +55,28 @@ public class DependencyAnalysis
         var violations = new List<Violation>();
         var dependencyComponents = GetAllDependencyComponents(model, component);
 
-        if (!component.Dependencies.Any())
-        {
-            return usingDirectives.Select(u => ViolationFactory.CreateDependencyViolation(u, component.Name)).ToList();
-        }
-
         foreach (var directive in usingDirectives)
         {
-            if (!dependencyComponents
+            if (dependencyComponents
                 .SelectMany(dep => dep.NamespaceComponents)
                 .Any(ns => directive.Using.Contains($"{ns.Name};") || directive.Using.Contains($"{ns.Name}.")))
             {
-                violations.Add(ViolationFactory.CreateDependencyViolation(directive, component.Name));
+                continue;
+            }
+            
+            violations.Add(ViolationFactory.CreateDependencyViolation(directive, component.Name));
+            var violationComp = model.Components
+                .FirstOrDefault(comp => comp.NamespaceComponents
+                    .Any(ns => directive.Using.Contains($"{ns.Name};") || directive.Using.Contains($"{ns.Name}.")));
+
+            if (violationComp != null)
+            {
+                component.Dependencies.Add(new ArchitecturalDependency()
+                {
+                    Id = violationComp.Id,
+                    IsOpen = true,
+                    IsViolation = true
+                });
             }
         }
 
@@ -77,6 +87,7 @@ public class DependencyAnalysis
     {
         var directComponents = model.Components
             .Where(comp => component.Dependencies
+                .Where(dependency => !dependency.IsViolation)
                 .Select(dependency => dependency.Id)
                 .Contains(comp.Id))
             .ToList();
@@ -91,7 +102,7 @@ public class DependencyAnalysis
         var length = components.Count;
         components.AddRange(model.Components
             .Where(comp => components.SelectMany(c => c.Dependencies)
-                .Where(dep => dep.IsOpen)
+                .Where(dep => dep is {IsOpen: true, IsViolation: false})
                 .Select(dependency => dependency.Id)
                 .Contains(comp.Id)));
 
