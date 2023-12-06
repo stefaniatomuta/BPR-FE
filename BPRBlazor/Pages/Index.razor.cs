@@ -263,9 +263,4 @@ public partial class Index : ComponentBase
         _unmappedNamespaceComponents.RemoveAll(namespaceComponent => _selectedArchitectureViewModel?.Components
             .SelectMany(component => component.NamespaceComponents).Contains(namespaceComponent) ?? false);
     }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-    }
 }
