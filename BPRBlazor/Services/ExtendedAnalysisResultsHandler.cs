@@ -102,7 +102,7 @@ public class ExtendedAnalysisResultsHandler
         }
 
         var dictionary = results.ExternalApiCalls ?? new Dictionary<string, int>();
-        dictionary.Add("Http Client", results.TotalHttpClientCalls.Value);
+        dictionary.Add("HTTP client", results.TotalHttpClientCalls.Value);
 
         return dictionary
             .OrderByDescending(dict => dict.Value)
