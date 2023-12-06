@@ -66,12 +66,4 @@ public static class Extensions
     {
         services.Configure<DatabaseConfig>(configuration.GetSection(DatabaseConfig.Section));
     }
-
-    public static void CleanUp()
-    {
-        if (Directory.Exists("../temp"))
-        {
-            Directory.Delete("../temp", true);
-        }
-    }
 }

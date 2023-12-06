@@ -27,12 +27,11 @@ public class ExtendedAnalysisResultsHandler
     public Dictionary<string, int>? HandleSolutionMetrics(ExtendedAnalysisResults results)
     {
         if (results.TotalClasses == null
+            || results.TotalCSharpFiles == null
             || results.TotalInterfaces == null
             || results.TotalMethods == null
             || results.TotalInheritanceDeclarations == null
             || results.TotalUsingDirectives == null
-            || results.TotalCodeLines == null
-            || results.TotalCommentLines == null
            )
         {
             return null;
@@ -41,11 +40,36 @@ public class ExtendedAnalysisResultsHandler
         return new Dictionary<string, int>
         {
             {"Classes", results.TotalClasses.Value},
+            {"C# files", results.TotalCSharpFiles.Value},
             {"Interfaces", results.TotalInterfaces.Value},
             {"Methods", results.TotalMethods.Value},
             {"Inheritance declarations", results.TotalInheritanceDeclarations.Value},
             {"Using directives", results.TotalUsingDirectives.Value},
         };
+    }
+
+    public Dictionary<string, int>? HandleCodeLinesPerFile(ExtendedAnalysisResults results)
+    {
+        if (results.TotalCodeLines == null)
+        {
+            return null;
+        }
+
+        return results.CodeLinesPerFile?.SelectMany(file => file)
+            .OrderByDescending(kvp => kvp.Value)
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    }
+
+    public Dictionary<string, int>? HandleCommentLinesPerFile(ExtendedAnalysisResults results)
+    {
+        if (results.TotalCommentLines == null)
+        {
+            return null;
+        }
+
+        return results.CommentLinesPerFile?.SelectMany(file => file)
+            .OrderByDescending(kvp => kvp.Value)
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 
     public Dictionary<string, double>? HandleCodeLinesMetrics(ExtendedAnalysisResults results)
@@ -78,10 +102,34 @@ public class ExtendedAnalysisResultsHandler
         }
 
         var dictionary = results.ExternalApiCalls ?? new Dictionary<string, int>();
-        dictionary.Add("Http Client", results.TotalHttpClientCalls.Value);
-        dictionary = dictionary
+        dictionary.Add("HTTP client", results.TotalHttpClientCalls.Value);
+
+        return dictionary
             .OrderByDescending(dict => dict.Value)
             .ToDictionary(dict => dict.Key, dict => dict.Value);
-        return dictionary;
+    }
+
+    public Dictionary<string, int>? HandleClassCoupling(ExtendedAnalysisResults results)
+    {
+        if (results.ClassCouplings == null || !results.ClassCouplings.Any())
+        {
+            return null;
+        }
+
+        return results.ClassCouplings
+            .OrderByDescending(kvp => kvp.Value)
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    }
+
+    public Dictionary<string, Dictionary<string, double>>? HandleCodeSimilarities(ExtendedAnalysisResults results)
+    {
+        if (results.CodeSimilarities == null || !results.CodeSimilarities.Any())
+        {
+            return null;
+        }
+
+        return results.CodeSimilarities.OrderByDescending(kvp => kvp.Value.Values.Sum())
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.OrderByDescending(kvp => kvp.Value)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
     }
 }

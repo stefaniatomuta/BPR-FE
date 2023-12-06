@@ -44,8 +44,10 @@ public class ResultService : IResultService
 
     public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, string analysisTitle)
     {
+        var folderId = Guid.Parse(folderPath.Split("\\")[^2]);
         var resultModel = new AnalysisResult(analysisTitle)
         {
+            Id = folderId,
             ResultStart = DateTime.UtcNow,
             ResultStatus = ResultStatus.Processing
         };
@@ -59,7 +61,7 @@ public class ResultService : IResultService
 
         try
         {
-            resultModel.Id = added.Value?.Id ?? new Guid();
+            resultModel.Id = added.Value!.Id;
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             resultModel.ArchitecturalModel = model;
             resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();

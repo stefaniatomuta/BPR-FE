@@ -2,25 +2,7 @@
 
 @if (ExternalApisCalls.Any())
 {
-    <div class="table-container my-5">
-        <table>
-            <thead>
-            <tr>
-                <th>External Api</th>
-                <th>Number of calls</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var keyValue in ExternalApisCalls)
-            {
-                <tr>
-                    <td>@keyValue.Key</td>
-                    <td>@keyValue.Value</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
+    <Table Data="@ExternalApisCalls" HeaderOne="External APIs" HeaderTwo="Number of references" />
 }
 
 

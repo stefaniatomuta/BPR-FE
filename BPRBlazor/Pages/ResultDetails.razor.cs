@@ -19,7 +19,11 @@ public partial class ResultDetails : ComponentBase
     private Dictionary<string, int>? _solutionMetrics;
     private Dictionary<string, double>? _codeLinesMetrics;
     private Dictionary<string, int>? _externalApiCalls;
-    
+    private Dictionary<string, int>? _classCouplings;
+    private Dictionary<string, int>? _codeLinesPerFile;
+    private Dictionary<string, int>? _commentLinesPerFile;
+    private Dictionary<string, Dictionary<string, double>>? _codeSimilarities;
+
     protected override async Task OnAfterRenderAsync(bool firstRender) 
     {
         if (firstRender)
@@ -45,8 +49,12 @@ public partial class ResultDetails : ComponentBase
 
         _conditionalFrequencies = ExtendedAnalysisHandler.HandleConditionalStatements(results);
         _solutionMetrics = ExtendedAnalysisHandler.HandleSolutionMetrics(results);
+        _codeLinesPerFile = ExtendedAnalysisHandler.HandleCodeLinesPerFile(results);
+        _commentLinesPerFile = ExtendedAnalysisHandler.HandleCommentLinesPerFile(results);
         _codeLinesMetrics = ExtendedAnalysisHandler.HandleCodeLinesMetrics(results);
         _externalApiCalls = ExtendedAnalysisHandler.HandleExternalApiCalls(results);
+        _classCouplings = ExtendedAnalysisHandler.HandleClassCoupling(results);
+        _codeSimilarities = ExtendedAnalysisHandler.HandleCodeSimilarities(results);
     }
 
     private void HandleViolationType(ViolationTypeViewModel value)

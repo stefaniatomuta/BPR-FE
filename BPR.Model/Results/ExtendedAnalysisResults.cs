@@ -17,6 +17,7 @@ public class ExtendedAnalysisResults
     public int? TotalInterfaces { get; init; }
     public int? TotalInheritanceDeclarations { get; init; }
     public int? TotalUsingDirectives { get; init; }
+    public int? TotalCSharpFiles { get; init; }
     public Dictionary<string, int>? ExternalApiCalls { get; init; }
     public int? TotalHttpClientCalls { get; init; }
     public Dictionary<string, int>? ClassCouplings { get; init; }
