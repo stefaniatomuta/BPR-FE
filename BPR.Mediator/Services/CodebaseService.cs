@@ -12,7 +12,7 @@ public class CodebaseService : ICodebaseService
     {
         var uploadedRootFolderName = file.Entries.First().FileName;
         _folderPath = ExtractArchive(file);
-        return Path.Combine(_folderPath, uploadedRootFolderName);
+        return $"{_folderPath}\\{uploadedRootFolderName}";
     }
 
     private static string ExtractArchive(ArchiveFile file)
