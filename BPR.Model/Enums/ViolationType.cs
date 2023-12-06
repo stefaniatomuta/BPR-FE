@@ -10,12 +10,12 @@ public enum ViolationType
     ForbiddenDependency,
     [Description("Mismatched namespace")] 
     MismatchedNamespace,
-    [Description("Conditional Statements")] 
+    [Description("Conditional statements")] 
     ConditionalStatements,
-    [Description("Solution Metrics")] 
+    [Description("Solution metrics")] 
     SolutionMetrics,
-    [Description("External Calls")] 
+    [Description("External calls")] 
     ExternalCalls,
-    [Description("Code Similarity")] 
+    [Description("Code similarity")] 
     CodeSimilarity
 }

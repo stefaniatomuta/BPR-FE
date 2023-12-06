@@ -1,3 +1,4 @@
+using BPR.Mediator.Utils;
 using BPR.Model.Enums;
 
 namespace BPRBlazor.ViewModels;
@@ -11,7 +12,7 @@ public class ViolationTypeViewModel
     public ViolationTypeViewModel(ViolationType violationType)
     {
         ViolationType = violationType;
-        Name = Enum.GetName(typeof(ViolationType), violationType) ?? string.Empty;
+        Name = EnumExtensions.GetDescription(violationType);
         IsChecked = true;
     }
 }

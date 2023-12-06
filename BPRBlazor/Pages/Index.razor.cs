@@ -111,6 +111,7 @@ public partial class Index : ComponentBase
         _rulesViewModels.ForEach(rule => rule.IsChecked = false);
         _isStartAnalysisButtonDisabled = false;
         _loadingIndicator?.ToggleLoading(false);
+        _analysisTitle = string.Empty;
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 

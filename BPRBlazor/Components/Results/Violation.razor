@@ -1,17 +1,24 @@
 ﻿@using BPR.Model.Enums
 @using BPR.Mediator.Utils
+
 <div class="violation">
     <p class="violation-name">
         <strong>#@(EnumExtensions.GetDescription(Model.Type))</strong>
     </p>
     <p class="violation-description">@Model.Description</p>
-    <p class="d-flex gap-2">Severity: 
-        <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
-    </p>
-    <div class="violation-code-wrapper">
-        @foreach (var line in Model.Code.Split("\n"))
-        {
-            <code>@line</code>
-        }
-    </div>
+    @if (Model.Severity != null)
+    {
+       <p class="d-flex gap-2">Severity: 
+           <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
+       </p>
+    }
+    @if (!string.IsNullOrEmpty(Model.Code))
+    {
+        <div class="violation-code-wrapper">
+            @foreach (var line in Model.Code.Split("\n"))
+            {
+                <code>@line</code>
+            }
+        </div>
+    }
 </div>

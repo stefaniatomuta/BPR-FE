@@ -6,18 +6,17 @@
 @inject IResultService ResultService
 
 <tr>
-    <td>Name Placeholder</td>
-    <td>Status: @Result.ResultStatus.ToString()</td>
-    <td>Started: @Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</td>
-    <td>Ended: @(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "")</td>
-
+    <td>@Result.Title</td>
+    <td>@Result.ResultStatus.ToString()</td>
+    <td>@Result.ResultStart.ToLocalTime().ToString(CultureInfo.InvariantCulture)</td>
+    <td>@(Result.ResultStatus != ResultStatus.Processing ? Result.ResultEnd.ToLocalTime().ToString(CultureInfo.InvariantCulture) : "")</td>
     <td>
-    @if (Result.ResultStatus == ResultStatus.Finished)
-    {
-        <button class="btn btn-secondary h-100" @onclick="() => SeeDetails(Result.Id)">See details</button>
-    }
-    </td>
-    <td>
-        <button class="btn btn-danger oi oi-trash h-100" @onclick="() => DeleteAsync(Result.Id)"></button>
+        <div class="d-flex align-items-center justify-content-end gap-2">
+            @if (Result.ResultStatus == ResultStatus.Finished)
+            {
+                <button class="btn btn-secondary" @onclick="() => SeeDetails(Result.Id)">See details</button>
+            }
+            <button class="btn btn-danger oi oi-trash" @onclick="() => DeleteAsync(Result.Id)"></button>
+        </div>
     </td>
 </tr>

@@ -37,6 +37,7 @@ public static class Extensions
         services.AddScoped<ICodeExtractionService, CodeExtractionService>();
         services.AddScoped<IAnalysisService, AnalysisService>();
         services.AddScoped<DependencyAnalysis>();
+        services.AddScoped<ExtendedAnalysisResultsHandler>();
         services.AddScoped<IDependencyService, DependencyService>();
         services.AddScoped<IRuleRepository, RuleRepository>();
         services.AddScoped<IRuleService, RuleService>();
