@@ -1,4 +1,5 @@
-﻿using BPR.Model.Results;
+﻿using BPR.Mediator.Utils;
+using BPR.Model.Results;
 
 namespace BPRBlazor.Shared;
 
@@ -16,6 +17,8 @@ public partial class MainLayout
         {
             ToastService.ShowSnackbar(response.CorrelationId);
         }
+
+        FolderCleanup.Cleanup(response.CorrelationId);
     }
 
     public void Dispose()

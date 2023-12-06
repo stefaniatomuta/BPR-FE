@@ -56,14 +56,8 @@ else
             <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
             <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
-            <div class="row">
-                <div class="col-xl-6 col-lg-12">
-                    <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
-                </div>
-                <div class="col-xl-6 col-lg-12">
-                    <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
-                </div>
-            </div>
+            <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
+            <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
         }
 
         @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
@@ -76,14 +70,10 @@ else
         @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.CodeSimilarity)?.IsChecked ?? false)
             && _codeSimilarities != null)
         {
-            <div class="row">
-                @foreach (var item in _codeSimilarities)
-                {
-                    <div class="col-6">
-                        <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
-                    </div>
-                }
-            </div>
+            @foreach (var item in _codeSimilarities)
+            {
+                <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
+            }
         }
     </div>
     

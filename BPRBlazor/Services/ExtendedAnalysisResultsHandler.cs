@@ -56,7 +56,7 @@ public class ExtendedAnalysisResultsHandler
         }
 
         return results.CodeLinesPerFile?.SelectMany(file => file)
-            .OrderBy(kvp => kvp.Key)
+            .OrderByDescending(kvp => kvp.Value)
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 
@@ -68,7 +68,7 @@ public class ExtendedAnalysisResultsHandler
         }
 
         return results.CommentLinesPerFile?.SelectMany(file => file)
-            .OrderBy(kvp => kvp.Key)
+            .OrderByDescending(kvp => kvp.Value)
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 
