@@ -11,5 +11,6 @@ public enum SolutionMetrics
     CommentLines,
     ClassCouplingListing,
     CodeLinesPerFile,
-    CommentLinesPerFile
+    CommentLinesPerFile,
+    CSFiles
 }
