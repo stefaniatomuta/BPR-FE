@@ -55,6 +55,9 @@ else
         {
             <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
+            <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
+            <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
+            <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
         }
 
         @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
@@ -62,6 +65,15 @@ else
             <ExternalCallsDetails
                 EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
                 ExternalApisCalls="_externalApiCalls"/>
+        }
+
+        @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.CodeSimilarity)?.IsChecked ?? false)
+            && _codeSimilarities != null)
+        {
+            @foreach (var item in _codeSimilarities)
+            {
+                <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
+            }
         }
     </div>
     

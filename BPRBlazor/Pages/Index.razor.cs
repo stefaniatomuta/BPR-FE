@@ -80,6 +80,7 @@ public partial class Index : ComponentBase
                 if (analysis.ResultStatus == ResultStatus.Finished)
                 {
                     ToastService.ShowSnackbar(analysis.Id);
+                    CodebaseService.Dispose();
                     _resultMessage = string.Empty;
                 }
                 else
@@ -111,6 +112,7 @@ public partial class Index : ComponentBase
         _isStartAnalysisButtonDisabled = false;
         _loadingIndicator?.ToggleLoading(false);
         _analysisTitle = string.Empty;
+        _folderPath = string.Empty;
         if (IsDependencyRuleChecked()) await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 
@@ -209,9 +211,9 @@ public partial class Index : ComponentBase
         }
         catch (Exception e)
         {
+            CodebaseService.Dispose();
             _folderPath = string.Empty;
             _resultMessage = e.Message;
-            CodebaseService.Dispose();
         }
 
         _loadingIndicator?.ToggleLoading(false);

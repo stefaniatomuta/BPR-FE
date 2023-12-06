@@ -1,3 +1,4 @@
+using BPR.Mediator.Utils;
 using BPRBlazor;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,6 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-Extensions.CleanUp();
+FolderCleanup.Cleanup("../temp");
 
 app.Run();

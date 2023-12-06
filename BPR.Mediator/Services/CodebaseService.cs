@@ -1,17 +1,18 @@
 ﻿using BPR.Mediator.Interfaces;
+using BPR.Mediator.Utils;
 using SevenZipExtractor;
 
 namespace BPR.Mediator.Services;
 
 public class CodebaseService : ICodebaseService
 {
-    private string? _folderPath;
+    private string _folderPath = string.Empty;
 
     public string LoadCodebaseInTemp(ArchiveFile file)
     {
         var uploadedRootFolderName = file.Entries.First().FileName;
         _folderPath = ExtractArchive(file);
-        return $"{_folderPath}/{uploadedRootFolderName}";
+        return $"{_folderPath}\\{uploadedRootFolderName}";
     }
 
     private static string ExtractArchive(ArchiveFile file)
@@ -25,10 +26,6 @@ public class CodebaseService : ICodebaseService
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-
-        if (Directory.Exists(_folderPath))
-        {
-            Directory.Delete(_folderPath, true);
-        }
+        FolderCleanup.Cleanup(_folderPath);
     }
 }

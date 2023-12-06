@@ -1,0 +1,21 @@
+﻿@typeparam T
+
+<div class="table-container my-4">
+    <table>
+        <thead>
+            <tr>
+                <th>@HeaderOne</th>
+                <th class="text-center @(PushLastColumnRight ? "col-2" : "")">@HeaderTwo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Data)
+            {
+                <tr>
+                    <td>@item.Key</td>
+                    <td class="text-center @(PushLastColumnRight ? "col-2" : "")">@item.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

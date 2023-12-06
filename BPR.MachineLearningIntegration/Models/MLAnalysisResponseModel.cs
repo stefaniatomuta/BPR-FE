@@ -35,6 +35,9 @@ public class MLAnalysisResponseModel
     [JsonPropertyName("commentLinesPerFile")]
     public List<Dictionary<string, int>>? CommentLinesPerFile { get; init; }
 
+    [JsonPropertyName("csFiles")]
+    public int? TotalCSharpFiles { get; init; }
+
     [JsonPropertyName("classNumber")]
     public int? TotalClasses { get; init; }
 
