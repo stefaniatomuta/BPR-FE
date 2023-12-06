@@ -11,6 +11,13 @@ svg {
     z-index: -1;
 }
 
+.svg-def {
+    width: 0;
+    height: 0;
+    position: absolute;
+    z-index: -1;
+}
+
 .component {
     position: absolute;
     background-color: #f1f1f1;
