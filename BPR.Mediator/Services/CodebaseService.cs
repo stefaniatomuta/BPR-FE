@@ -1,5 +1,6 @@
 ﻿using BPR.Mediator.Interfaces;
 using BPR.Mediator.Utils;
+using BPR.Model.Results;
 using SevenZipExtractor;
 
 namespace BPR.Mediator.Services;
@@ -19,7 +20,13 @@ public class CodebaseService : ICodebaseService
     {
         var guid = Guid.NewGuid();
         var directory = Directory.CreateDirectory($"../temp/{guid}");
-        file.Extract(directory.FullName);
+        foreach (var entry in file.Entries.Where(entry => 
+             entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.cshtml)) ||
+             entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.csproj)) ||
+             entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.cs))))
+        {
+            entry.Extract($"{directory.FullName}\\{entry.FileName}");
+        }
         return directory.FullName;
     }
 
