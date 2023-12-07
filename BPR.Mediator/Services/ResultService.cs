@@ -44,24 +44,23 @@ public class ResultService : IResultService
 
     public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, string analysisTitle)
     {
-        var folderId = Guid.Parse(folderPath.Split("\\")[^2]);
         var resultModel = new AnalysisResult(analysisTitle)
         {
-            Id = folderId,
             ResultStart = DateTime.UtcNow,
             ResultStatus = ResultStatus.Processing
         };
 
-        var added = await _resultRepository.AddResultAsync(resultModel);
-
-        if (!added.Success)
-        {
-            return added;
-        }
-
         try
         {
-            resultModel.Id = added.Value!.Id;
+            var folderId = GetGuidFromFolderPath(folderPath);
+            resultModel.Id = folderId;
+            
+            var added = await _resultRepository.AddResultAsync(resultModel);
+            if (!added.Success)
+            {
+                return added;
+            }
+        
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             resultModel.ArchitecturalModel = model;
             resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();
@@ -133,5 +132,18 @@ public class ResultService : IResultService
 
         await _messagingService.SendAsync(folderPath, externalRules, correlationId);
         return true;
+    }
+
+    private Guid GetGuidFromFolderPath(string folderPath)
+    {
+        foreach (var folderName in folderPath.Split("\\"))
+        {
+            if (Guid.TryParse(folderName, out var guid))
+            {
+                return guid;
+            }
+        }
+
+        throw new Exception("No guid found on selected path");
     }
 }
