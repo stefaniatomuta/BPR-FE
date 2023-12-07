@@ -2,7 +2,6 @@
 @using BPR.Mediator.Interfaces
 @using BPRBlazor.Components.Results
 
-@inject IJSRuntime JS
 @inject IResultService ResultService
 @inject IMapper Mapper
 
@@ -30,7 +29,7 @@ else
             <tbody>
             @foreach (var result in _results)
             {
-                <ResultRow Result="result" ResultDeleted="HandleResultDeletedAsync"/>
+                <ResultRow Result="result" ResultDeleted="HandleResultDeleted"/>
             }
             </tbody>
         </table>

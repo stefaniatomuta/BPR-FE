@@ -18,6 +18,11 @@ public partial class ResultRow : ComponentBase
     
     private async void DeleteAsync(Guid id)
     {
+        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the result?"});
+        if (!confirmed)
+        {
+            return;
+        }
         var result = await ResultService.DeleteResultAsync(id);
         if (result.Success)
         {
