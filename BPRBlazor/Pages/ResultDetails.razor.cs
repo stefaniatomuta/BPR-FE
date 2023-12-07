@@ -1,5 +1,6 @@
 ﻿using BPR.Model.Enums;
 using BPR.Model.Results;
+using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -14,6 +15,7 @@ public partial class ResultDetails : ComponentBase
     private ResultViewModel? _result;
     private List<ViolationTypeViewModel> _violationTypes = new();
     private List<ViolationViewModel> _filteredViolations = new();
+    private LoadingIndicator? _loadingIndicator;
 
     private Dictionary<string, double>? _conditionalFrequencies;
     private Dictionary<string, int>? _solutionMetrics;
@@ -28,6 +30,7 @@ public partial class ResultDetails : ComponentBase
     {
         if (firstRender)
         {
+            _loadingIndicator?.ToggleLoading(true);
             var resultModel = await ResultService.GetResultAsync(Id);
             if (resultModel != null)
             {
@@ -37,6 +40,7 @@ public partial class ResultDetails : ComponentBase
                 _violationTypes = GetCurrentViolationTypes();
                 StateHasChanged();
             }
+            _loadingIndicator?.ToggleLoading(false);
         }
     }
 
@@ -92,7 +96,9 @@ public partial class ResultDetails : ComponentBase
     
     private async Task DownloadPdf()
     {
+        _loadingIndicator.ToggleLoading(true);
         await JsRuntime.InvokeVoidAsync("TransformToPng");
+        _loadingIndicator.ToggleLoading(false);
         await JsRuntime.InvokeVoidAsync("DownloadResultsToPDF");
     }
 }

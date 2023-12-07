@@ -12,7 +12,7 @@
 @inject ExtendedAnalysisResultsHandler ExtendedAnalysisHandler
 
 @page "/results/{id:guid}"
-
+<LoadingIndicator @ref="_loadingIndicator" />
 <div class="float-end hide-pdf">
     <button class="btn btn-secondary" @onclick="DownloadPdf">Download as PDF</button>
 </div>
