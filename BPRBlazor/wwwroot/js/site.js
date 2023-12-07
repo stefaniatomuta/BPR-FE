@@ -1,22 +1,20 @@
 const fileName = "Download";
 
 function DownloadResultsToPDF() {
-    const elementToPrint = document.createElement('div');
-    const elements = document.getElementsByClassName('result-pdf');
+    const elements = document.getElementsByClassName('pdf-image');
+    const promise = Promise.resolve();
 
     for (let i = 0; i < elements.length; i++) {
-        elementToPrint.appendChild(elements[i].cloneNode(true));
+        htmlToImage.toPng(elements[i].firstElementChild)
+            .then(function (dataUrl) {
+                const img = new Image();
+                img.src = dataUrl;
+                elements[i].firstElementChild.remove()
+                elements[i].appendChild(img)
+            }).catch()
     }
-    
-    const opt = {
-        margin: 15,
-        filename: fileName,
-    };
-
-    html2pdf()
-        .set(opt)
-        .from(elementToPrint)
-        .save();
+    window.focus()
+    window.print()
 }
 
 function getElementOffset(elementId) {

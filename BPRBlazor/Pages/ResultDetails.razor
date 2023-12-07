@@ -13,18 +13,18 @@
 
 @page "/results/{id:guid}"
 
-<div class="float-end">
+<div class="float-end hide-pdf">
     <button class="btn btn-secondary" @onclick="DownloadPdf">Download as PDF</button>
 </div>
 
-<h1 class="result-pdf mb-3">Analysis results</h1>
+<h1 class="mb-3">Analysis results</h1>
 @if (_result is null) 
 {
     <h2>No results to display...</h2>
 }
 else 
 {
-    <div class="result-pdf">
+    <div>
         <h3>@_result.Title</h3>
         @if (_result.Violations.Count != _filteredViolations.Count)
         {
@@ -36,52 +36,59 @@ else
         }
     </div>
     
-    <p>Filter details based on rules</p>
-    <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
-
-    <div class="result-pdf">
-        @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ForbiddenDependency)?.IsChecked ?? false) 
-            && _result.ArchitecturalModel != null)
-        {
-            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitecturalModel" IsEditable="false"/>
-        }
-        
-        @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ConditionalStatements)?.IsChecked ?? false)
-        {
-            <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
-        }
-
-        @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
-        {
-            <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
-            <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
-            <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
-            <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
-            <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
-        }
-
-        @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
-        {
-            <ExternalCallsDetails
-                EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
-                ExternalApisCalls="_externalApiCalls"/>
-        }
-
-        @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.CodeSimilarity)?.IsChecked ?? false)
-            && _codeSimilarities != null)
-        {
-            @foreach (var item in _codeSimilarities)
-            {
-                <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
-            }
-        }
+    <div class="hide-pdf">
+        <p>Filter details based on rules</p>
+        <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
     </div>
     
-    <div class="result-pdf">
-        <Virtualize Items="_filteredViolations" Context="violation">
-            <div class="violation">
-                <Violation Model="violation" />
-            </div>
-        </Virtualize>
-    </div>
+    @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ForbiddenDependency)?.IsChecked ?? false) 
+        && _result.ArchitecturalModel != null)
+    {
+        <div class="pdf-image my-5">
+            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitecturalModel" IsEditable="false"/>
+        </div>
+    }
+    
+    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ConditionalStatements)?.IsChecked ?? false)
+    {
+        <div class="pdf-image my-5">
+            <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
+        </div>
+    }
+
+    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
+    {
+        <div class="pdf-image my-5">
+        <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
+        </div>
+        <div class="pdf-image my-5">
+            <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
+        </div>
+        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
+        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
+        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
+    }
+
+    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
+    {
+        <ExternalCallsDetails
+            EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
+            ExternalApisCalls="_externalApiCalls"/>
+    }
+
+    @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.CodeSimilarity)?.IsChecked ?? false)
+        && _codeSimilarities != null)
+    {
+        @foreach (var item in _codeSimilarities)
+        {
+            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
+        }
+    }
+    
+    @foreach (var violation in _filteredViolations)
+    {
+        <div class="violation">
+            <Violation Model="violation"/>
+        </div>
+    }
 }
