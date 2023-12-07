@@ -1,17 +1,15 @@
 ﻿@using Radzen.Blazor
 
-<div class="d-flex justify-content-center">
-    <RadzenChart Style="width: 80%;">
-        <RadzenBarSeries 
-            Fills=@(new [] {"#955cb8"}) 
-            Data="@_data" 
-            CategoryProperty="Label" 
-            Title="@Title" 
-            LineType="LineType.Dashed" 
-            ValueProperty="Value">
-            <RadzenSeriesDataLabels Visible="@ShowDataLabels" />
-        </RadzenBarSeries>
-        <RadzenBarOptions Radius="5" />
-        <RadzenLegend Visible="@ShowLegend" Position="LegendPosition.Bottom" />
-    </RadzenChart>
-</div>
+<RadzenChart Style="width: 90%; height: 50vh;">
+    <RadzenBarSeries 
+        Fills=@(new [] {"#955cb8"}) 
+        Data="@_data" 
+        CategoryProperty="Label" 
+        Title="@Title" 
+        LineType="LineType.Dashed" 
+        ValueProperty="Value">
+        <RadzenSeriesDataLabels Visible="@ShowDataLabels" />
+    </RadzenBarSeries>
+    <RadzenBarOptions Radius="5" />
+    <RadzenLegend Visible="@ShowLegend" Position="LegendPosition.Bottom" />
+</RadzenChart>
