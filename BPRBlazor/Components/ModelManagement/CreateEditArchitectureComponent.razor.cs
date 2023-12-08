@@ -21,18 +21,40 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _boundarySize = await JS.InvokeAsync<SizeViewModel>("getElementSize", new object[]{"boundary"});
-        foreach (var component in  ModelViewModel.Components.ToList())
+        var update = false;
+        var boundarySize = await JS.InvokeAsync<SizeViewModel>("getElementSize", new object[] { "boundary" });
+
+        if (_boundarySize == null)
         {
-            component.Size = await JS.InvokeAsync<SizeViewModel>("getElementSize", new object[]{component.Id});
-            if (component.Position.X + component.Size.Width > _boundarySize.Width)
+            _boundarySize = boundarySize;
+            update = true;
+        }
+        else if (boundarySize.Width != _boundarySize.Width)
+        {
+            _boundarySize = boundarySize;
+            update = true;
+        }
+
+        if (_boundarySize != null)
+        {
+            foreach (var component in ModelViewModel.Components.ToList())
             {
-                component.Position.X = _boundarySize.Width - component.Size.Width - 20;
+                component.Size = await JS.InvokeAsync<SizeViewModel>("getElementSize", new object[] { component.Id });
+
+                if (component.Position.X + component.Size.Width > _boundarySize.Width)
+                {
+                    component.Position.X = _boundarySize.Width - component.Size.Width - 20;
+                    update = true;
+                }
             }
         }
-        StateHasChanged();
+
+        if (update || firstRender)
+        {
+            StateHasChanged();
+        }
     }
-    
+
     private void AddArchitecturalComponent()
     {
         if (!IsEditable)

@@ -17,5 +17,7 @@ public enum ViolationType
     [Description("External calls")] 
     ExternalCalls,
     [Description("Code similarity")] 
-    CodeSimilarity
+    CodeSimilarity,
+    [Description("Technical debt classification")]
+    TechnicalDebtClassification
 }

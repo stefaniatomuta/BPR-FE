@@ -32,12 +32,12 @@ public class RabbitMqSender : RabbitMqBase, ISender
 
             channel.BasicPublish(string.Empty, QueueName, null, body);
             _logger.LogDebug("Sent message to queue: '{Queue}'", QueueName);
+            return Task.CompletedTask;
         }
         catch (Exception ex)
         {
             _logger.LogWarning("{ExceptionMessage}. Exception: {Exception}", ex.Message, ex);
+            throw;
         }
-
-        return Task.CompletedTask;
     }
 }

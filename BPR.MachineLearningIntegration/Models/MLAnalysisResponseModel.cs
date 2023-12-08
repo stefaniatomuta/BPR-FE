@@ -1,5 +1,4 @@
-﻿using BPR.Model.Results;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace BPR.MachineLearningIntegration.Models;
 
@@ -54,7 +53,7 @@ public class MLAnalysisResponseModel
     public int? TotalUsingDirectives { get; init; }
 
     [JsonPropertyName("externalApiCalls")]
-    public Dictionary<string, int>? ExternalApiCalls { get; init; }
+    public Dictionary<string, ExternalApiMetrics>? ExternalApiCalls { get; init; }
 
     [JsonPropertyName("httpClientCalls")]
     public int? TotalHttpClientCalls { get; init; }
@@ -64,4 +63,7 @@ public class MLAnalysisResponseModel
 
     [JsonPropertyName("codeSimilarity")]
     public Dictionary<string, Dictionary<string, double>>? CodeSimilarities { get; init; }
+
+    [JsonPropertyName("technicalDebtLabel")]
+    public string? TechnicalDebtClassification { get; init; }
 }

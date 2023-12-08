@@ -7,6 +7,11 @@ public class Result
     public bool Success { get; set; }
     public IList<string> Errors { get; set; }
 
+    public Result()
+    {
+        Errors = new List<string>();
+    }
+
     public Result(bool success, IList<string> error)
     {
         Success = success;
@@ -71,6 +76,11 @@ public class Result
 public class Result<T> : Result
 {
     public T? Value { get; set; }
+
+    public Result() : base()
+    {
+
+    }
 
     public Result(bool success, string error) : base(success, error)
     {

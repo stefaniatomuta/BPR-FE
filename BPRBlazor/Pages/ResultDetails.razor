@@ -12,6 +12,7 @@
 @inject ExtendedAnalysisResultsHandler ExtendedAnalysisHandler
 
 @page "/results/{id:guid}"
+
 <LoadingIndicator @ref="_loadingIndicator" />
 <div class="float-end hide-pdf">
     <button class="btn btn-secondary" @onclick="DownloadPdf">Download as PDF</button>
@@ -41,22 +42,26 @@ else
         <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
     </div>
     
-    @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ForbiddenDependency)?.IsChecked ?? false) 
-        && _result.ArchitecturalModel != null)
+    @if (ShouldDisplayResults(ViolationType.ForbiddenDependency) && _result.ArchitecturalModel != null)
     {
         <div class="pdf-image my-5">
             <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitecturalModel" IsEditable="false"/>
         </div>
     }
-    
-    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ConditionalStatements)?.IsChecked ?? false)
+
+    @if (ShouldDisplayResults(ViolationType.TechnicalDebtClassification))
+    {
+        <p>Technical debt classification: <strong>@_technicalDebtClassification</strong></p>
+    }
+
+    @if (ShouldDisplayResults(ViolationType.ConditionalStatements))
     {
         <div class="pdf-image my-5">
             <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
         </div>
     }
 
-    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.SolutionMetrics)?.IsChecked ?? false)
+    @if (ShouldDisplayResults(ViolationType.SolutionMetrics))
     {
         <div class="pdf-image my-5">
         <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
@@ -64,24 +69,23 @@ else
         <div class="pdf-image my-5">
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
         </div>
-        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types"></Table>
-        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code"></Table>
-        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments"></Table>
+        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
+        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
+        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
     }
 
-    @if (_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.ExternalCalls)?.IsChecked ?? false)
+    @if (ShouldDisplayResults(ViolationType.ExternalCalls))
     {
         <ExternalCallsDetails
             EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
             ExternalApisCalls="_externalApiCalls"/>
     }
 
-    @if ((_violationTypes.SingleOrDefault(type => type.ViolationType == ViolationType.CodeSimilarity)?.IsChecked ?? false)
-        && _codeSimilarities != null)
+    @if (ShouldDisplayResults(ViolationType.CodeSimilarity) && _codeSimilarities != null)
     {
         @foreach (var item in _codeSimilarities)
         {
-            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true"></Table>
+            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
         }
     }
     

@@ -1,5 +1,6 @@
 ﻿using BPR.Model.Architectures;
 using BPR.Model.Enums;
+using BPR.Model.Results.External;
 
 namespace BPR.Model.Results;
 

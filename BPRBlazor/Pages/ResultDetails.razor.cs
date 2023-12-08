@@ -1,5 +1,6 @@
 ﻿using BPR.Model.Enums;
 using BPR.Model.Results;
+using BPR.Model.Results.External;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -17,10 +18,11 @@ public partial class ResultDetails : ComponentBase
     private List<ViolationViewModel> _filteredViolations = new();
     private LoadingIndicator? _loadingIndicator;
 
+    private string? _technicalDebtClassification;
     private Dictionary<string, double>? _conditionalFrequencies;
     private Dictionary<string, int>? _solutionMetrics;
     private Dictionary<string, double>? _codeLinesMetrics;
-    private Dictionary<string, int>? _externalApiCalls;
+    private Dictionary<string, ExternalApiMetrics>? _externalApiCalls;
     private Dictionary<string, int>? _classCouplings;
     private Dictionary<string, int>? _codeLinesPerFile;
     private Dictionary<string, int>? _commentLinesPerFile;
@@ -51,6 +53,7 @@ public partial class ResultDetails : ComponentBase
             return;
         }
 
+        _technicalDebtClassification = ExtendedAnalysisHandler.HandleTechnicalDebtClassification(results);
         _conditionalFrequencies = ExtendedAnalysisHandler.HandleConditionalStatements(results);
         _solutionMetrics = ExtendedAnalysisHandler.HandleSolutionMetrics(results);
         _codeLinesPerFile = ExtendedAnalysisHandler.HandleCodeLinesPerFile(results);
@@ -100,5 +103,10 @@ public partial class ResultDetails : ComponentBase
         await JsRuntime.InvokeVoidAsync("TransformToPng");
         _loadingIndicator?.ToggleLoading(false);
         await JsRuntime.InvokeVoidAsync("DownloadResultsToPDF");
+    }
+
+    private bool ShouldDisplayResults(ViolationType type)
+    {
+        return _violationTypes.SingleOrDefault(t => t.ViolationType == type)?.IsChecked ?? false;
     }
 }

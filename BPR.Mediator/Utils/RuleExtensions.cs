@@ -17,6 +17,7 @@ public static class RuleExtensions
                 ViolationType.SolutionMetrics => Enum.GetValues<SolutionMetrics>().Select(e => e.ToString()),
                 ViolationType.ExternalCalls => Enum.GetValues<ExternalCalls>().Select(e => e.ToString()),
                 ViolationType.CodeSimilarity => Enum.GetValues<CodeSimilarity>().Select(e => e.ToString()),
+                ViolationType.TechnicalDebtClassification => Enum.GetValues<TechnicalDebtClassification>().Select(e => e.ToString()),
                 _ => Array.Empty<string>()
             });
         }
