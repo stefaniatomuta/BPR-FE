@@ -1,4 +1,4 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css');
 
 .table-container {
     width: 100%;
@@ -14,12 +14,13 @@ table {
 }
 
 thead {
-    background-color: #955cb8;
+    background-color: #9b83af;
     color: white;
 }
 
 td, th {
     padding: 1rem;
+    word-break: break-word;
     position: relative;
 }
 
@@ -110,6 +111,11 @@ select {
     color: orangered;
 }
 
+img {
+    width: 100%;
+    height: auto;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -147,10 +153,8 @@ h1:focus {
     page-break-inside: avoid !important;
 }
 
-.rz-legend-items {
-    padding: 0;
-    margin-bottom: -3rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: 100%;
+@media print {
+    nav, .hide-pdf {
+        display: none !important;
+    }
 }

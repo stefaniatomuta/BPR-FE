@@ -1,22 +1,18 @@
-const fileName = "Download";
-
-function DownloadResultsToPDF() {
-    const elementToPrint = document.createElement('div');
-    const elements = document.getElementsByClassName('result-pdf');
-
+async function TransformToPng()
+{
+    const elements = document.getElementsByClassName('pdf-image')
     for (let i = 0; i < elements.length; i++) {
-        elementToPrint.appendChild(elements[i].cloneNode(true));
+        const img = new Image()
+        img.src = await htmlToImage.toPng(elements[i].firstElementChild)
+        elements[i].firstElementChild.remove()
+        elements[i].appendChild(img)
     }
-    
-    const opt = {
-        margin: 15,
-        filename: fileName,
-    };
+}
 
-    html2pdf()
-        .set(opt)
-        .from(elementToPrint)
-        .save();
+function DownloadResultsToPDF(){
+    window.focus()
+    window.print()
+    location.reload();
 }
 
 function getElementOffset(elementId) {
@@ -25,7 +21,7 @@ function getElementOffset(elementId) {
 }
 
 function getElementSize(elementId) {
-    const element = document.getElementById(elementId);
+    const element = document.getElementById(elementId)
     if (element === undefined || element === null) {
         return { height: 0, width: 0 }
     }
@@ -33,12 +29,12 @@ function getElementSize(elementId) {
 }
 
 function removeSelectedElement(elementId) {
-    const element = document.getElementById(elementId);
+    const element = document.getElementById(elementId)
     element.selectedIndex = 0;
 }
 
 function setSelectedElement(elementId, modelIndex) {
-    const element = document.getElementById(elementId);
+    const element = document.getElementById(elementId)
     element.selectedIndex = modelIndex;
 }
 

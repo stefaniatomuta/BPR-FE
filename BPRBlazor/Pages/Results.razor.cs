@@ -13,13 +13,8 @@ public partial class Results : ComponentBase
         _results = Mapper.Map<List<ResultViewModel>>(resultModel);
     }
     
-    private async Task HandleResultDeletedAsync(Guid id)
+    private void HandleResultDeleted(Guid id)
     { 
-        var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the result?"});
-        if (!confirmed)
-        {
-            return;
-        }
         _results.RemoveAll(result => result.Id == id);
     }
 }
