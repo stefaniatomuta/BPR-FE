@@ -1,6 +1,7 @@
 using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Results;
+using BPR.Model.Results.External;
 
 namespace BPR.Mediator.Interfaces;
 

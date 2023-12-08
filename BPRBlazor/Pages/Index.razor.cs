@@ -91,7 +91,7 @@ public partial class Index : ComponentBase
             }
             else
             {
-                _resultMessage = "Analysis failed...";
+                _resultMessage = $"Analysis failed... Reason: '{result.Errors.FirstOrDefault()}'";
             }
 
             await Reset();
@@ -134,13 +134,13 @@ public partial class Index : ComponentBase
         {
             if (_selectedArchitectureViewModel is null)
             {
-                _resultMessage = "Please select an architectural model";
+                _resultMessage = "Please select an architecture model";
                 return false;
             }
 
             if (_unmappedNamespaceComponents.Any())
             {
-                _resultMessage = "Please make sure all namespaces are mapped to an architectural component";
+                _resultMessage = "Please make sure all namespaces are mapped to an architecture component";
                 return false;
             }
         }

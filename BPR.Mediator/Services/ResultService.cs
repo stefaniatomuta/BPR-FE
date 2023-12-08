@@ -4,7 +4,9 @@ using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPR.Model.Results;
+using BPR.Model.Results.External;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client.Exceptions;
 
 namespace BPR.Mediator.Services;
 
@@ -64,18 +66,35 @@ public class ResultService : IResultService
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             resultModel.ArchitecturalModel = model;
             resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();
+            Result<AnalysisResult> analysisCreatedResult = new();
 
-            if (!await HandleExternalAnalysis(folderPath, rules, resultModel.Id))
+            try
             {
-                resultModel.ResultStatus = ResultStatus.Finished;
+                if (!await HandleExternalAnalysis(folderPath, rules, resultModel.Id))
+                {
+                    resultModel.ResultStatus = ResultStatus.Finished;
+                    resultModel.ResultEnd = DateTime.UtcNow;
+                }
+
+                analysisCreatedResult.Success = true;
+            }
+            catch (Exception)
+            {
+                resultModel.ResultStatus = ResultStatus.Failed;
                 resultModel.ResultEnd = DateTime.UtcNow;
+                analysisCreatedResult.Errors.Add("Connection to message broker could not be established");
+                analysisCreatedResult.Success = false;
             }
 
-            var addResult = await _resultRepository.UpdateResultAsync(resultModel);
+            var updated = await _resultRepository.UpdateResultAsync(resultModel);
+            if (!updated.Success)
+            {
+                return updated;
+            }
 
-            return addResult.Success 
-                ? Result.Ok(addResult).Value!
-                : Result.Fail<AnalysisResult>(addResult.Errors, _logger);
+            return analysisCreatedResult.Success 
+                ? Result.Ok(updated).Value!
+                : Result.Fail<AnalysisResult>(analysisCreatedResult.Errors, _logger);
         }
         catch (Exception e)
         {

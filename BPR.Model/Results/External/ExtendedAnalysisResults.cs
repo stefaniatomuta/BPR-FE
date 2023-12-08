@@ -1,4 +1,4 @@
-﻿namespace BPR.Model.Results;
+﻿namespace BPR.Model.Results.External;
 
 public class ExtendedAnalysisResults
 {
@@ -18,8 +18,9 @@ public class ExtendedAnalysisResults
     public int? TotalInheritanceDeclarations { get; init; }
     public int? TotalUsingDirectives { get; init; }
     public int? TotalCSharpFiles { get; init; }
-    public Dictionary<string, int>? ExternalApiCalls { get; init; }
+    public Dictionary<string, ExternalApiMetrics>? ExternalApiCalls { get; init; }
     public int? TotalHttpClientCalls { get; init; }
     public Dictionary<string, int>? ClassCouplings { get; init; }
     public Dictionary<string, Dictionary<string, double>>? CodeSimilarities { get; init; }
+    public string? TechnicalDebtClassification { get; init; }
 }

@@ -1,5 +1,5 @@
 ﻿using BPR.Model.Enums;
-using BPR.Model.Results;
+using BPR.Model.Results.External;
 
 namespace BPRBlazor.ViewModels;
 
