@@ -51,7 +51,7 @@ public class RuleRepository : IRuleRepository
             
             var ruleCollection = _mapper.Map<RuleCollection>(rule);
             await _rulesCollection.InsertOneAsync(ruleCollection);
-            _logger.LogInformation($"Architectural model added" + ruleCollection);
+            _logger.LogInformation($"Architecture model added" + ruleCollection);
             
             return Result.Ok(ruleCollection);
         }

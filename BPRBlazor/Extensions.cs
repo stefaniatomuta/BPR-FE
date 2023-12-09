@@ -21,8 +21,8 @@ public static class Extensions
 {
     public static void AddValidators(this IServiceCollection services)
     {
-        services.AddScoped<IValidator<ArchitecturalModel>, ArchitecturalModelValidator>();
-        services.AddScoped<IValidator<ArchitecturalComponent>, ArchitecturalComponentValidator>();
+        services.AddScoped<IValidator<ArchitectureModel>, ArchitectureModelValidator>();
+        services.AddScoped<IValidator<ArchitectureComponent>, ArchitectureComponentValidator>();
         services.AddScoped<IValidator<Rule>, RuleValidator>();
         services.AddScoped<IValidatorService, ValidatorService>();
     }
@@ -32,13 +32,13 @@ public static class Extensions
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
         services.AddScoped<IResultService, ResultService>();
-        services.AddScoped<IDependencyRepository, ArchitectureModelRepository>();
+        services.AddScoped<IArchitectureModelRepository, ArchitectureModelRepository>();
         services.AddScoped<IResultRepository, ResultRepository>();
         services.AddScoped<ICodeExtractionService, CodeExtractionService>();
         services.AddScoped<IAnalysisService, AnalysisService>();
         services.AddScoped<DependencyAnalysis>();
         services.AddScoped<ExtendedAnalysisResultsHandler>();
-        services.AddScoped<IDependencyService, DependencyService>();
+        services.AddScoped<IArchitectureModelService, ArchitectureModelService>();
         services.AddScoped<IRuleRepository, RuleRepository>();
         services.AddScoped<IRuleService, RuleService>();
 

@@ -1,4 +1,4 @@
-﻿namespace BPR.Model.Enums;
+﻿namespace BPR.MachineLearningIntegration.Enums;
 
 public enum ConditionalStatements
 {

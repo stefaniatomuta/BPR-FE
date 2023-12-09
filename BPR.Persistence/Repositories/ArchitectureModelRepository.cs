@@ -10,7 +10,7 @@ using MongoDB.Driver;
 
 namespace BPR.Persistence.Repositories;
 
-public class ArchitectureModelRepository : IDependencyRepository
+public class ArchitectureModelRepository : IArchitectureModelRepository
 {
     private readonly IMongoCollection<ArchitectureModelsCollection> _architectureModelsRuleCollection;
     private readonly ILogger<ArchitectureModelRepository> _logger;
@@ -28,17 +28,17 @@ public class ArchitectureModelRepository : IDependencyRepository
         
     }
 
-    public async Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync()
+    public async Task<IList<ArchitectureModel>> GetArchitectureModelsAsync()
     {
         var collections = await (await _architectureModelsRuleCollection.FindAsync(_ => true)).ToListAsync();
-        return _mapper.Map<IList<ArchitecturalModel>>(collections);
+        return _mapper.Map<IList<ArchitectureModel>>(collections);
     }
 
-    public async Task<Result> AddModelAsync(ArchitecturalModel model)
+    public async Task<Result> AddModelAsync(ArchitectureModel model)
     {
         try
         {
-            var result = await GetArchitecturalModelCollectionByName(model.Name);
+            var result = await GetArchitectureModelCollectionByName(model.Name);
             if (result != null) return Result.Fail<ArchitectureModelsCollection>("Model with the same name already exists", _logger);
             var modelCollection = _mapper.Map<ArchitectureModelsCollection>(model);
             await _architectureModelsRuleCollection.InsertOneAsync(modelCollection);
@@ -51,11 +51,11 @@ public class ArchitectureModelRepository : IDependencyRepository
         }
     }
     
-    public async Task<Result> EditModelAsync(ArchitecturalModel model)
+    public async Task<Result> EditModelAsync(ArchitectureModel model)
     {
         try
         {
-            var result = await GetArchitecturalModelCollectionByName(model.Name);
+            var result = await GetArchitectureModelCollectionByName(model.Name);
             if (result != null && result.Id != model.Id)
             {
                 return Result.Fail<ArchitectureModelsCollection>("Model with the same name already exists", _logger);
@@ -67,7 +67,7 @@ public class ArchitectureModelRepository : IDependencyRepository
                 .Set(old => old.Components, model.Components);
             
             await _architectureModelsRuleCollection.UpdateOneAsync(filter, update);
-            _logger.LogInformation("Architectural model successfully edited");
+            _logger.LogInformation("Architecture model successfully edited");
 
             return Result.Ok(model);
         }
@@ -77,15 +77,15 @@ public class ArchitectureModelRepository : IDependencyRepository
         }
     }
 
-    public async Task<ArchitecturalModel?> DeleteModelAsync(Guid id)
+    public async Task<ArchitectureModel?> DeleteModelAsync(Guid id)
     {
         var filter = Builders<ArchitectureModelsCollection>.Filter.Eq(model => model.Id, id);
         var result = await _architectureModelsRuleCollection.FindOneAndDeleteAsync(filter);
         
-        return _mapper.Map<ArchitecturalModel?>(result);;
+        return _mapper.Map<ArchitectureModel?>(result);;
     }
 
-    private async Task<ArchitectureModelsCollection?> GetArchitecturalModelCollectionByName(string name)
+    private async Task<ArchitectureModelsCollection?> GetArchitectureModelCollectionByName(string name)
     {
         return await (await _architectureModelsRuleCollection.FindAsync(x => x.Name.Equals(name))).FirstOrDefaultAsync();
     }

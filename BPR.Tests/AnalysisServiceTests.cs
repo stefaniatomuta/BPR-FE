@@ -171,7 +171,7 @@ public class AnalysisServiceTests
         Assert.That(violations, Has.Count.EqualTo(5));
     }
 
-    private static List<Violation> StartAnalysis(List<UsingDirective> usings, ArchitecturalModel model)
+    private static List<Violation> StartAnalysis(List<UsingDirective> usings, ArchitectureModel model)
     {
         var violations = new List<Violation>();
 

@@ -15,7 +15,7 @@ public class AnalysisService : IAnalysisService
         _dependencyAnalysis = dependencyAnalysis;
     }
 
-    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitecturalModel model, List<ViolationType> violationTypes)
+    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitectureModel model, List<ViolationType> violationTypes)
     {
         var violations = new List<Violation>();
 

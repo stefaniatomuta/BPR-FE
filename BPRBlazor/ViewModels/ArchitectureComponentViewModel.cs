@@ -2,7 +2,7 @@
 
 namespace BPRBlazor.ViewModels;
 
-public class ArchitecturalComponentViewModel
+public class ArchitectureComponentViewModel
 {
     public int Id { get; set; }
 

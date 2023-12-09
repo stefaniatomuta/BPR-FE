@@ -8,15 +8,15 @@ namespace BPRBlazor.Components.ModelManagement;
 public partial class CreateEditArchitectureComponent : ComponentBase
 {
     [Parameter, EditorRequired] 
-    public ArchitecturalModelViewModel ModelViewModel { get; set; } = new();
+    public ArchitectureModelViewModel ModelViewModel { get; set; } = new();
 
     [Parameter]
     public bool IsEditable { get; set; }
 
     private List<(string Message, string Class)> _resultMessages = new();
-    private ArchitecturalComponentViewModel? _dependencyComponent;
+    private ArchitectureComponentViewModel? _dependencyComponent;
     private PositionViewModel _dragStartCoordinates = new();
-    private ArchitecturalComponentViewModel? _draggingComponent;
+    private ArchitectureComponentViewModel? _draggingComponent;
     private SizeViewModel? _boundarySize;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -55,7 +55,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         }
     }
 
-    private void AddArchitecturalComponent()
+    private void AddArchitectureComponent()
     {
         if (!IsEditable)
         {
@@ -65,7 +65,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         _dependencyComponent = null;
         _resultMessages = new List<(string Message, string Class)>();
 
-        var component = new ArchitecturalComponentViewModel()
+        var component = new ArchitectureComponentViewModel()
         {
             Id = ModelViewModel.Components.Any() ? ModelViewModel.Components.Max(c => c.Id) + 1 : 0
         };
@@ -73,7 +73,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         ModelViewModel.Components.Add(component);
     }
 
-    private void RemoveArchitecturalComponent(ArchitecturalComponentViewModel component)
+    private void RemoveArchitectureComponent(ArchitectureComponentViewModel component)
     {
         if (!IsEditable)
         {
@@ -94,7 +94,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         try
         {
             _resultMessages = new();
-            var result = await DependencyService.AddOrEditModelAsync(Mapper.Map<ArchitecturalModel>(ModelViewModel));
+            var result = await ArchitectureModelService.AddOrEditModelAsync(Mapper.Map<ArchitectureModel>(ModelViewModel));
             if (result.Success)
             {
                NavigationManager.NavigateTo(NavigationManager.Uri, true);
@@ -113,7 +113,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         }
     }
 
-    private void AddDependency(ArchitecturalComponentViewModel dependencyComponent)
+    private void AddDependency(ArchitectureComponentViewModel dependencyComponent)
     {
         if (!IsEditable)
         {
@@ -140,7 +140,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         }
     }
     
-    private static void RemoveDependency(ArchitecturalComponentViewModel component, ArchitecturalComponentViewModel dependency)
+    private static void RemoveDependency(ArchitectureComponentViewModel component, ArchitectureComponentViewModel dependency)
     {
         component.Dependencies.RemoveAll(dep => dep.Id == dependency.Id);
     }
@@ -152,7 +152,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
     private static string ComponentDependencyTypeClass(DependencyViewModel dependency) => dependency.IsOpen ? "btn-success" : "btn-danger";
 
-    private void OnDragComponentStart(DragEventArgs args, ArchitecturalComponentViewModel component)
+    private void OnDragComponentStart(DragEventArgs args, ArchitectureComponentViewModel component)
     {
         _dragStartCoordinates = new PositionViewModel()
         {
@@ -187,7 +187,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         }
     }
 
-    private PositionViewModel GetMiddlePositionForComponent(ArchitecturalComponentViewModel component)
+    private PositionViewModel GetMiddlePositionForComponent(ArchitectureComponentViewModel component)
     {
         if (component.Size == null)
         {
@@ -226,7 +226,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
 
         try
         {
-            var result = await DependencyService.DeleteArchitectureModelAsync(ModelViewModel.Id);
+            var result = await ArchitectureModelService.DeleteArchitectureModelAsync(ModelViewModel.Id);
 
             if (result.Success)
             {

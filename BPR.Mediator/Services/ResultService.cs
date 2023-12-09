@@ -44,7 +44,7 @@ public class ResultService : IResultService
     }
 
 
-    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, string analysisTitle)
+    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitectureModel model, List<Rule> rules, string analysisTitle)
     {
         var resultModel = new AnalysisResult(analysisTitle)
         {
@@ -64,13 +64,13 @@ public class ResultService : IResultService
             }
         
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
-            resultModel.ArchitecturalModel = model;
+            resultModel.ArchitectureModel = model;
             resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();
             Result<AnalysisResult> analysisCreatedResult = new();
 
             try
             {
-                if (!await HandleExternalAnalysis(folderPath, rules, resultModel.Id))
+                if (!HandleExternalAnalysis(folderPath, rules, resultModel.Id))
                 {
                     resultModel.ResultStatus = ResultStatus.Finished;
                     resultModel.ResultEnd = DateTime.UtcNow;
@@ -131,7 +131,7 @@ public class ResultService : IResultService
             : Result.Fail($"No result found with id: '{id}'", _logger);
     }
 
-    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitectureModel model, List<Rule> rules)
     {
         var ruleList = rules
             .Select(rule => rule.ViolationType)
@@ -140,16 +140,9 @@ public class ResultService : IResultService
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
     }
 
-    private async Task<bool> HandleExternalAnalysis(string folderPath, List<Rule> rules, Guid correlationId)
+    private bool HandleExternalAnalysis(string folderPath, List<Rule> rules, Guid correlationId)
     {
-        var externalRules = rules.ToExternalAnalysisRules();
-
-        if (!externalRules.Any())
-        {
-            return false;
-        }
-
-        await _messagingService.SendAsync(folderPath, externalRules, correlationId);
+        _messagingService.Send(folderPath, rules, correlationId);
         return true;
     }
 

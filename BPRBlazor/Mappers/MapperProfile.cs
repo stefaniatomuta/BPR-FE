@@ -9,13 +9,13 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<ArchitecturalComponent, ArchitecturalComponentViewModel>().ReverseMap();
-        CreateMap<ArchitecturalModel, ArchitecturalModelViewModel>().ReverseMap();
+        CreateMap<ArchitectureComponent, ArchitectureComponentViewModel>().ReverseMap();
+        CreateMap<ArchitectureModel, ArchitectureModelViewModel>().ReverseMap();
         CreateMap<NamespaceViewModel, NamespaceModel>().ReverseMap();
         CreateMap<RuleViewModel, Rule>().ReverseMap();
         CreateMap<Violation, ViolationViewModel>().ReverseMap();
         CreateMap<AnalysisResult, ResultViewModel>().ReverseMap();
         CreateMap<Position, PositionViewModel>().ReverseMap();
-        CreateMap<DependencyViewModel, ArchitecturalDependency>().ReverseMap();
+        CreateMap<DependencyViewModel, ArchitectureDependency>().ReverseMap();
     }
 }

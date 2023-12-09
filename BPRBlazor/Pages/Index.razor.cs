@@ -16,7 +16,7 @@ public partial class Index : ComponentBase
     private string _folderPath = string.Empty;
     private string _resultMessage = string.Empty;
     private string _resultMessageCss = string.Empty;
-    private ArchitecturalModelViewModel? _selectedArchitectureViewModel;
+    private ArchitectureModelViewModel? _selectedArchitectureViewModel;
     private List<NamespaceViewModel> _unmappedNamespaceComponents = new();
     private NamespaceViewModel? _selectedNamespaceViewModelComponent;
     private readonly List<RuleViewModel> _rulesViewModels = new();
@@ -24,7 +24,7 @@ public partial class Index : ComponentBase
     private bool _isStartAnalysisButtonDisabled;
     private string _analysisTitle = string.Empty;
 
-    private void HandleArchitectureModelOnChange(ArchitecturalModel newValue)
+    private void HandleArchitectureModelOnChange(ArchitectureModel newValue)
     {
         if (_selectedArchitectureViewModel != null)
         {
@@ -33,7 +33,7 @@ public partial class Index : ComponentBase
                 _unmappedNamespaceComponents.AddRange(component.NamespaceComponents);
             }
         }
-        _selectedArchitectureViewModel = Mapper.Map<ArchitecturalModelViewModel>(newValue);
+        _selectedArchitectureViewModel = Mapper.Map<ArchitectureModelViewModel>(newValue);
         AutoMapNamespaceComponents();
     }
 
@@ -68,11 +68,11 @@ public partial class Index : ComponentBase
 
         try
         {
-            var architecturalModel = Mapper.Map<ArchitecturalModel>(_selectedArchitectureViewModel);
+            var architectureModel = Mapper.Map<ArchitectureModel>(_selectedArchitectureViewModel);
             var ruleList = _rulesViewModels.Where(rule => rule.IsChecked).Select(rule => Mapper.Map<Rule>(rule)).ToList();
             _loadingIndicator?.ToggleLoading(true);
             _isStartAnalysisButtonDisabled = true;
-            var result = await ResultService.CreateResultAsync(_folderPath, architecturalModel, ruleList, _analysisTitle);
+            var result = await ResultService.CreateResultAsync(_folderPath, architectureModel, ruleList, _analysisTitle);
             
             if (result.Success)
             {
@@ -159,15 +159,15 @@ public partial class Index : ComponentBase
         _selectedNamespaceViewModelComponent = namespaceViewModelComponent;
     }
 
-    private void HandleDrop(ArchitecturalComponentViewModel? componentViewModel = null)
+    private void HandleDrop(ArchitectureComponentViewModel? componentViewModel = null)
     {
         if (_selectedArchitectureViewModel is null || _selectedNamespaceViewModelComponent is null)
         {
             return;
         }
 
-        var oldComponent = _selectedArchitectureViewModel.Components.FirstOrDefault(architecturalComponent =>
-            architecturalComponent.NamespaceComponents.Contains(_selectedNamespaceViewModelComponent));
+        var oldComponent = _selectedArchitectureViewModel.Components.FirstOrDefault(architectureComponent =>
+            architectureComponent.NamespaceComponents.Contains(_selectedNamespaceViewModelComponent));
 
         oldComponent?.NamespaceComponents.Remove(_selectedNamespaceViewModelComponent);
 

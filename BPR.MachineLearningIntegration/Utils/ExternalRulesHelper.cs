@@ -1,11 +1,12 @@
-﻿using BPR.Model.Architectures;
+﻿using BPR.MachineLearningIntegration.Enums;
+using BPR.Model.Architectures;
 using BPR.Model.Enums;
 
-namespace BPR.Mediator.Utils;
+namespace BPR.MachineLearningIntegration.Utils;
 
-public static class RuleExtensions
+public static class ExternalRulesHelper
 {
-    public static List<string> ToExternalAnalysisRules(this List<Rule> rules)
+    public static List<string> ToExternalAnalysisRules(List<Rule> rules)
     {
         var output = new List<string>();
 

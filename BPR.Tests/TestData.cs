@@ -83,9 +83,9 @@ internal class TestData
         };
     }
 
-    internal static ArchitecturalComponent GenerateDummyComponent(bool isTransitiveDependencyLayerOpen = false)
+    internal static ArchitectureComponent GenerateDummyComponent(bool isTransitiveDependencyLayerOpen = false)
     {
-        return new ArchitecturalComponent()
+        return new ArchitectureComponent()
         {
             Id = 1,
             NamespaceComponents = new List<NamespaceModel>()
@@ -95,7 +95,7 @@ internal class TestData
                     Name = "BPRBlazor"
                 }
             },
-            Dependencies = new List<ArchitecturalDependency>()
+            Dependencies = new List<ArchitectureDependency>()
             {
                 new()
                 {
@@ -110,11 +110,11 @@ internal class TestData
         };
     }
 
-    internal static ArchitecturalModel GenerateDummyModel(bool isTransitiveDependencyLayerOpen = false)
+    internal static ArchitectureModel GenerateDummyModel(bool isTransitiveDependencyLayerOpen = false)
     {
-        return new ArchitecturalModel()
+        return new ArchitectureModel()
         {
-            Components = new List<ArchitecturalComponent>()
+            Components = new List<ArchitectureComponent>()
             {
                 new()
                 {
@@ -127,7 +127,7 @@ internal class TestData
                             Name = "BPRBlazor"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>()
+                    Dependencies = new List<ArchitectureDependency>()
                     {
                         new()
                         {
@@ -146,7 +146,7 @@ internal class TestData
                             Name = "BPR.Mediator"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>()
+                    Dependencies = new List<ArchitectureDependency>()
                     {
                         new()
                         {
@@ -171,11 +171,11 @@ internal class TestData
         };
     }
 
-    internal static ArchitecturalModel GenerateDummyModelWithDoubledMiddleLayer(bool isTransitiveDependencyLayerOpen = false)
+    internal static ArchitectureModel GenerateDummyModelWithDoubledMiddleLayer(bool isTransitiveDependencyLayerOpen = false)
     {
-        return new ArchitecturalModel()
+        return new ArchitectureModel()
         {
-            Components = new List<ArchitecturalComponent>()
+            Components = new List<ArchitectureComponent>()
             {
                 new()
                 {
@@ -188,7 +188,7 @@ internal class TestData
                             Name = "BPRBlazor"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>()
+                    Dependencies = new List<ArchitectureDependency>()
                     {
                         new()
                         {
@@ -207,7 +207,7 @@ internal class TestData
                             Name = "BPR.Mediator1"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>()
+                    Dependencies = new List<ArchitectureDependency>()
                     {
                         new()
                         {
@@ -227,7 +227,7 @@ internal class TestData
                             Name = "BPR.Mediator2"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>()
+                    Dependencies = new List<ArchitectureDependency>()
                     {
                         new()
                         {
@@ -252,9 +252,9 @@ internal class TestData
         };
     }
 
-    internal static ArchitecturalComponent GenerateDummyComponentWithNoDependencies()
+    internal static ArchitectureComponent GenerateDummyComponentWithNoDependencies()
     {
-        return new ArchitecturalComponent
+        return new ArchitectureComponent
         {
             Name = "1",
             NamespaceComponents = new List<NamespaceModel>()
@@ -264,15 +264,15 @@ internal class TestData
                     Name = "BPRBlazor"
                 }
             },
-            Dependencies = new List<ArchitecturalDependency>()
+            Dependencies = new List<ArchitectureDependency>()
         };
     }
 
-    internal static ArchitecturalModel GenerateOnionModel(bool isApplicationLayerOpen)
+    internal static ArchitectureModel GenerateOnionModel(bool isApplicationLayerOpen)
     {
-        return new ArchitecturalModel
+        return new ArchitectureModel
         {
-            Components = new List<ArchitecturalComponent>
+            Components = new List<ArchitectureComponent>
             {
                 new()
                 {
@@ -285,7 +285,7 @@ internal class TestData
                             Name = "BPR.Model"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency> {}
+                    Dependencies = new List<ArchitectureDependency> {}
                 },
                 new()
                 {
@@ -298,7 +298,7 @@ internal class TestData
                             Name = "BPR.Mediator"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -318,7 +318,7 @@ internal class TestData
                             Name = "BPR.Persistence"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -338,7 +338,7 @@ internal class TestData
                             Name = "BPRBlazor"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -358,7 +358,7 @@ internal class TestData
                             Name = "BPR.Analysis"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -445,11 +445,11 @@ internal class TestData
         };
     }
 
-    internal static ArchitecturalModel GenerateComplexModel()
+    internal static ArchitectureModel GenerateComplexModel()
     {
-        return new ArchitecturalModel
+        return new ArchitectureModel
         {
-            Components = new List<ArchitecturalComponent>
+            Components = new List<ArchitectureComponent>
             {
                 new()
                 {
@@ -462,7 +462,7 @@ internal class TestData
                             Name = "0Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -482,7 +482,7 @@ internal class TestData
                             Name = "1Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -507,7 +507,7 @@ internal class TestData
                             Name = "2Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -532,7 +532,7 @@ internal class TestData
                             Name = "3Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -552,7 +552,7 @@ internal class TestData
                             Name = "4Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -572,7 +572,7 @@ internal class TestData
                             Name = "5Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                     }
                 },
@@ -587,7 +587,7 @@ internal class TestData
                             Name = "6Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -607,7 +607,7 @@ internal class TestData
                             Name = "7Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -627,7 +627,7 @@ internal class TestData
                             Name = "8Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                         new()
                         {
@@ -647,7 +647,7 @@ internal class TestData
                             Name = "9Name"
                         }
                     },
-                    Dependencies = new List<ArchitecturalDependency>
+                    Dependencies = new List<ArchitectureDependency>
                     {
                     }
                 }

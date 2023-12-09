@@ -42,10 +42,10 @@ else
         <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
     </div>
     
-    @if (ShouldDisplayResults(ViolationType.ForbiddenDependency) && _result.ArchitecturalModel != null)
+    @if (ShouldDisplayResults(ViolationType.ForbiddenDependency) && _result.ArchitectureModel != null)
     {
         <div class="pdf-image my-5">
-            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitecturalModel" IsEditable="false"/>
+            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitectureModel" IsEditable="false"/>
         </div>
     }
 

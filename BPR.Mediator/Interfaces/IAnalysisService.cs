@@ -11,9 +11,9 @@ public interface IAnalysisService
     /// A violation of dependency is a using directive that does match not any of the dependencies related to the component
     /// </summary>
     /// <param name="folderPath">The path to the root temp directory</param>
-    /// <param name="model">Architectural model </param>\
+    /// <param name="model">Architecture model </param>\
     /// <param name="violationTypes">List of violation times as enums </param>\
     /// <returns>A list of all violations and their severity</returns>
-    Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitecturalModel model,
+    Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitectureModel model,
         List<ViolationType> violationTypes);
 }
