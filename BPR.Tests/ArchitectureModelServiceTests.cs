@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BPR.Mediator.Interfaces;
+﻿using BPR.Mediator.Interfaces;
 using BPR.Mediator.Services;
 using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;

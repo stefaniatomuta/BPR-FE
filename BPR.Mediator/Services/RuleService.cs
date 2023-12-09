@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BPR.Mediator.Interfaces;
+﻿using BPR.Mediator.Interfaces;
 using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
 using BPR.Model.Architectures;
@@ -20,7 +19,6 @@ public class RuleService : IRuleService
         _logger = logger;
     }
 
-    // TODO - Is this method necessary? We have no user stories related to being able to add new rules.
     // The user will have no access to add new rules to the system, it is used for facilitating BE operations
     public async Task<Result> AddRuleAsync(Rule rule)
     {

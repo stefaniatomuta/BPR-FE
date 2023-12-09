@@ -1,5 +1,4 @@
 ﻿using BPR.Analysis.Models;
-using BPR.Analysis.Services;
 using BPR.Analysis.Services.Analyses;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;

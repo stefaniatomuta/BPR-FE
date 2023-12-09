@@ -6,7 +6,6 @@ using BPR.Model.Enums;
 using BPR.Model.Results;
 using BPR.Model.Results.External;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client.Exceptions;
 
 namespace BPR.Mediator.Services;
 
