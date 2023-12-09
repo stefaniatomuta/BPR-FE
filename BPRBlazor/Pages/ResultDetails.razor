@@ -56,15 +56,15 @@ else
 
     @if (ShouldDisplayResults(ViolationType.ConditionalStatements))
     {
-        <div class="pdf-image my-5">
+        <div class="pdf-image my-5 justify-content-center d-flex">
             <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
         </div>
     }
 
     @if (ShouldDisplayResults(ViolationType.SolutionMetrics))
     {
-        <div class="pdf-image my-5">
-        <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
+        <div class="pdf-image my-5 justify-content-center d-flex">
+            <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
         </div>
         <div class="pdf-image my-5">
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
