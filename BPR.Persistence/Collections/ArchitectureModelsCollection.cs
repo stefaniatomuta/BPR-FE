@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BPR.Persistence.Collections;
 
-public class ArchitecturalModelCollection
+public class ArchitectureModelsCollection
 {
     [BsonId]
     [BsonRepresentation(BsonType.String)]

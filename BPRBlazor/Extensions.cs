@@ -32,7 +32,7 @@ public static class Extensions
         services.AddScoped<IDependencyComponentService, DependencyComponentService>();
         services.AddScoped<ICodebaseService, CodebaseService>();
         services.AddScoped<IResultService, ResultService>();
-        services.AddScoped<IDependencyRepository, DependencyRepository>();
+        services.AddScoped<IDependencyRepository, ArchitectureModelRepository>();
         services.AddScoped<IResultRepository, ResultRepository>();
         services.AddScoped<ICodeExtractionService, CodeExtractionService>();
         services.AddScoped<IAnalysisService, AnalysisService>();
