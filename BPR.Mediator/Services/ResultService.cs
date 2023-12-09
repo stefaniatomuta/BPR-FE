@@ -143,12 +143,6 @@ public class ResultService : IResultService
     private async Task<bool> HandleExternalAnalysis(string folderPath, List<Rule> rules, Guid correlationId)
     {
         var externalRules = rules.ToExternalAnalysisRules();
-
-        if (!externalRules.Any())
-        {
-            return false;
-        }
-
         await _messagingService.SendAsync(folderPath, externalRules, correlationId);
         return true;
     }

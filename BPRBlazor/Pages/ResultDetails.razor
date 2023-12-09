@@ -49,7 +49,7 @@ else
         </div>
     }
 
-    @if (ShouldDisplayResults(ViolationType.TechnicalDebtClassification))
+    @if (_technicalDebtClassification != null)
     {
         <p>Technical debt classification: <strong>@_technicalDebtClassification</strong></p>
     }
