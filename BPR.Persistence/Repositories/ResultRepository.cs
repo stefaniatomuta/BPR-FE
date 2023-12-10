@@ -73,7 +73,7 @@ public class ResultRepository : IResultRepository
                 .Set(old => old.ResultEnd, model.ResultEnd)
                 .Set(old => old.Violations, model.Violations)
                 .Set(old => old.ResultStatus, model.ResultStatus)
-                .Set(old => old.ArchitecturalModel, _mapper.Map<ArchitecturalModelCollection>(model.ArchitecturalModel))
+                .Set(old => old.ArchitecturalModel, _mapper.Map<ArchitectureModelsCollection>(model.ArchitecturalModel))
                 .Set(old => old.ViolationTypes, model.ViolationTypes)
                 .Set(old => old.ExtendedAnalysisResults, model.ExtendedAnalysisResults);
             

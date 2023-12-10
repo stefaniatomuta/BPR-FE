@@ -14,6 +14,7 @@ public static class RuleExtensions
             output.AddRange(rule.ViolationType switch
             {
                 ViolationType.ConditionalStatements => Enum.GetValues<ConditionalStatements>().Select(e => e.ToString()),
+                ViolationType.MismatchedNamespace => Enum.GetValues<MismatchedNamespace>().Select(e =>e.ToString()),
                 ViolationType.SolutionMetrics => Enum.GetValues<SolutionMetrics>().Select(e => e.ToString()),
                 ViolationType.ExternalCalls => Enum.GetValues<ExternalCalls>().Select(e => e.ToString()),
                 ViolationType.CodeSimilarity => Enum.GetValues<CodeSimilarity>().Select(e => e.ToString()),
