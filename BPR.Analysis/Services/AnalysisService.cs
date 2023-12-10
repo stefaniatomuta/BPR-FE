@@ -15,16 +15,16 @@ public class AnalysisService : IAnalysisService
         _dependencyAnalysis = dependencyAnalysis;
     }
 
-    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitecturalModel model, List<ViolationType> violationTypes)
+    public async Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitectureModel model, List<RuleType> ruleTypes)
     {
         var violations = new List<Violation>();
 
-        if (violationTypes.Contains(ViolationType.ForbiddenDependency))
+        if (ruleTypes.Contains(RuleType.ForbiddenDependency))
         {
             violations.AddRange(await _dependencyAnalysis.AnalyseAsync(folderPath, model));
         }
 
-        if (violationTypes.Contains(ViolationType.MismatchedNamespace))
+        if (ruleTypes.Contains(RuleType.MismatchedNamespace))
         {
             violations.AddRange(await NamespaceAnalysis.AnalyseAsync(folderPath));
         }

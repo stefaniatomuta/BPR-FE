@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace BPR.MachineLearningIntegration.Backoff;
+﻿namespace BPR.MachineLearningIntegration.Backoff;
 
 internal class ExponentialBackoff
 {

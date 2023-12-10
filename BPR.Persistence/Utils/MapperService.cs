@@ -10,7 +10,7 @@ public class ServiceMappers : Profile
     public ServiceMappers()
     {
         CreateMap<Rule, RuleCollection>().ReverseMap();
-        CreateMap<ArchitectureModelsCollection, ArchitecturalModel>().ReverseMap();
+        CreateMap<ArchitectureModelsCollection, ArchitectureModel>().ReverseMap();
         CreateMap<AnalysisResult, ResultCollection>().ReverseMap();
     }
 }

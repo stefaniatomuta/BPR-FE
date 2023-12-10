@@ -1,5 +1,5 @@
 ﻿using BPR.Model.Enums;
-using BPR.Model.Results.External;
+using BPR.Model.Results;
 
 namespace BPRBlazor.ViewModels;
 
@@ -10,8 +10,8 @@ public class ResultViewModel
     public DateTime ResultStart { get; set; }
     public DateTime ResultEnd { get; set; }
     public ResultStatus ResultStatus { get; set; }
-    public ArchitecturalModelViewModel? ArchitecturalModel { get; set; }
-    public List<ViolationType> ViolationTypes { get; set; } = new();
+    public ArchitectureModelViewModel? ArchitectureModel { get; set; }
+    public List<RuleType> RuleTypes { get; set; } = new();
     public List<ViolationViewModel> Violations { get; set; } = new();
     public ExtendedAnalysisResults? ExtendedAnalysisResults { get; set; }
 }

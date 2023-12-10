@@ -10,5 +10,5 @@ public class ArchitectureModelsCollection
     [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
-    public IList<ArchitecturalComponent> Components { get; set; } = default!;
+    public IList<ArchitectureComponent> Components { get; set; } = default!;
 }

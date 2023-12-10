@@ -1,6 +1,5 @@
 using BPR.Model.Enums;
 using BPR.Model.Results;
-using BPR.Model.Results.External;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -15,8 +14,8 @@ public class ResultCollection
     public DateTime ResultStart { get; set; }
     public DateTime ResultEnd { get; set; }
     public ResultStatus ResultStatus { get; set; }
-    public ArchitectureModelsCollection? ArchitecturalModel { get; set; }
-    public List<ViolationType> ViolationTypes { get; set; } = new();
+    public ArchitectureModelsCollection? ArchitectureModel { get; set; }
+    public List<RuleType> RuleTypes { get; set; } = new();
     public List<Violation> Violations { get; set; } = new();
     public ExtendedAnalysisResults? ExtendedAnalysisResults { get; set; }
 }

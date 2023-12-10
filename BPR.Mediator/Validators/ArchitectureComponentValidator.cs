@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace BPR.Mediator.Validators;
 
-public class ArchitecturalComponentValidator : AbstractValidator<ArchitecturalComponent>
+public class ArchitectureComponentValidator : AbstractValidator<ArchitectureComponent>
 {
-    public ArchitecturalComponentValidator()
+    public ArchitectureComponentValidator()
     {
         RuleFor(x => x.Name).NotEmpty().WithMessage("Component name is required");
     }

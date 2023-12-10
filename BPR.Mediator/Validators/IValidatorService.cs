@@ -5,6 +5,6 @@ namespace BPR.Mediator.Validators;
 
 public interface IValidatorService
 {
-    public Task<Result> ValidateArchitecturalModelAsync(ArchitecturalModel model);
+    public Task<Result> ValidateArchitectureModelAsync(ArchitectureModel model);
     public Task<Result> ValidateRuleAsync(Rule rule);
 }

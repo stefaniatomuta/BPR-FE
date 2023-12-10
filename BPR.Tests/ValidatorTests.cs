@@ -8,24 +8,24 @@ namespace BPR.Tests;
 [TestFixture]
 public class ValidatorTests
 {
-    private IValidator<ArchitecturalModel> _architecturalModelValidator;
-    private IValidator<Rule> _ruleValidator;
+    private IValidator<ArchitectureModel> _architectureModelValidator = default!;
+    private IValidator<Rule> _ruleValidator = default!;
 
     [SetUp]
     public void Setup()
     {
-        _architecturalModelValidator = new ArchitecturalModelValidator();
+        _architectureModelValidator = new ArchitectureModelValidator();
         _ruleValidator = new RuleValidator();
     }
 
     [Test]
-    public void Architectural_Model_Should_Have_Error_When_Name_Is_Empty()
+    public void Architecture_Model_Should_Have_Error_When_Name_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel {Name = "", Components = new List<ArchitecturalComponent>()};
+        var model = new ArchitectureModel {Name = "", Components = new List<ArchitectureComponent>()};
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _architectureModelValidator.TestValidate(model);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Name)
@@ -33,13 +33,13 @@ public class ValidatorTests
     }
 
     [Test]
-    public void Architectural_Model_Should_Have_Error_When_Components_Is_Empty()
+    public void Architecture_Model_Should_Have_Error_When_Components_Is_Empty()
     {
         // Arrange
-        var model = new ArchitecturalModel {Name = "ModelName", Components = new List<ArchitecturalComponent>()};
+        var model = new ArchitectureModel {Name = "ModelName", Components = new List<ArchitectureComponent>()};
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _architectureModelValidator.TestValidate(model);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Components)
@@ -47,13 +47,13 @@ public class ValidatorTests
     }
 
     [Test]
-    public void Architectural_Model_Should_Have_Error_When_Duplicate_Component_Names()
+    public void Architecture_Model_Should_Have_Error_When_Duplicate_Component_Names()
     {
         // Arrange
-        var model = new ArchitecturalModel
+        var model = new ArchitectureModel
         {
             Name = "ModelName",
-            Components = new List<ArchitecturalComponent>
+            Components = new List<ArchitectureComponent>
             {
                 new() {Name = "Component1"},
                 new() {Name = "Component2"},
@@ -62,7 +62,7 @@ public class ValidatorTests
         };
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _architectureModelValidator.TestValidate(model);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Components)
@@ -70,13 +70,13 @@ public class ValidatorTests
     }
 
     [Test]
-    public void Architectural_Model_Should_Not_Have_Error_When_Valid_Model()
+    public void Architecture_Model_Should_Not_Have_Error_When_Valid_Model()
     {
         // Arrange
-        var model = new ArchitecturalModel
+        var model = new ArchitectureModel
         {
             Name = "ModelName",
-            Components = new List<ArchitecturalComponent>
+            Components = new List<ArchitectureComponent>
             {
                 new() {Name = "Component1"},
                 new() {Name = "Component2"}
@@ -84,7 +84,7 @@ public class ValidatorTests
         };
 
         // Act
-        var result = _architecturalModelValidator.TestValidate(model);
+        var result = _architectureModelValidator.TestValidate(model);
 
         // Assert
         result.ShouldNotHaveAnyValidationErrors();

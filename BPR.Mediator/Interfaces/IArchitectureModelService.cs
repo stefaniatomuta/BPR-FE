@@ -3,13 +3,13 @@ using BPR.Model.Architectures;
 
 namespace BPR.Mediator.Interfaces;
 
-public interface IDependencyService
+public interface IArchitectureModelService
 {
     /**
      * Mediator between the persistence and the UI
-     * Used in retrieval of architectural models
+     * Used in retrieval of architecture models
      */
-    Task<IList<ArchitecturalModel>> GetArchitecturalModelsAsync();
-    Task<Result> AddOrEditModelAsync(ArchitecturalModel model);
+    Task<IList<ArchitectureModel>> GetArchitectureModelsAsync();
+    Task<Result> AddOrEditModelAsync(ArchitectureModel model);
     Task<Result> DeleteArchitectureModelAsync(Guid id);
 }

@@ -7,16 +7,16 @@ namespace BPRBlazor.Components.Common;
 public partial class SelectArchitectureComponent : ComponentBase
 {
     [Parameter, EditorRequired]
-    public EventCallback<ArchitecturalModel> ArchitectureModelChanged { get; set; }
+    public EventCallback<ArchitectureModel> ArchitectureModelChanged { get; set; }
 
     [Parameter]
     public Guid? SelectedOption { get; set; }
 
-    private IList<ArchitecturalModel> _architectureOptions = new List<ArchitecturalModel>();
+    private IList<ArchitectureModel> _architectureOptions = new List<ArchitectureModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        _architectureOptions = (await GetArchitecturalModels())
+        _architectureOptions = (await GetArchitectureModels())
             .OrderBy(option => option.Name)
             .ToList();
     }
@@ -36,9 +36,9 @@ public partial class SelectArchitectureComponent : ComponentBase
         }
     }
 
-    private Task<IList<ArchitecturalModel>> GetArchitecturalModels()
+    private Task<IList<ArchitectureModel>> GetArchitectureModels()
     {
-        return DependencyService.GetArchitecturalModelsAsync();
+        return ArchitectureModelService.GetArchitectureModelsAsync();
     }
 
     private async Task OnSelectedValueChanged(ChangeEventArgs e)

@@ -1,6 +1,6 @@
-﻿@if (Violations != null && Violations.Any())
+﻿@if (RuleTypes != null && RuleTypes.Any())
 {
-    @foreach (var item in Violations)
+    @foreach (var item in RuleTypes)
     {
         <div class="form-check">
             <input class="custom-checkbox" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />

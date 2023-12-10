@@ -6,6 +6,7 @@
 @using BPRBlazor.Components.ModelManagement
 @using BPRBlazor.Services;
 @using BPR.Model.Enums
+@using Violation = BPRBlazor.Components.Results.Violation
 @inject IResultService ResultService
 @inject IJSRuntime JsRuntime
 @inject IMapper Mapper
@@ -43,24 +44,24 @@ else
     
     <div class="hide-pdf">
         <p>Filter details based on rules</p>
-        <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
+        <SelectRuleTypeComponent OnChange="HandleRuleType" RuleTypes="GetCurrentRuleTypes()"/>
     </div>
     
-    @if (ShouldDisplayResults(ViolationType.ForbiddenDependency) && _result.ArchitecturalModel != null)
+    @if (ShouldDisplayResults(RuleType.ForbiddenDependency) && _result.ArchitectureModel != null)
     {
         <div class="pdf-image my-5">
-            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitecturalModel" IsEditable="false"/>
+            <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitectureModel" IsEditable="false"/>
         </div>
     }
 
-    @if (ShouldDisplayResults(ViolationType.ConditionalStatements))
+    @if (ShouldDisplayResults(RuleType.ConditionalStatements))
     {
         <div class="pdf-image my-5 justify-content-center d-flex">
             <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
         </div>
     }
 
-    @if (ShouldDisplayResults(ViolationType.SolutionMetrics))
+    @if (ShouldDisplayResults(RuleType.SolutionMetrics))
     {
         <div class="pdf-image my-5 justify-content-center d-flex">
             <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
@@ -68,23 +69,23 @@ else
         <div class="pdf-image my-5">
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
         </div>
-        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
-        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
-        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
+        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types"></Table>
+        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code"></Table>
+        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments"></Table>
     }
 
-    @if (ShouldDisplayResults(ViolationType.ExternalCalls))
+    @if (ShouldDisplayResults(RuleType.ExternalCalls))
     {
         <ExternalCallsDetails
             EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
             ExternalApisCalls="_externalApiCalls"/>
     }
 
-    @if (ShouldDisplayResults(ViolationType.CodeSimilarity) && _codeSimilarities != null)
+    @if (ShouldDisplayResults(RuleType.CodeSimilarity) && _codeSimilarities != null)
     {
         @foreach (var item in _codeSimilarities)
         {
-            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
+            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true"></Table>
         }
     }
     

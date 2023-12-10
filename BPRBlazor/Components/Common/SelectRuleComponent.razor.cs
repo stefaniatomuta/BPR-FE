@@ -26,7 +26,7 @@ public partial class SelectRuleComponent : ComponentBase
     private async Task<List<RuleViewModel>> GetRulesAsync()
     {
         var rules = await Service.GetRulesAsync();
-        return rules.Select(rule => new RuleViewModel(rule.Name, rule.Description, rule.ViolationType))
+        return rules.Select(rule => new RuleViewModel(rule.Name, rule.Description, rule.RuleType))
                     .OrderBy(rule => rule.Name)
                     .ToList();
     }

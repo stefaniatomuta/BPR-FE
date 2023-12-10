@@ -1,6 +1,8 @@
-﻿namespace BPR.Mediator.Interfaces.Messaging;
+﻿using BPR.Model.Architectures;
+
+namespace BPR.Mediator.Interfaces.Messaging;
 
 public interface ISender
 {
-    Task SendAsync(string folderPath, List<string> rules, Guid correlationId);
+    Task<bool> SendAsync(string folderPath, List<Rule> rules, Guid correlationId);
 }

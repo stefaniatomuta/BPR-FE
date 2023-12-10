@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BPR.Mediator.Interfaces;
+﻿using BPR.Mediator.Interfaces;
 using BPR.Mediator.Services;
 using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
@@ -11,9 +10,9 @@ namespace BPR.Tests;
 [TestFixture]
 public class RuleServiceTests
 {
-    private IRuleService uut;
-    private IRuleRepository _repositoryStub;
-    private IValidatorService _validatorService;
+    private IRuleService uut = default!;
+    private IRuleRepository _repositoryStub = default!;
+    private IValidatorService _validatorService = default!;
     private readonly ILogger<RuleService> _logger = default!;
 
     [OneTimeSetUp]

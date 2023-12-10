@@ -11,5 +11,5 @@ public class RuleCollection
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
-    public ViolationType ViolationType { get; set; }
+    public RuleType RuleType { get; set; }
 }

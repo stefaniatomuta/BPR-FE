@@ -18,7 +18,7 @@ public class DependencyAnalysis
         _codeExtractionService = codeExtractionService;
     }
 
-    internal async Task<List<Violation>> AnalyseAsync(string folderPath, ArchitecturalModel model)
+    internal async Task<List<Violation>> AnalyseAsync(string folderPath, ArchitectureModel model)
     {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
         var violations = new List<Violation>();
@@ -33,9 +33,9 @@ public class DependencyAnalysis
 
     private async Task<List<Violation>> GetDependencyAnalysisOnComponentAsync(
         string folderPath,
-        ArchitecturalModel model,
+        ArchitectureModel model,
         IList<string> projectNames,
-        ArchitecturalComponent component)
+        ArchitectureComponent component)
     {
         var componentUsings = await GetUsingsAsync(folderPath, component.NamespaceComponents, projectNames);
 
@@ -49,8 +49,8 @@ public class DependencyAnalysis
 
     internal static List<Violation> GetDependencyAnalysisOnComponent(
         IList<UsingDirective> usingDirectives,
-        ArchitecturalModel model,
-        ArchitecturalComponent component)
+        ArchitectureModel model,
+        ArchitectureComponent component)
     {
         var violations = new List<Violation>();
         var dependencyComponents = GetAllDependencyComponents(model, component);
@@ -71,7 +71,7 @@ public class DependencyAnalysis
 
             if (violationComp != null)
             {
-                component.Dependencies.Add(new ArchitecturalDependency()
+                component.Dependencies.Add(new ArchitectureDependency()
                 {
                     Id = violationComp.Id,
                     IsOpen = true,
@@ -83,7 +83,7 @@ public class DependencyAnalysis
         return violations;
     }
 
-    private static IList<ArchitecturalComponent> GetAllDependencyComponents(ArchitecturalModel model, ArchitecturalComponent component)
+    private static IList<ArchitectureComponent> GetAllDependencyComponents(ArchitectureModel model, ArchitectureComponent component)
     {
         var directComponents = model.Components
             .Where(comp => component.Dependencies
@@ -97,7 +97,7 @@ public class DependencyAnalysis
         return directComponents.ToList();
     }
 
-    private static void AddOpenDependencies(ArchitecturalModel model, List<ArchitecturalComponent> components)
+    private static void AddOpenDependencies(ArchitectureModel model, List<ArchitectureComponent> components)
     {
         var length = components.Count;
         components.AddRange(model.Components

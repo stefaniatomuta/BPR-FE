@@ -1,4 +1,4 @@
-﻿using BPR.Model.Results.External;
+﻿using BPR.Model.Results;
 using Microsoft.AspNetCore.Components;
 
 namespace BPRBlazor.Components.Results;

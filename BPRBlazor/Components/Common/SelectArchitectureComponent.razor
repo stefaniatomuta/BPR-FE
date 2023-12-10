@@ -1,13 +1,9 @@
 ﻿@using BPR.Mediator.Services
 @using BPR.Mediator.Interfaces
-@inject IDependencyService DependencyService
+@inject IArchitectureModelService ArchitectureModelService
 @inject IJSRuntime JS
 
-@if (_architectureOptions is null)
-{
-    <p>Loading...</p>
-}
-else if (!_architectureOptions.Any())
+@if (!_architectureOptions.Any())
 {
     <p>No architecture models found!</p>
 }

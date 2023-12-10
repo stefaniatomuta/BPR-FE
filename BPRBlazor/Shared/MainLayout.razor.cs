@@ -1,5 +1,5 @@
 ﻿using BPR.Mediator.Utils;
-using BPR.Model.Results.External;
+using BPR.Model.Results;
 
 namespace BPRBlazor.Shared;
 

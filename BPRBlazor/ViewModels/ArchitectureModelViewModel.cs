@@ -2,7 +2,7 @@
 
 namespace BPRBlazor.ViewModels;
 
-public class ArchitecturalModelViewModel
+public class ArchitectureModelViewModel
 {
     public Guid Id { get; set; } = new Guid();
     
@@ -12,7 +12,7 @@ public class ArchitecturalModelViewModel
     [Required]
     [MinLength(1, ErrorMessage = "The model must consist of at least {1} component")]
     [ValidateComplexType]
-    public List<ArchitecturalComponentViewModel> Components { get; set; } = new();
+    public List<ArchitectureComponentViewModel> Components { get; set; } = new();
 
     public override string ToString()
     {

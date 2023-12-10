@@ -1,5 +1,4 @@
 ﻿using BPR.Analysis.Models;
-using BPR.Analysis.Services;
 using BPR.Analysis.Services.Analyses;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
@@ -53,7 +52,7 @@ public class AnalysisServiceTests
         //Assert
         Assert.That(result, Is.Not.Empty);
         Assert.That(result[0].Severity, Is.EqualTo(ViolationSeverity.Minor));
-        Assert.That(result[0].Type, Is.EqualTo(ViolationType.MismatchedNamespace));
+        Assert.That(result[0].Type, Is.EqualTo(RuleType.MismatchedNamespace));
     }
 
     [Test]
@@ -97,7 +96,7 @@ public class AnalysisServiceTests
         //Assert
         Assert.That(violations, Is.Not.Empty);
         Assert.That(violations[0].Severity, Is.EqualTo(ViolationSeverity.Major));
-        Assert.That(violations[0].Type, Is.EqualTo(ViolationType.ForbiddenDependency));
+        Assert.That(violations[0].Type, Is.EqualTo(RuleType.ForbiddenDependency));
     }
 
     [Test]
@@ -171,7 +170,7 @@ public class AnalysisServiceTests
         Assert.That(violations, Has.Count.EqualTo(5));
     }
 
-    private static List<Violation> StartAnalysis(List<UsingDirective> usings, ArchitecturalModel model)
+    private static List<Violation> StartAnalysis(List<UsingDirective> usings, ArchitectureModel model)
     {
         var violations = new List<Violation>();
 

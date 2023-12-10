@@ -6,15 +6,15 @@ namespace BPRBlazor.Pages;
 
 public partial class ManageArchitecturesPage : ComponentBase
 {
-    private ArchitecturalModelViewModel? _selectedModel;
+    private ArchitectureModelViewModel? _selectedModel;
     
-    private void HandleModelChange(ArchitecturalModel model)
+    private void HandleModelChange(ArchitectureModel model)
     {
-        _selectedModel = Mapper.Map<ArchitecturalModelViewModel>(model);
+        _selectedModel = Mapper.Map<ArchitectureModelViewModel>(model);
     }
     
     private void CreateNewArchitecture()
     {
-        _selectedModel = new ArchitecturalModelViewModel();
+        _selectedModel = new ArchitectureModelViewModel();
     }
 }

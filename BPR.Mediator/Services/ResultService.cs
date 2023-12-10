@@ -4,7 +4,6 @@ using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPR.Model.Results;
-using BPR.Model.Results.External;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Mediator.Services;
@@ -43,7 +42,7 @@ public class ResultService : IResultService
     }
 
 
-    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitecturalModel model, List<Rule> rules, string analysisTitle)
+    public async Task<Result<AnalysisResult>> CreateResultAsync(string folderPath, ArchitectureModel model, List<Rule> rules, string analysisTitle)
     {
         var resultModel = new AnalysisResult(analysisTitle)
         {
@@ -63,13 +62,13 @@ public class ResultService : IResultService
             }
         
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
-            resultModel.ArchitecturalModel = model;
-            resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();
+            resultModel.ArchitectureModel = model;
+            resultModel.RuleTypes = rules.Select(rule => rule.RuleType).ToList();
             Result<AnalysisResult> analysisCreatedResult = new();
 
             try
             {
-                if (!await HandleExternalAnalysis(folderPath, rules, resultModel.Id))
+                if (!await HandleExternalAnalysisAsync(folderPath, rules, resultModel.Id))
                 {
                     resultModel.ResultStatus = ResultStatus.Finished;
                     resultModel.ResultEnd = DateTime.UtcNow;
@@ -130,19 +129,18 @@ public class ResultService : IResultService
             : Result.Fail($"No result found with id: '{id}'", _logger);
     }
 
-    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitecturalModel model, List<Rule> rules)
+    private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitectureModel model, List<Rule> rules)
     {
         var ruleList = rules
-            .Select(rule => rule.ViolationType)
+            .Select(rule => rule.RuleType)
             .ToList();
 
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
     }
 
-    private async Task<bool> HandleExternalAnalysis(string folderPath, List<Rule> rules, Guid correlationId)
+    private async Task<bool> HandleExternalAnalysisAsync(string folderPath, List<Rule> rules, Guid correlationId)
     {
-        var externalRules = rules.ToExternalAnalysisRules();
-        await _messagingService.SendAsync(folderPath, externalRules, correlationId);
+        await _messagingService.SendAsync(folderPath, rules, correlationId);
         return true;
     }
 

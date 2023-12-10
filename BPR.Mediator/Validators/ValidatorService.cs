@@ -7,18 +7,18 @@ namespace BPR.Mediator.Validators;
 
 public class ValidatorService : IValidatorService
 {
-    private readonly IValidator<ArchitecturalModel> _architecturalModelValidator;
+    private readonly IValidator<ArchitectureModel> _architectureModelValidator;
     private readonly IValidator<Rule> _ruleValidator;
 
-    public ValidatorService(IValidator<ArchitecturalModel> architecturalModelValidator, IValidator<Rule> ruleValidator)
+    public ValidatorService(IValidator<ArchitectureModel> architectureModelValidator, IValidator<Rule> ruleValidator)
     {
-        _architecturalModelValidator = architecturalModelValidator;
+        _architectureModelValidator = architectureModelValidator;
         _ruleValidator = ruleValidator;
     }
 
-    public async Task<Result> ValidateArchitecturalModelAsync(ArchitecturalModel model)
+    public async Task<Result> ValidateArchitectureModelAsync(ArchitectureModel model)
     {
-        var result = await _architecturalModelValidator.ValidateAsync(model);
+        var result = await _architectureModelValidator.ValidateAsync(model);
         if (result.IsValid) return new Result(true);
         var errorMessages = result.Errors.Select(x => x.ErrorMessage).ToList();
         return new Result(false, errorMessages);

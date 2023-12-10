@@ -1,4 +1,4 @@
-﻿using BPR.Model.Results.External;
+﻿using BPR.Model.Results;
 
 namespace BPRBlazor.Services;
 
@@ -137,7 +137,8 @@ public class ExtendedAnalysisResultsHandler
         }
 
         return results.CodeSimilarities.OrderByDescending(kvp => kvp.Value.Values.Sum())
-            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.OrderByDescending(kvp => kvp.Value)
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value
+                .OrderByDescending(keyValuePair => keyValuePair.Value)
+                .ToDictionary(keyValuePair => keyValuePair.Key, keyValuePair => keyValuePair.Value));
     }
 }
