@@ -14,6 +14,7 @@ using BPRBlazor.Mappers;
 using BPRBlazor.Services;
 using FluentValidation;
 using System.Text.Json;
+using BPR.Model.Rules;
 
 namespace BPRBlazor;
 

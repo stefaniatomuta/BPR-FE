@@ -1,6 +1,6 @@
 ﻿using BPR.MachineLearningIntegration.Enums;
-using BPR.Model.Architectures;
 using BPR.Model.Enums;
+using BPR.Model.Rules;
 
 namespace BPR.MachineLearningIntegration.Utils;
 

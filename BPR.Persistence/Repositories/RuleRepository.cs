@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BPR.Mediator.Interfaces;
 using BPR.Mediator.Utils;
-using BPR.Model.Architectures;
+using BPR.Model.Rules;
 using BPR.Persistence.Collections;
 using BPR.Persistence.Config;
 using Microsoft.Extensions.Logging;

@@ -1,6 +1,6 @@
 ﻿using BPR.Model.Enums;
 
-namespace BPR.Model.Architectures;
+namespace BPR.Model.Rules;
 
 public class Rule
 {

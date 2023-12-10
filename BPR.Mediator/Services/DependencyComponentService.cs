@@ -1,6 +1,6 @@
 ﻿using BPR.Mediator.Interfaces;
 using BPR.Mediator.Utils;
-using BPR.Model.Results;
+using BPR.Model.Enums;
 
 namespace BPR.Mediator.Services;
 
@@ -9,8 +9,8 @@ public class DependencyComponentService : IDependencyComponentService
     private static readonly string[] IgnoredFolders = {"bin", "obj", ".git", ".github", ".vs", ".Test", ".Tests"};
     private static readonly string[] RequiredFileExtensions =
     {
-        EnumExtensions.GetDescription(FileExtensions.cs), 
-        EnumExtensions.GetDescription(FileExtensions.cshtml)
+        EnumExtensions.GetDescription(FileExtensions.Cs), 
+        EnumExtensions.GetDescription(FileExtensions.Cshtml)
     };
 
     public IList<string> GetFolderNamesForProjects(string folderPath)
@@ -23,14 +23,14 @@ public class DependencyComponentService : IDependencyComponentService
             .ToList();
     }
 
-    private static readonly Func<string, bool> IsNotIgnoredFolder = (folderPath) =>
+    private readonly Func<string, bool> IsNotIgnoredFolder = (folderPath) =>
         !IgnoredFolders.Any(folderPath.EndsWith);
 
-    private static readonly Func<string, bool> DoesContainCSharpFiles = (folderPath) =>
+    private readonly Func<string, bool> DoesContainCSharpFiles = (folderPath) =>
         Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories)
             .Any(file => RequiredFileExtensions.Any(file.EndsWith));
 
-    private static string RemoveFolderPath(string folderPath, string pathToClean)
+    private string RemoveFolderPath(string folderPath, string pathToClean)
     {
         return pathToClean.Replace($"{folderPath}\\", "");
     }

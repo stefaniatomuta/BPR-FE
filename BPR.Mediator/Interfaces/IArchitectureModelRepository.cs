@@ -6,7 +6,7 @@ namespace BPR.Mediator.Interfaces;
 public interface IArchitectureModelRepository
 {
     Task<IList<ArchitectureModel>> GetArchitectureModelsAsync();
-    Task<Result> AddModelAsync(ArchitectureModel modelCollection);
+    Task<Result> AddModelAsync(ArchitectureModel model);
     Task<ArchitectureModel?> DeleteModelAsync(Guid id);
     Task<Result> EditModelAsync(ArchitectureModel model);
 }

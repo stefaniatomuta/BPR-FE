@@ -6,6 +6,7 @@ using BPR.Model.Results;
 using System.Text;
 using System.Text.RegularExpressions;
 using BPR.Mediator.Utils;
+using BPR.Model.Enums;
 
 namespace BPR.Analysis.Services.Analyses;
 
@@ -144,8 +145,8 @@ public class DependencyAnalysis
 
         foreach (var file in files)
         {
-            if (file.EndsWith(EnumExtensions.GetDescription(FileExtensions.cshtml)) ||
-                file.EndsWith(EnumExtensions.GetDescription(FileExtensions.cs)))
+            if (file.EndsWith(EnumExtensions.GetDescription(FileExtensions.Cshtml)) ||
+                file.EndsWith(EnumExtensions.GetDescription(FileExtensions.Cs)))
             {
                 var content = await File.ReadAllLinesAsync(file, Encoding.UTF8);
                 var result = content.Where(s => Regex.Match(s, AnalysisRegex.UsingRegex).Success);

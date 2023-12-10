@@ -1,5 +1,6 @@
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
+using BPR.Model.Rules;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
