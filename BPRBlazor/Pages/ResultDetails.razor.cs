@@ -1,6 +1,5 @@
 ﻿using BPR.Model.Enums;
 using BPR.Model.Results;
-using BPR.Model.Results.External;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;

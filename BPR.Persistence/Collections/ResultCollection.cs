@@ -1,6 +1,5 @@
 using BPR.Model.Enums;
 using BPR.Model.Results;
-using BPR.Model.Results.External;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 

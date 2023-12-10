@@ -2,13 +2,13 @@
 using BPR.MachineLearningIntegration.Backoff;
 using BPR.MachineLearningIntegration.Models;
 using BPR.Mediator.Interfaces.Messaging;
-using BPR.Model.Results.External;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using System.Text;
 using System.Text.Json;
+using BPR.Model.Results;
 
 namespace BPR.MachineLearningIntegration.RabbitMq;
 

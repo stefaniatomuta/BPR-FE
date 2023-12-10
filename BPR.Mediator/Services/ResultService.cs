@@ -4,7 +4,6 @@ using BPR.Mediator.Utils;
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
 using BPR.Model.Results;
-using BPR.Model.Results.External;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Mediator.Services;
