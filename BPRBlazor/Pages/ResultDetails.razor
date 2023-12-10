@@ -18,7 +18,6 @@
     <button class="btn btn-secondary" @onclick="DownloadPdf">Download as PDF</button>
 </div>
 
-<h1 class="mb-3">Analysis results</h1>
 @if (_result is null) 
 {
     <h2>No results to display...</h2>
@@ -26,7 +25,12 @@
 else 
 {
     <div>
-        <h3>@_result.Title</h3>
+        <h1 class="mb-3">Analysis results of @_result.Title</h1>
+        @if (_technicalDebtClassification != null)
+        {
+            <p>Technical debt classification: <strong>@_technicalDebtClassification</strong></p>
+        }
+
         @if (_result.Violations.Count != _filteredViolations.Count)
         {
             <h5>Showing @_filteredViolations.Count of the @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
@@ -49,22 +53,17 @@ else
         </div>
     }
 
-    @if (ShouldDisplayResults(ViolationType.TechnicalDebtClassification))
-    {
-        <p>Technical debt classification: <strong>@_technicalDebtClassification</strong></p>
-    }
-
     @if (ShouldDisplayResults(ViolationType.ConditionalStatements))
     {
-        <div class="pdf-image my-5">
+        <div class="pdf-image my-5 justify-content-center d-flex">
             <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
         </div>
     }
 
     @if (ShouldDisplayResults(ViolationType.SolutionMetrics))
     {
-        <div class="pdf-image my-5">
-        <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
+        <div class="pdf-image my-5 justify-content-center d-flex">
+            <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
         </div>
         <div class="pdf-image my-5">
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>

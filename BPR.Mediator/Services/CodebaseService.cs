@@ -20,12 +20,11 @@ public class CodebaseService : ICodebaseService
     {
         var guid = Guid.NewGuid();
         var directory = Directory.CreateDirectory($"../temp/{guid}");
-        var cSharpFiles = file.Entries.Where(entry =>
+
+        foreach (var entry in file.Entries.Where(entry =>
              entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.cshtml)) ||
              entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.csproj)) ||
-             entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.cs)));
-
-        foreach (var entry in cSharpFiles)
+             entry.FileName.EndsWith(EnumExtensions.GetDescription(FileExtensions.cs))))
         {
             entry.Extract($"{directory.FullName}\\{entry.FileName}");
         }

@@ -1,8 +1,7 @@
 ﻿@using Radzen.Blazor
 
-<RadzenChart Style="height: 500px; width: 100%">
+<RadzenChart Style="height: 500px; max-width: 400px; width: 100%">
     <RadzenPieSeries 
-        Radius="180" 
         Fills=@(new [] {"#6f13a9", "#9b83af", "#955cb8", "#cccccc" }) 
         Data="@_data"
         Title="Revenue"
