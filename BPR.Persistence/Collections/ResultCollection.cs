@@ -16,7 +16,7 @@ public class ResultCollection
     public DateTime ResultEnd { get; set; }
     public ResultStatus ResultStatus { get; set; }
     public ArchitectureModelsCollection? ArchitectureModel { get; set; }
-    public List<ViolationType> ViolationTypes { get; set; } = new();
+    public List<RuleType> RuleTypes { get; set; } = new();
     public List<Violation> Violations { get; set; } = new();
     public ExtendedAnalysisResults? ExtendedAnalysisResults { get; set; }
 }

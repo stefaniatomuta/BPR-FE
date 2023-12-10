@@ -14,7 +14,7 @@ public partial class ResultDetails : ComponentBase
     public Guid Id { get; set; }
 
     private ResultViewModel? _result;
-    private List<ViolationTypeViewModel> _violationTypes = new();
+    private List<RuleTypeViewModel> _ruleTypes = new();
     private List<ViolationViewModel> _filteredViolations = new();
     private LoadingIndicator? _loadingIndicator;
 
@@ -39,7 +39,7 @@ public partial class ResultDetails : ComponentBase
                 _result = Mapper.Map<AnalysisResult, ResultViewModel>(resultModel);
                 _filteredViolations = new List<ViolationViewModel>(_result.Violations);
                 HandleExtendedAnalysisResults(_result.ExtendedAnalysisResults);
-                _violationTypes = GetCurrentViolationTypes();
+                _ruleTypes = GetCurrentRuleTypes();
                 StateHasChanged();
             }
             _loadingIndicator?.ToggleLoading(false);
@@ -64,35 +64,35 @@ public partial class ResultDetails : ComponentBase
         _codeSimilarities = ExtendedAnalysisHandler.HandleCodeSimilarities(results);
     }
 
-    private void HandleViolationType(ViolationTypeViewModel value)
+    private void HandleRuleType(RuleTypeViewModel value)
     {
-        _violationTypes.Single(type => type.ViolationType == value.ViolationType).IsChecked = value.IsChecked;
-        if (value.ViolationType != ViolationType.ForbiddenDependency &&
-            value.ViolationType != ViolationType.MismatchedNamespace)
+        _ruleTypes.Single(type => type.RuleType == value.RuleType).IsChecked = value.IsChecked;
+        if (value.RuleType != RuleType.ForbiddenDependency &&
+            value.RuleType != RuleType.MismatchedNamespace)
         {
             return;
         }
         if (value.IsChecked && _result != null)
         {
             _filteredViolations.AddRange(
-                _result.Violations.Where(violation => violation.Type == value.ViolationType));
+                _result.Violations.Where(violation => violation.Type == value.RuleType));
         }
         else
         {
-            _filteredViolations.RemoveAll(violation => violation.Type == value.ViolationType);
+            _filteredViolations.RemoveAll(violation => violation.Type == value.RuleType);
         }
     }
 
-    private List<ViolationTypeViewModel> GetCurrentViolationTypes()
+    private List<RuleTypeViewModel> GetCurrentRuleTypes()
     {
         if (_result == null)
         {
-            return new List<ViolationTypeViewModel>();
+            return new List<RuleTypeViewModel>();
         }
         
-        return _result.ViolationTypes
+        return _result.RuleTypes
             .Distinct()
-            .Select(type => new ViolationTypeViewModel(type))
+            .Select(type => new RuleTypeViewModel(type))
             .OrderBy(viewModel => viewModel.Name)
             .ToList();
     }
@@ -105,8 +105,8 @@ public partial class ResultDetails : ComponentBase
         await JsRuntime.InvokeVoidAsync("DownloadResultsToPDF");
     }
 
-    private bool ShouldDisplayResults(ViolationType type)
+    private bool ShouldDisplayResults(RuleType type)
     {
-        return _violationTypes.SingleOrDefault(t => t.ViolationType == type)?.IsChecked ?? false;
+        return _ruleTypes.SingleOrDefault(t => t.RuleType == type)?.IsChecked ?? false;
     }
 }

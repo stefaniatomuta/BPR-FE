@@ -12,13 +12,13 @@ public static class ExternalRulesHelper
 
         foreach (var rule in rules)
         {
-            output.AddRange(rule.ViolationType switch
+            output.AddRange(rule.RuleType switch
             {
-                ViolationType.ConditionalStatements => Enum.GetValues<ConditionalStatements>().Select(e => e.ToString()),
-                ViolationType.MismatchedNamespace => Enum.GetValues<MismatchedNamespace>().Select(e =>e.ToString()),
-                ViolationType.SolutionMetrics => Enum.GetValues<SolutionMetrics>().Select(e => e.ToString()),
-                ViolationType.ExternalCalls => Enum.GetValues<ExternalCalls>().Select(e => e.ToString()),
-                ViolationType.CodeSimilarity => Enum.GetValues<CodeSimilarity>().Select(e => e.ToString()),
+                RuleType.ConditionalStatements => Enum.GetValues<ConditionalStatements>().Select(e => e.ToString()),
+                RuleType.MismatchedNamespace => Enum.GetValues<MismatchedNamespace>().Select(e =>e.ToString()),
+                RuleType.SolutionMetrics => Enum.GetValues<SolutionMetrics>().Select(e => e.ToString()),
+                RuleType.ExternalCalls => Enum.GetValues<ExternalCalls>().Select(e => e.ToString()),
+                RuleType.CodeSimilarity => Enum.GetValues<CodeSimilarity>().Select(e => e.ToString()),
                 _ => Array.Empty<string>()
             });
         }

@@ -52,7 +52,7 @@ public class AnalysisServiceTests
         //Assert
         Assert.That(result, Is.Not.Empty);
         Assert.That(result[0].Severity, Is.EqualTo(ViolationSeverity.Minor));
-        Assert.That(result[0].Type, Is.EqualTo(ViolationType.MismatchedNamespace));
+        Assert.That(result[0].Type, Is.EqualTo(RuleType.MismatchedNamespace));
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class AnalysisServiceTests
         //Assert
         Assert.That(violations, Is.Not.Empty);
         Assert.That(violations[0].Severity, Is.EqualTo(ViolationSeverity.Major));
-        Assert.That(violations[0].Type, Is.EqualTo(ViolationType.ForbiddenDependency));
+        Assert.That(violations[0].Type, Is.EqualTo(RuleType.ForbiddenDependency));
     }
 
     [Test]

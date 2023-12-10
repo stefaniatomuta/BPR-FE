@@ -10,7 +10,7 @@ internal class ViolationFactory
     {
         return new Violation
         {
-            Type = ViolationType.ForbiddenDependency,
+            Type = RuleType.ForbiddenDependency,
             Description = $"'{directive.Using}' cannot be in '{directive.FilePath}'. Namespace '{directive.ComponentName}' in component '{componentName}' cannot have this dependency",
             Severity = ViolationSeverity.Major,
             Code = directive.Using,

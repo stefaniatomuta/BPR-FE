@@ -2,9 +2,9 @@
 
 namespace BPR.Model.Enums;
 
-public enum ViolationType
+public enum RuleType
 {
-    [Description("Unknown violation type")] 
+    [Description("Unknown rule type")] 
     Unknown,
     [Description("Forbidden dependency")] 
     ForbiddenDependency,

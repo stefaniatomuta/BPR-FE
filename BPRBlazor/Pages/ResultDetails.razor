@@ -43,24 +43,24 @@ else
     
     <div class="hide-pdf">
         <p>Filter details based on rules</p>
-        <SelectViolationTypeComponent OnChange="HandleViolationType" Violations="GetCurrentViolationTypes()"/>
+        <SelectRuleTypeComponent OnChange="HandleRuleType" RuleTypes="GetCurrentRuleTypes()"/>
     </div>
     
-    @if (ShouldDisplayResults(ViolationType.ForbiddenDependency) && _result.ArchitectureModel != null)
+    @if (ShouldDisplayResults(RuleType.ForbiddenDependency) && _result.ArchitectureModel != null)
     {
         <div class="pdf-image my-5">
             <CreateEditArchitectureComponent ModelViewModel="@_result.ArchitectureModel" IsEditable="false"/>
         </div>
     }
 
-    @if (ShouldDisplayResults(ViolationType.ConditionalStatements))
+    @if (ShouldDisplayResults(RuleType.ConditionalStatements))
     {
         <div class="pdf-image my-5 justify-content-center d-flex">
             <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
         </div>
     }
 
-    @if (ShouldDisplayResults(ViolationType.SolutionMetrics))
+    @if (ShouldDisplayResults(RuleType.SolutionMetrics))
     {
         <div class="pdf-image my-5 justify-content-center d-flex">
             <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
@@ -73,14 +73,14 @@ else
         <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments"></Table>
     }
 
-    @if (ShouldDisplayResults(ViolationType.ExternalCalls))
+    @if (ShouldDisplayResults(RuleType.ExternalCalls))
     {
         <ExternalCallsDetails
             EndOfLifeFrameworks="_result.ExtendedAnalysisResults?.EndOfLifeFrameworks"
             ExternalApisCalls="_externalApiCalls"/>
     }
 
-    @if (ShouldDisplayResults(ViolationType.CodeSimilarity) && _codeSimilarities != null)
+    @if (ShouldDisplayResults(RuleType.CodeSimilarity) && _codeSimilarities != null)
     {
         @foreach (var item in _codeSimilarities)
         {

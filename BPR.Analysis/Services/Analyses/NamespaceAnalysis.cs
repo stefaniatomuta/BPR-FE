@@ -61,7 +61,7 @@ internal class NamespaceAnalysis
                     Severity = ViolationSeverity.Minor,
                     Code = directive.Namespace,
                     Description = $"Namespace '{directive.Namespace}' in '{directive.File}' does not match",
-                    Type = ViolationType.MismatchedNamespace
+                    Type = RuleType.MismatchedNamespace
                 });
             }
         }

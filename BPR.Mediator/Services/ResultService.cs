@@ -64,7 +64,7 @@ public class ResultService : IResultService
         
             resultModel.Violations = await GetViolationsFromAnalysisAsync(folderPath, model, rules);
             resultModel.ArchitectureModel = model;
-            resultModel.ViolationTypes = rules.Select(rule => rule.ViolationType).ToList();
+            resultModel.RuleTypes = rules.Select(rule => rule.RuleType).ToList();
             Result<AnalysisResult> analysisCreatedResult = new();
 
             try
@@ -133,7 +133,7 @@ public class ResultService : IResultService
     private async Task<List<Violation>> GetViolationsFromAnalysisAsync(string folderPath, ArchitectureModel model, List<Rule> rules)
     {
         var ruleList = rules
-            .Select(rule => rule.ViolationType)
+            .Select(rule => rule.RuleType)
             .ToList();
 
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);

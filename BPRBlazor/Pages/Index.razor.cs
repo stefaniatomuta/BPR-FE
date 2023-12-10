@@ -52,7 +52,7 @@ public partial class Index : ComponentBase
 
     private bool IsDependencyRuleChecked()
     {
-        var dependencyRule = _rulesViewModels.FirstOrDefault(rule => rule.ViolationType == ViolationType.ForbiddenDependency);
+        var dependencyRule = _rulesViewModels.FirstOrDefault(rule => rule.RuleType == RuleType.ForbiddenDependency);
         if (dependencyRule == null) return false;
         return dependencyRule.IsChecked;
     }

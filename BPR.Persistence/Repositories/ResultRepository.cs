@@ -74,7 +74,7 @@ public class ResultRepository : IResultRepository
                 .Set(old => old.Violations, model.Violations)
                 .Set(old => old.ResultStatus, model.ResultStatus)
                 .Set(old => old.ArchitectureModel, _mapper.Map<ArchitectureModelsCollection>(model.ArchitectureModel))
-                .Set(old => old.ViolationTypes, model.ViolationTypes)
+                .Set(old => old.RuleTypes, model.RuleTypes)
                 .Set(old => old.ExtendedAnalysisResults, model.ExtendedAnalysisResults);
             
             await _resultCollection.UpdateOneAsync(filter, update);
