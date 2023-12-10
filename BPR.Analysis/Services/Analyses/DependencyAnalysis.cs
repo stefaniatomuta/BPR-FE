@@ -19,7 +19,7 @@ public class DependencyAnalysis
         _codeExtractionService = codeExtractionService;
     }
 
-    internal async Task<List<Violation>> AnalyseAsync(string folderPath, ArchitectureModel model)
+    public async Task<List<Violation>> AnalyseAsync(string folderPath, ArchitectureModel model)
     {
         var projectNames = _codeExtractionService.GetProjectNames(folderPath);
         var violations = new List<Violation>();

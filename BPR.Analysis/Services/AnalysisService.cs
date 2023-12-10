@@ -8,11 +8,13 @@ namespace BPR.Analysis.Services;
 
 public class AnalysisService : IAnalysisService
 {
-    private DependencyAnalysis _dependencyAnalysis;
+    private readonly DependencyAnalysis _dependencyAnalysis;
+    private readonly NamespaceAnalysis _namespaceAnalysis;
 
-    public AnalysisService(DependencyAnalysis dependencyAnalysis)
+    public AnalysisService(DependencyAnalysis dependencyAnalysis, NamespaceAnalysis namespaceAnalysis)
     {
         _dependencyAnalysis = dependencyAnalysis;
+        _namespaceAnalysis = namespaceAnalysis;
     }
 
     public async Task<List<Violation>> GetAnalysisAsync(string folderPath, ArchitectureModel model, List<RuleType> ruleTypes)
@@ -26,7 +28,7 @@ public class AnalysisService : IAnalysisService
 
         if (ruleTypes.Contains(RuleType.MismatchedNamespace))
         {
-            violations.AddRange(await NamespaceAnalysis.AnalyseAsync(folderPath));
+            violations.AddRange(await _namespaceAnalysis.AnalyseAsync(folderPath));
         }
 
         return violations;
