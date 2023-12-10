@@ -1,4 +1,4 @@
-﻿namespace BPR.Model.Results;
+﻿namespace BPR.Model.Results.External;
 
 public class EndOfLifeFramework
 {

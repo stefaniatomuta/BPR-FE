@@ -2,9 +2,33 @@
 
 @if (ExternalApisCalls.Any())
 {
-    <Table Data="@ExternalApisCalls" HeaderOne="External APIs" HeaderTwo="Number of references" />
+    <div class="table-container my-4">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-7">External APIs</th>
+                    <th class="col-3">Versions</th>
+                    <th class="text-center col-2">Number of references</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ExternalApisCalls)
+                {
+                    <tr>
+                        <td class="col-7">@item.Key</td>
+                        <td class="col-3">
+                            @if (item.Value.Versions.Any())
+                            {
+                                @string.Join(", ", item.Value.Versions.OrderByDescending(version => version))
+                            }
+                        </td>
+                        <td class="text-center col-2 text-nowrap">@item.Value.Usage</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
-
 
 @foreach (var keyValue in EndOfLifeFrameworks.SelectMany(endOfLifeFramework => endOfLifeFramework))
 {

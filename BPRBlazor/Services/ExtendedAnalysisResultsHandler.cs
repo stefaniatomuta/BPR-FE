@@ -1,9 +1,14 @@
-﻿using BPR.Model.Results;
+﻿using BPR.Model.Results.External;
 
 namespace BPRBlazor.Services;
 
 public class ExtendedAnalysisResultsHandler
 {
+    public string? HandleTechnicalDebtClassification(ExtendedAnalysisResults results)
+    {
+        return results.TechnicalDebtClassification;
+    }
+
     public Dictionary<string, double>? HandleConditionalStatements(ExtendedAnalysisResults results)
     {
         if (results.IfFrequency == null
@@ -88,7 +93,7 @@ public class ExtendedAnalysisResultsHandler
         };
     }
 
-    public Dictionary<string, int>? HandleExternalApiCalls(ExtendedAnalysisResults results)
+    public Dictionary<string, ExternalApiMetrics>? HandleExternalApiCalls(ExtendedAnalysisResults results)
     {
         if ((results.ExternalApiCalls == null || !results.ExternalApiCalls.Any()) &&
             results.TotalHttpClientCalls == null)
@@ -101,11 +106,14 @@ public class ExtendedAnalysisResultsHandler
             return results.ExternalApiCalls;
         }
 
-        var dictionary = results.ExternalApiCalls ?? new Dictionary<string, int>();
-        dictionary.Add("HTTP client", results.TotalHttpClientCalls.Value);
+        var dictionary = results.ExternalApiCalls ?? new Dictionary<string, ExternalApiMetrics>();
+        dictionary.Add("HTTP client", new()
+        { 
+            Usage = results.TotalHttpClientCalls.Value
+        });
 
         return dictionary
-            .OrderByDescending(dict => dict.Value)
+            .OrderByDescending(dict => dict.Value.Usage)
             .ToDictionary(dict => dict.Key, dict => dict.Value);
     }
 
