@@ -11,7 +11,7 @@ internal class ExponentialBackoff
         _maxBackoff = maxBackoff;
     }
 
-    public async Task PerformBackoff(CancellationToken cancellationToken)
+    public async Task PerformBackoffAsync(CancellationToken cancellationToken)
     {
         await Task.Delay(Backoff, cancellationToken);
         Backoff *= 2;

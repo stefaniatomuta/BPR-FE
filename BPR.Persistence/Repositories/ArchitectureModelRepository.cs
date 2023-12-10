@@ -38,7 +38,7 @@ public class ArchitectureModelRepository : IArchitectureModelRepository
     {
         try
         {
-            var result = await GetArchitectureModelCollectionByName(model.Name);
+            var result = await GetArchitectureModelCollectionByNameAsync(model.Name);
             if (result != null) return Result.Fail<ArchitectureModelsCollection>("Model with the same name already exists", _logger);
             var modelCollection = _mapper.Map<ArchitectureModelsCollection>(model);
             await _architectureModelsRuleCollection.InsertOneAsync(modelCollection);
@@ -55,7 +55,7 @@ public class ArchitectureModelRepository : IArchitectureModelRepository
     {
         try
         {
-            var result = await GetArchitectureModelCollectionByName(model.Name);
+            var result = await GetArchitectureModelCollectionByNameAsync(model.Name);
             if (result != null && result.Id != model.Id)
             {
                 return Result.Fail<ArchitectureModelsCollection>("Model with the same name already exists", _logger);
@@ -85,7 +85,7 @@ public class ArchitectureModelRepository : IArchitectureModelRepository
         return _mapper.Map<ArchitectureModel?>(result);
     }
 
-    private async Task<ArchitectureModelsCollection?> GetArchitectureModelCollectionByName(string name)
+    private async Task<ArchitectureModelsCollection?> GetArchitectureModelCollectionByNameAsync(string name)
     {
         return await (await _architectureModelsRuleCollection.FindAsync(x => x.Name.Equals(name))).FirstOrDefaultAsync();
     }

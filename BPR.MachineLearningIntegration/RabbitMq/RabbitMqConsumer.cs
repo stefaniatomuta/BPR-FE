@@ -64,7 +64,7 @@ public class RabbitMqConsumer : RabbitMqBase, IConsumer
         catch (BrokerUnreachableException ex)
         {
             _logger.LogWarning("{ExceptionMessage}. Retrying in {BackoffTime} seconds...", ex.Message, _backoffStrategy.Backoff.TotalSeconds);
-            await _backoffStrategy.PerformBackoff(cancellationToken);
+            await _backoffStrategy.PerformBackoffAsync(cancellationToken);
             await ConsumeAsync(cancellationToken);
         }
     }
