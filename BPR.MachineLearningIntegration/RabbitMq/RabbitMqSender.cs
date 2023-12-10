@@ -20,7 +20,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
         _serializerOptions = serializerOptions;
     }
 
-    public bool Send(string folderPath, List<Rule> rules, Guid correlationId)
+    public Task<bool> SendAsync(string folderPath, List<Rule> rules, Guid correlationId)
     {
         try
         {
@@ -28,7 +28,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
 
             if (!externalRules.Any())
             {
-                return false;
+                return Task.FromResult(false);
             }
             
             using var connection = _connectionFactory.CreateConnection();
@@ -41,7 +41,7 @@ public class RabbitMqSender : RabbitMqBase, ISender
 
             channel.BasicPublish(string.Empty, QueueName, null, body);
             _logger.LogDebug("Sent message to queue: '{Queue}'", QueueName);
-            return true;
+            return Task.FromResult(true);
         }
         catch (Exception ex)
         {

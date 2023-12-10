@@ -69,7 +69,7 @@ public class ResultService : IResultService
 
             try
             {
-                if (!HandleExternalAnalysis(folderPath, rules, resultModel.Id))
+                if (!await HandleExternalAnalysisAsync(folderPath, rules, resultModel.Id))
                 {
                     resultModel.ResultStatus = ResultStatus.Finished;
                     resultModel.ResultEnd = DateTime.UtcNow;
@@ -139,9 +139,9 @@ public class ResultService : IResultService
         return await _analysisService.GetAnalysisAsync(folderPath, model, ruleList);
     }
 
-    private bool HandleExternalAnalysis(string folderPath, List<Rule> rules, Guid correlationId)
+    private async Task<bool> HandleExternalAnalysisAsync(string folderPath, List<Rule> rules, Guid correlationId)
     {
-        _messagingService.Send(folderPath, rules, correlationId);
+        await _messagingService.SendAsync(folderPath, rules, correlationId);
         return true;
     }
 
