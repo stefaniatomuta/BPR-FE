@@ -20,7 +20,7 @@ public class ToastService
         _snackbar.Add(message, Severity.Success, config =>
         {
             config.HideIcon = true;
-            config.Onclick = (snackbar) =>
+            config.Onclick = (_) =>
             {
                 _navigationManager.NavigateTo($"/results/{resultId}");
                 return Task.CompletedTask;

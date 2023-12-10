@@ -11,10 +11,10 @@ namespace BPR.Tests;
 [TestFixture]
 internal class ArchitectureModelServiceTests
 {
-    private IArchitectureModelService uut;
-    private IArchitectureModelRepository repositoryStub;
-    private IValidatorService validatorStub;
-    private ILogger<ArchitectureModelService> _logger;
+    private IArchitectureModelService uut = default!;
+    private IArchitectureModelRepository repositoryStub = default!;
+    private IValidatorService validatorStub = default!;
+    private ILogger<ArchitectureModelService> _logger = default!;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()

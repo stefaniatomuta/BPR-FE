@@ -69,9 +69,9 @@ else
         <div class="pdf-image my-5">
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
         </div>
-        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types" />
-        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code" />
-        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments" />
+        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types"></Table>
+        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code"></Table>
+        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments"></Table>
     }
 
     @if (ShouldDisplayResults(ViolationType.ExternalCalls))
@@ -85,7 +85,7 @@ else
     {
         @foreach (var item in _codeSimilarities)
         {
-            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true" />
+            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true"></Table>
         }
     }
     

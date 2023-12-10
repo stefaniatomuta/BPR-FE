@@ -39,7 +39,7 @@ public class RabbitMqConsumer : RabbitMqBase, IConsumer
             channel.QueueDeclare(QueueName, false, false, false);
 
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, args) =>
+            consumer.Received += (_, args) =>
             {
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);

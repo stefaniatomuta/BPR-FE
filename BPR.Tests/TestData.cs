@@ -285,7 +285,7 @@ internal class TestData
                             Name = "BPR.Model"
                         }
                     },
-                    Dependencies = new List<ArchitectureDependency> {}
+                    Dependencies = new List<ArchitectureDependency>()
                 },
                 new()
                 {
@@ -572,9 +572,7 @@ internal class TestData
                             Name = "5Name"
                         }
                     },
-                    Dependencies = new List<ArchitectureDependency>
-                    {
-                    }
+                    Dependencies = new List<ArchitectureDependency>()
                 },
                 new()
                 {
@@ -647,9 +645,7 @@ internal class TestData
                             Name = "9Name"
                         }
                     },
-                    Dependencies = new List<ArchitectureDependency>
-                    {
-                    }
+                    Dependencies = new List<ArchitectureDependency> ()
                 }
             }
         };

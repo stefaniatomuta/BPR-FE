@@ -82,7 +82,7 @@ public class ArchitectureModelRepository : IArchitectureModelRepository
         var filter = Builders<ArchitectureModelsCollection>.Filter.Eq(model => model.Id, id);
         var result = await _architectureModelsRuleCollection.FindOneAndDeleteAsync(filter);
         
-        return _mapper.Map<ArchitectureModel?>(result);;
+        return _mapper.Map<ArchitectureModel?>(result);
     }
 
     private async Task<ArchitectureModelsCollection?> GetArchitectureModelCollectionByName(string name)

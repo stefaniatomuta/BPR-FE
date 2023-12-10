@@ -8,8 +8,8 @@ namespace BPR.Tests;
 [TestFixture]
 public class ValidatorTests
 {
-    private IValidator<ArchitectureModel> _architectureModelValidator;
-    private IValidator<Rule> _ruleValidator;
+    private IValidator<ArchitectureModel> _architectureModelValidator = default!;
+    private IValidator<Rule> _ruleValidator = default!;
 
     [SetUp]
     public void Setup()
