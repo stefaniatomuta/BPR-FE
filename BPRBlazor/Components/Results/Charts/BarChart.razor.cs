@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BPRBlazor.ViewModels;
+using Microsoft.AspNetCore.Components;
 
 namespace BPRBlazor.Components.Results.Charts;
 

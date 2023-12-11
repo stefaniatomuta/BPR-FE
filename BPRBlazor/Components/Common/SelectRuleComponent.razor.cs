@@ -31,7 +31,7 @@ public partial class SelectRuleComponent : ComponentBase
                     .ToList();
     }
 
-    private async Task CheckboxChanged(ChangeEventArgs e, RuleViewModel item)
+    private async Task CheckboxChangedAsync(ChangeEventArgs e, RuleViewModel item)
     {
         item.IsChecked = (bool)(e.Value ?? false);
         await OnChange.InvokeAsync(item);

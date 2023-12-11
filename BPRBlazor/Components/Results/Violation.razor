@@ -9,7 +9,7 @@
     @if (Model.Severity != null)
     {
        <p class="d-flex gap-2">Severity: 
-           <span class="violation-severity violation-severity-@SeverityCssClass">@Model.Severity.ToString()</span>
+           <span class="violation-severity violation-severity-@_severityCssClass">@Model.Severity.ToString()</span>
        </p>
     }
     @if (!string.IsNullOrEmpty(Model.Code))

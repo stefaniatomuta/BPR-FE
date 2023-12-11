@@ -89,7 +89,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         }
     }
 
-    private async Task CreateOrEditArchitectureModel()
+    private async Task CreateOrEditArchitectureModelAsync()
     {
         try
         {
@@ -140,17 +140,17 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         }
     }
     
-    private static void RemoveDependency(ArchitectureComponentViewModel component, ArchitectureComponentViewModel dependency)
+    private void RemoveDependency(ArchitectureComponentViewModel component, ArchitectureComponentViewModel dependency)
     {
         component.Dependencies.RemoveAll(dep => dep.Id == dependency.Id);
     }
 
-    private static void ToggleOpenness(DependencyViewModel dependency)
+    private void ToggleOpenness(DependencyViewModel dependency)
     {
         dependency.IsOpen = !dependency.IsOpen;
     }
 
-    private static string ComponentDependencyTypeClass(DependencyViewModel dependency) => dependency.IsOpen ? "btn-success" : "btn-danger";
+    private string ComponentDependencyTypeClass(DependencyViewModel dependency) => dependency.IsOpen ? "btn-success" : "btn-danger";
 
     private void OnDragComponentStart(DragEventArgs args, ArchitectureComponentViewModel component)
     {
@@ -162,7 +162,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
         _draggingComponent = component;
     }
 
-    private async Task OnDropComponent(DragEventArgs args)
+    private async Task OnDropComponentAsync(DragEventArgs args)
     {
         if (_draggingComponent == null)
         {
@@ -214,7 +214,7 @@ public partial class CreateEditArchitectureComponent : ComponentBase
             : 400;
     }
     
-    private async Task DeleteSelectedModel()
+    private async Task DeleteSelectedModelAsync()
     {
         var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the '{ModelViewModel.Name}' model?"});
         _resultMessages = new List<(string Message, string Class)>();

@@ -247,7 +247,11 @@ public partial class Index : ComponentBase
 
         for (var id = 0; id < folderNames.Count; id++)
         {
-            _unmappedNamespaceComponents.Add(new NamespaceViewModel(id, folderNames[id]));
+            _unmappedNamespaceComponents.Add(new NamespaceViewModel
+            {
+                Id = id,
+                Name = folderNames[id]
+            });
         }
     }
 
