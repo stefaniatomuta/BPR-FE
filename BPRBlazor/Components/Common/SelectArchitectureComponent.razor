@@ -9,7 +9,7 @@
 }
 else
 {
-    <select id="selectArchitecture" class="form-control form-select" @onchange="OnSelectedValueChanged">
+    <select id="selectArchitecture" class="form-control form-select" @onchange="OnSelectedValueChangedAsync">
         <option hidden>Select an architecture model</option>
         @foreach (var op in _architectureOptions)
         {

@@ -11,7 +11,7 @@ public partial class SelectRuleTypeComponent : ComponentBase
     [Parameter, EditorRequired] 
     public List<RuleTypeViewModel>? RuleTypes { get; set; }
 
-    private async Task CheckboxChanged(ChangeEventArgs e, RuleTypeViewModel item)
+    private async Task CheckboxChangedAsync(ChangeEventArgs e, RuleTypeViewModel item)
     {
         item.IsChecked = (bool)(e.Value ?? false);
         await OnChange.InvokeAsync(item);

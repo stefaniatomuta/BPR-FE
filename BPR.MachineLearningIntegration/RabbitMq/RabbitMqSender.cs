@@ -5,7 +5,7 @@ using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 using BPR.MachineLearningIntegration.Utils;
-using BPR.Model.Architectures;
+using BPR.Model.Rules;
 
 namespace BPR.MachineLearningIntegration.RabbitMq;
 

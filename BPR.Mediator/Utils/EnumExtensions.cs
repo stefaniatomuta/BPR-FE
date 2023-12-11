@@ -2,7 +2,7 @@
 
 namespace BPR.Mediator.Utils;
 
-public class EnumExtensions
+public static class EnumExtensions
 {
     public static string GetDescription(Enum enumValue)
     {

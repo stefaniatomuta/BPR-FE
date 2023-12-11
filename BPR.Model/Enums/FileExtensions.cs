@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel;
 
-namespace BPR.Model.Results;
+namespace BPR.Model.Enums;
 
 public enum FileExtensions
 {
     [Description(".cshtml")]
-    cshtml,
+    Cshtml,
 
     [Description(".cs")]
-    cs,
+    Cs,
 
     [Description(".csproj")]
-    csproj
+    Csproj
 }

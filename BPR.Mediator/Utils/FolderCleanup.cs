@@ -1,6 +1,6 @@
 ﻿namespace BPR.Mediator.Utils;
 
-public class FolderCleanup
+public static class FolderCleanup
 {
     public static void Cleanup(Guid guid)
     {

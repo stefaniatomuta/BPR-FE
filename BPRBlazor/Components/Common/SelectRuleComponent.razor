@@ -15,7 +15,7 @@ else
     @foreach (var item in _rules)
     {
         <div class="form-check">
-            <input class="custom-checkbox" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChanged(e, item)" />
+            <input class="custom-checkbox" type="checkbox" id="@item.Name" checked= "@item.IsChecked" @onchange="(e) => CheckboxChangedAsync(e, item)" />
             <label for="@item.Name">@item.Name</label>
             @if (!string.IsNullOrWhiteSpace(item.Description))
             {

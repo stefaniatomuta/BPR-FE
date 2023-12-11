@@ -1,4 +1,4 @@
-﻿namespace BPRBlazor.Components.Results.Charts;
+﻿namespace BPRBlazor.ViewModels;
 
 public class ChartData
 {

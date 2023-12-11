@@ -7,7 +7,7 @@
 @inject NavigationManager NavigationManager
 @inject IMapper Mapper
 
-<EditForm Model="ModelViewModel" OnValidSubmit="CreateOrEditArchitectureModel">
+<EditForm Model="ModelViewModel" OnValidSubmit="CreateOrEditArchitectureModelAsync">
     @if (IsEditable)
     {
         <ObjectGraphDataAnnotationsValidator />
@@ -16,7 +16,7 @@
         <button type="button" class="btn btn-secondary mb-2" @onclick="AddArchitectureComponent">Add component</button>
     }
 
-    <div id ="boundary" class="draggable-boundary mb-2" ondragover="return false;" style="height: @(GetBottomPositionForComponents())px;" @ondrop="OnDropComponent">
+    <div id ="boundary" class="draggable-boundary mb-2" ondragover="return false;" style="height: @(GetBottomPositionForComponents())px;" @ondrop="OnDropComponentAsync">
         @foreach (var component in ModelViewModel.Components)
         {
             <div key="@component.Id" id="@component.Id" class="component" draggable="true" style="left: @(component.Position.X)px; top: @(component.Position.Y)px" @ondragstart="(e) => OnDragComponentStart(e, component)">
@@ -91,5 +91,5 @@
 
 @if (IsEditable && ModelViewModel.Id != default)    
 {
-    <button class="btn btn-danger" @onclick="DeleteSelectedModel">Delete selected model</button>
+    <button class="btn btn-danger" @onclick="DeleteSelectedModelAsync">Delete selected model</button>
 }

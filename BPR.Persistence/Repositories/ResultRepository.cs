@@ -13,10 +13,10 @@ namespace BPR.Persistence.Repositories;
 public class ResultRepository : IResultRepository
 {
     private readonly IMongoCollection<ResultCollection> _resultCollection;
-    private readonly ILogger<RuleRepository> _logger;
+    private readonly ILogger<ResultRepository> _logger;
     private readonly IMapper _mapper;
 
-    public ResultRepository(IOptions<DatabaseConfig> databaseSettings, ILogger<RuleRepository> logger, IMapper mapper)
+    public ResultRepository(IOptions<DatabaseConfig> databaseSettings, ILogger<ResultRepository> logger, IMapper mapper)
     {
         _logger = logger;
         _mapper = mapper;

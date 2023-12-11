@@ -1,5 +1,6 @@
 using BPR.Model.Architectures;
 using BPR.Model.Enums;
+using BPR.Model.Rules;
 using BPRBlazor.Components.Common;
 using BPRBlazor.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -246,7 +247,11 @@ public partial class Index : ComponentBase
 
         for (var id = 0; id < folderNames.Count; id++)
         {
-            _unmappedNamespaceComponents.Add(new NamespaceViewModel(id, folderNames[id]));
+            _unmappedNamespaceComponents.Add(new NamespaceViewModel
+            {
+                Id = id,
+                Name = folderNames[id]
+            });
         }
     }
 

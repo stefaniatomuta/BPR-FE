@@ -2,7 +2,7 @@
 using BPR.Mediator.Services;
 using BPR.Mediator.Utils;
 using BPR.Mediator.Validators;
-using BPR.Model.Architectures;
+using BPR.Model.Rules;
 using Microsoft.Extensions.Logging;
 
 namespace BPR.Tests;

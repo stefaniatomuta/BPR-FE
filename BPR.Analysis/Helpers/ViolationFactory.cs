@@ -4,9 +4,9 @@ using BPR.Model.Results;
 
 namespace BPR.Analysis.Helpers;
 
-internal class ViolationFactory
+public static class ViolationFactory
 {
-    internal static Violation CreateDependencyViolation(UsingDirective directive, string componentName)
+    public static Violation CreateDependencyViolation(UsingDirective directive, string componentName)
     {
         return new Violation
         {
@@ -15,6 +15,18 @@ internal class ViolationFactory
             Severity = ViolationSeverity.Major,
             Code = directive.Using,
             File = directive.File
+        };
+    }
+    
+    public static Violation CreateNamespaceViolation(NamespaceDirective directive)
+    {
+        return new Violation
+        {
+            File = directive.File,
+            Severity = ViolationSeverity.Minor,
+            Code = directive.Namespace,
+            Description = $"Namespace '{directive.Namespace}' in '{directive.File}' does not match",
+            Type = RuleType.MismatchedNamespace
         };
     }
 }

@@ -96,7 +96,7 @@ public partial class ResultDetails : ComponentBase
             .ToList();
     }
     
-    private async Task DownloadPdf()
+    private async Task DownloadPdfAsync()
     {
         _loadingIndicator?.ToggleLoading(true);
         await JsRuntime.InvokeVoidAsync("TransformToPng");

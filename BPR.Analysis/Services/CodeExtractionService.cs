@@ -1,6 +1,6 @@
 ﻿using BPR.Mediator.Interfaces;
 using BPR.Mediator.Utils;
-using BPR.Model.Results;
+using BPR.Model.Enums;
 
 namespace BPR.Analysis.Services;
 
@@ -15,12 +15,12 @@ public class CodeExtractionService : ICodeExtractionService
         foreach (var dir in projDirectories)
         {
             files.AddRange(Directory.GetFiles(dir)
-                .Where(file => file.EndsWith(EnumExtensions.GetDescription(FileExtensions.csproj))));
+                .Where(file => file.EndsWith(EnumExtensions.GetDescription(FileExtensions.Csproj))));
         }
 
         foreach (var file in files)
         {
-            projectNames.Add(Path.GetFileName(file).Split(EnumExtensions.GetDescription(FileExtensions.csproj))[0]);
+            projectNames.Add(Path.GetFileName(file).Split(EnumExtensions.GetDescription(FileExtensions.Csproj))[0]);
         }
 
         return projectNames;

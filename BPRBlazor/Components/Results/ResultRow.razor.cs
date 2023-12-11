@@ -16,7 +16,7 @@ public partial class ResultRow : ComponentBase
         NavigationManager.NavigateTo($"results/{id}");
     }
     
-    private async void DeleteAsync(Guid id)
+    private async Task DeleteAsync(Guid id)
     {
         var confirmed = await JS.InvokeAsync<bool>("handleConfirmation", new object?[]{$"Are you sure you want to delete the result?"});
         if (!confirmed)

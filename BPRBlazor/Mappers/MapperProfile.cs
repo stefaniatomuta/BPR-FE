@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BPR.Model.Architectures;
 using BPR.Model.Results;
+using BPR.Model.Rules;
 using BPRBlazor.ViewModels;
 
 namespace BPRBlazor.Mappers; 

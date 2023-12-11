@@ -1,4 +1,4 @@
-﻿using BPR.Model.Architectures;
+﻿using BPR.Model.Rules;
 using FluentValidation;
 
 namespace BPR.Mediator.Validators;

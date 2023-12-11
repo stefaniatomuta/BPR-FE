@@ -16,7 +16,7 @@ public partial class SelectArchitectureComponent : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        _architectureOptions = (await GetArchitectureModels())
+        _architectureOptions = (await GetArchitectureModelsAsync())
             .OrderBy(option => option.Name)
             .ToList();
     }
@@ -36,22 +36,15 @@ public partial class SelectArchitectureComponent : ComponentBase
         }
     }
 
-    private Task<IList<ArchitectureModel>> GetArchitectureModels()
+    private Task<IList<ArchitectureModel>> GetArchitectureModelsAsync()
     {
         return ArchitectureModelService.GetArchitectureModelsAsync();
     }
 
-    private async Task OnSelectedValueChanged(ChangeEventArgs e)
+    private async Task OnSelectedValueChangedAsync(ChangeEventArgs e)
     {
         var selectedModelId = Guid.Parse(e.Value?.ToString()!);
         var selectedModel = _architectureOptions.First(option => option.Id == selectedModelId);
         await ArchitectureModelChanged.InvokeAsync(selectedModel);
-    }
-
-    public async Task RemoveOptionById(Guid modelId)
-    {
-        var model = _architectureOptions.First(option => option.Id == modelId);
-        _architectureOptions.Remove(model);
-        await JS.InvokeVoidAsync("removeSelectedElement", "selectArchitecture");
     }
 }
