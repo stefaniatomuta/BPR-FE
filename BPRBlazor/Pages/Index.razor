@@ -15,7 +15,8 @@
 <LoadingIndicator @ref="_loadingIndicator" />
 
 <div class="mb-5">
-    <h3>Upload file containing source code</h3>
+    <h3>Upload zip file containing source code</h3>
+    <p>The zipped file should contain the solution folder. This folder should contain the project folders.</p>
     <div class="d-flex gap-2 align-items-center">
         <label for="inputFile" class="btn btn-secondary">
             <InputFile id="inputFile" class="d-none" OnChange="LoadCodeSource" accept=@string.Join(", ", _allowedFileTypes) />
@@ -45,6 +46,7 @@
 
     <div class="row">
         <h3>Map namespaces according to the selected architecture model</h3>
+        <p>Drag each unmapped namespace to their associated architecture component</p>
         @if (_unmappedNamespaceComponents.Any())
         {
             <div class="col-4 mb-3">
@@ -62,7 +64,7 @@
         @if (_selectedArchitectureViewModel is not null)
         {
             <div class="col mb-5">
-                <h4>Architecture model</h4>
+                <h4>Architecture components</h4>
                 @foreach (var component in _selectedArchitectureViewModel.Components)
                 {
                     <div class="mt-3">

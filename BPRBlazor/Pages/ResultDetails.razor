@@ -31,18 +31,9 @@ else
         {
             <p>Technical debt classification: <strong>@_technicalDebtClassification</strong></p>
         }
-
-        @if (_result.Violations.Count != _filteredViolations.Count)
-        {
-            <h5>Showing @_filteredViolations.Count of the @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
-        }
-        else
-        {
-            <h5>Showing @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
-        }
     </div>
     
-    <div class="hide-pdf">
+    <div class="hide-pdf mb-3">
         <p>Filter details based on rules</p>
         <SelectRuleTypeComponent OnChange="HandleRuleType" RuleTypes="GetCurrentRuleTypes()"/>
     </div>
@@ -54,24 +45,48 @@ else
         </div>
     }
 
+    @if (_result.Violations.Count != _filteredViolations.Count)
+    {
+        <h5>Showing @_filteredViolations.Count of the @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
+    }
+    else
+    {
+        <h5>Showing @_result.Violations.Count total violation@(_result.Violations.Count != 1 ? "s" : "")</h5>
+    }
+
+    @foreach (var violation in _filteredViolations)
+    {
+        <div class="violation">
+            <Violation Model="violation" />
+        </div>
+    }
+
     @if (ShouldDisplayResults(RuleType.ConditionalStatements))
     {
-        <div class="pdf-image my-5 justify-content-center d-flex">
-            <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()"/>
+        <h3 class="mt-5 mb-2">Distribution of conditional statements</h3>
+        <div class="pdf-image mb-5 justify-content-center d-flex">
+            <PieChart Labels="_conditionalFrequencies?.Keys.ToArray()" Data="_conditionalFrequencies?.Values.ToArray()" ShowDataLabels="false"/>
         </div>
     }
 
     @if (ShouldDisplayResults(RuleType.SolutionMetrics))
     {
-        <div class="pdf-image my-5 justify-content-center d-flex">
-            <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()"/>
+        <h3 class="mt-5 mb-2">Distribution of lines of code vs lines of comments</h3>
+        <div class="pdf-image mb-5 justify-content-center d-flex">
+            <PieChart Labels="_codeLinesMetrics?.Keys.ToArray()" Data="_codeLinesMetrics?.Values.ToArray()" ShowDataLabels="false"/>
         </div>
-        <div class="pdf-image my-5">
+        <h3 class="mt-5 mb-2">Distribution of diffent solution entities</h3>
+        <div class="pdf-image mb-5">
             <BarChart Labels="_solutionMetrics?.Keys.ToArray()" Data="_solutionMetrics?.Values.ToArray()"/>
         </div>
-        <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types"></Table>
-        <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code"></Table>
-        <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments"></Table>
+        <div class="mb-5">
+            <h3 class="mt-4 mb-2">Distribution of each file's amount of referenced external types</h3>
+            <Table Data="_classCouplings" HeaderOne="Class" HeaderTwo="External types"></Table>
+            <h3 class="mt-4 mb-2">Distribution of each file's amount of lines of code</h3>
+            <Table Data="_codeLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of code"></Table>
+            <h3 class="mt-4 mb-2">Distribution of each file's amount of lines of comments</h3>
+            <Table Data="_commentLinesPerFile" HeaderOne="Class" HeaderTwo="Lines of comments"></Table>
+        </div>
     }
 
     @if (ShouldDisplayResults(RuleType.ExternalCalls))
@@ -83,16 +98,12 @@ else
 
     @if (ShouldDisplayResults(RuleType.CodeSimilarity) && _codeSimilarities != null)
     {
+        <h3 class="mt-5 mb-2">Distribution of code similarities within files</h3>
         @foreach (var item in _codeSimilarities)
         {
-            <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true"></Table>
+            <div class="mb-4">
+                <Table Data="item.Value" HeaderOne=@($"{item.Key} compared to similar files") HeaderTwo="Similarity (%)" PushLastColumnRight="true"></Table>
+            </div>
         }
-    }
-    
-    @foreach (var violation in _filteredViolations)
-    {
-        <div class="violation">
-            <Violation Model="violation"/>
-        </div>
     }
 }
