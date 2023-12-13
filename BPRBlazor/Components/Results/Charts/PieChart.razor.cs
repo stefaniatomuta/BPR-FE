@@ -29,7 +29,7 @@ public partial class PieChart : ComponentBase
         {
             _data[i] = new()
             {
-                Label = Labels[i],
+                Label = $"{Labels[i]} ({Data[i]})",
                 Value = Data[i]
             };
         }

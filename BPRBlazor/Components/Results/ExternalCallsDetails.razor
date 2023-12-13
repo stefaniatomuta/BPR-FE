@@ -2,7 +2,8 @@
 
 @if (ExternalApisCalls.Any())
 {
-    <div class="table-container my-4">
+    <h3 class="mt-5 mb-2">Information on each external API, their version and number of references</h3>
+    <div class="table-container mb-4">
         <table>
             <thead>
                 <tr>
@@ -30,24 +31,28 @@
     </div>
 }
 
-@foreach (var keyValue in EndOfLifeFrameworks.SelectMany(endOfLifeFramework => endOfLifeFramework))
-{
-    <div class="table-container my-5">
-        <table>
-            <thead>
-            <tr>
-                <th>@keyValue.Key</th>
-                <th class="col-1 text-center">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>@keyValue.Value.Version</td>
-                <td class="col-1 text-center text-nowrap">
-                    <a style="background-color: @(keyValue.Value.Status ? "orangered" : "lightgreen"); padding: 6px; border-radius: 6px;">@(keyValue.Value.Status ? "Unsupported" : "Supported")</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-}
+<div class="my-5">
+    <h3 class="mb-2">Information on project's framework and their status</h3>
+    @foreach (var keyValue in EndOfLifeFrameworks.SelectMany(endOfLifeFramework => endOfLifeFramework))
+    {
+        <div class="table-container mb-4">
+            <table>
+                <thead>
+                    <tr>
+                        <th>@keyValue.Key</th>
+                        <th class="col-1 text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@keyValue.Value.Version</td>
+                        <td class="col-1 text-center text-nowrap">
+                            <a style="background-color: @(keyValue.Value.Status ? "orangered" : "lightgreen"); padding: 6px; border-radius: 6px;">@(keyValue.Value.Status ? "Unsupported" : "Supported")</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

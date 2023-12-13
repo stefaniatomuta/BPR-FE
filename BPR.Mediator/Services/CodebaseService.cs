@@ -11,7 +11,7 @@ public class CodebaseService : ICodebaseService
 
     public string LoadCodebaseInTemp(ArchiveFile file)
     {
-        var uploadedRootFolderName = file.Entries.First().FileName;
+        var uploadedRootFolderName = file.Entries.First().FileName.Split("\\")[0];
         _folderPath = ExtractArchive(file);
         return $"{_folderPath}\\{uploadedRootFolderName}";
     }

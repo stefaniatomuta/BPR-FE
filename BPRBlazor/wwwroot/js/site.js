@@ -1,5 +1,4 @@
-async function TransformToPng()
-{
+async function TransformToPng() {
     const elements = document.getElementsByClassName('pdf-image')
     for (let i = 0; i < elements.length; i++) {
         const img = new Image()
@@ -9,7 +8,7 @@ async function TransformToPng()
     }
 }
 
-function DownloadResultsToPDF(){
+function DownloadResultsToPDF() {
     window.focus()
     window.print()
     location.reload();

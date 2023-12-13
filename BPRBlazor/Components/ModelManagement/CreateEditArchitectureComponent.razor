@@ -13,6 +13,7 @@
         <ObjectGraphDataAnnotationsValidator />
         <InputText class="form-control mb-2" placeholder="Model name..." @bind-Value="ModelViewModel.Name" />
         <ValidationMessage For="() => ModelViewModel.Name" />
+        <p>A <strong>closed</strong> dependency (dotted line) only works as a direct dependency. An <strong>open</strong> dependency (full line) is extended to further components.</p>
         <button type="button" class="btn btn-secondary mb-2" @onclick="AddArchitectureComponent">Add component</button>
     }
 
