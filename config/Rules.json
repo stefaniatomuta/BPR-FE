@@ -1,0 +1,31 @@
+[{
+  "_id": "b294b95e-ec79-4791-a03b-694cc4072e2f",
+  "Name": "Dependency",
+  "Description": "This rule analyzes against the dependencies in the source code. In order to analyse with this rule, an architectural model needs to be created on the architectures page. After selecting the desired architecture, map the namespaces from the source code to the architectural components they belong to",
+  "RuleType": "1"
+},{
+  "_id": "b294b95e-ec79-4791-a03b-694cc4072eff",
+  "Name": "Namespace",
+  "Description": "This rule analyzes against the namespaces accross the solution. If the namespaces does not match the file path, it will return a violation",
+  "RuleType": "2"
+},{
+  "_id": "b294b95e-ec79-4791-a03b-694cc4072f01",
+  "Name": "Conditional statements",
+  "Description": "This rule analyzes metrics related to conditional statements consisting of if, for, for each and while loops",
+  "RuleType": "3"
+},{
+  "_id": "b294b95e-ec79-4791-a03b-694cc4072f02",
+  "Name": "Solution metrics",
+  "Description": "This rule analyzes solution wide metrics regarding classes, methods, interfaces, inheritance declarations, using directives, code and comment files",
+  "RuleType": "4"
+},{
+  "_id": "b294b95e-ec79-4791-a03b-694cc4072f03",
+  "Name": "External calls",
+  "Description": "This rule analyzes the external calls used across the solutions as well as the http client calls. On top of that, this rule analyzes the end of life frameworks of each project",
+  "RuleType": "5"
+},{
+  "_id": "b294b95e-ec79-4791-a03b-694cc4072f04",
+  "Name": "Code similarity",
+  "Description": "This rule analyzes the code similarity between each file",
+  "RuleType": "6"
+}]

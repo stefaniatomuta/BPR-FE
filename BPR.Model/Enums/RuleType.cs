@@ -6,9 +6,9 @@ public enum RuleType
 {
     [Description("Unknown rule type")] 
     Unknown,
-    [Description("Forbidden dependency")] 
+    [Description("Dependency")] 
     ForbiddenDependency,
-    [Description("Mismatched namespace")] 
+    [Description("Namespace")] 
     MismatchedNamespace,
     [Description("Conditional statements")] 
     ConditionalStatements,
