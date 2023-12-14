@@ -46,7 +46,7 @@ How to set up the project:
  - Navigate to the root of the project where the docker-compose.yml file is
  - Build up the docker compose file by runnning this command
     ``` docker compose up ```
- - Add the config/rules.json as a 'Rules' collection in the MongoDB or you can use MongoCompass to do so
+ - Add the config/Rules.json as a 'Rules' collection in the MongoDB or you can use MongoCompass to do so
     ![image](https://github.com/stefaniatomuta/BPR-FE/assets/72012292/bd1e056a-4cf4-454b-a26c-87c2ac0a2d11)
 
 Important information:
